@@ -1,6 +1,7 @@
 package se.luddoj.distsys.gcom;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Implements the interface {@link VectorClock} with the use of a
@@ -10,6 +11,10 @@ import java.util.Hashtable;
 public class HashVectorClock implements VectorClock {
 
 	private Hashtable<Object, Integer> clocks;
+	
+	public HashVectorClock(Map<Object, Integer> m) {
+		clocks = new Hashtable<Object, Integer>(m);
+	}
 	
 	public int compareTo(HashVectorClock o) {
 		int later = 0;
