@@ -26,4 +26,10 @@ public class HashVectorClock implements VectorClock {
 		return earlier + later;
 	}
 
+	@Override
+	public int compareTo(VectorClock o) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
