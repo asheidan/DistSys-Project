@@ -21,8 +21,8 @@ public class Group implements GroupInterface {
 
 	@Override
 	public void removeMember(Member member) {
-		// TODO Auto-generated method stub
-
+		int index = members.indexOf(member);
+		members.remove(index);
 	}
 
 }
