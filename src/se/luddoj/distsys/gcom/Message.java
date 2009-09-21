@@ -2,16 +2,42 @@ package se.luddoj.distsys.gcom;
 
 import java.io.Serializable;
 
-public interface Message extends Serializable {
-	public static enum TYPE_MESSAGE { APPLICATION };
+public class Message implements MessageInterface {
 
-	// public Message(VectorClock j, String groupName, Serializable data, TYPE_MESSAGE messageType);
-
-	public Serializable getMessage();
-
-	public VectorClock getClock();
-
-	public String getGroupName();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5507203760294899480L;
+	private HashVectorClock clock;
+	private String groupName;
+	private Serializable data;
+	private TYPE_MESSAGE type;
 	
-	public TYPE_MESSAGE getMessageType();
+	public Message(HashVectorClock c, String n, Serializable d, TYPE_MESSAGE t) {
+		clock = c;
+		groupName = n;
+		data = d;
+		type = t;
+	}
+	
+	@Override
+	public HashVectorClock getClock() {
+		return clock;
+	}
+
+	@Override
+	public String getGroupName() {
+		return groupName;
+	}
+
+	@Override
+	public Serializable getMessage() {
+		return data;
+	}
+
+	@Override
+	public TYPE_MESSAGE getMessageType() {
+		return type;
+	}
+
 }
