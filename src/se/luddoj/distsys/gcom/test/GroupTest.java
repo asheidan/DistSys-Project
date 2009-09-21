@@ -1,9 +1,11 @@
-package se.luddoj.distsys.gcom;
+package se.luddoj.distsys.gcom.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import se.luddoj.distsys.gcom.*;
 
 
 public class GroupTest {
