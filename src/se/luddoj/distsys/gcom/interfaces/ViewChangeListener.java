@@ -11,7 +11,7 @@ public interface ViewChangeListener {
 	 * @param member
 	 *                the new member who has joined
 	 */
-	public void newMember(MemberInterface member);
+	public void newMember(Member member);
 
 	/**
 	 * Callback method when a member leaves the group.
@@ -19,5 +19,5 @@ public interface ViewChangeListener {
 	 * @param member
 	 *                the new member who has left
 	 */
-	public void lostMember(MemberInterface member);
+	public void lostMember(Member member);
 }

@@ -170,7 +170,7 @@ public interface GComInterface {
 	 * @param groupName
 	 *                the affected group
 	 */
-	public MemberInterface getLocalMember(String groupName);
+	public Member getLocalMember(String groupName);
 
 	/**
 	 * Retrieves the group members.
@@ -179,6 +179,6 @@ public interface GComInterface {
 	 *                the affected group
 	 * @return an array containing group members
 	 */
-	public List<MemberInterface> getMembers(String groupName);
+	public List<Member> getMembers(String groupName);
 
 }

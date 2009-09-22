@@ -2,7 +2,7 @@ package se.luddoj.distsys.gcom;
 
 import se.luddoj.distsys.gcom.interfaces.*;
 
-public class Member implements MemberInterface {
+public class Member implements se.luddoj.distsys.gcom.interfaces.Member {
 
 	private static final long serialVersionUID = 6940203241759957894L;
 	private String id;
@@ -25,8 +25,8 @@ public class Member implements MemberInterface {
 	
 	public boolean equals(Object m) {
 		System.out.println("tja");
-		if(MemberInterface.class.isInstance(m)) {
-			return ((MemberInterface) m).getID().equals(this.id);
+		if(Member.class.isInstance(m)) {
+			return ((Member) m).getID().equals(this.id);
 		}
 		return false;
 	}

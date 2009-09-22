@@ -6,7 +6,7 @@ import java.io.Serializable;
  * A GComInterface Group member interface. Used to identify individual members in a
  * GComInterface group.
  */
-public interface MemberInterface extends Serializable {
+public interface Member extends Serializable {
 	// ---------------------------------------------------------
 	/**
 	 * @return a unique group member identifier.

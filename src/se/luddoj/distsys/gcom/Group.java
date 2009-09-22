@@ -7,7 +7,7 @@ import java.util.Vector;
 
 public class Group implements GroupInterface {
 
-	private Vector<MemberInterface> members = new Vector<MemberInterface>();
+	private Vector<Member> members = new Vector<Member>();
 	private GroupDefinitionInterface groupDefinition;
 	
 	public Group(GroupDefinitionInterface group_definition) {
@@ -15,17 +15,17 @@ public class Group implements GroupInterface {
 	}
 	
 	@Override
-	public void addMember(MemberInterface member) {
+	public void addMember(Member member) {
 		members.add(member);
 	}
 
 	@Override
-	public List<MemberInterface> listMembers() {
+	public List<Member> listMembers() {
 		return members;
 	}
 
 	@Override
-	public void removeMember(MemberInterface member) {
+	public void removeMember(Member member) {
 		int index = members.indexOf(member);
 		members.remove(index);
 	}
