@@ -1,4 +1,4 @@
-package se.luddoj.distsys.gcom.interfaces;
+package gcom.interfaces;
 
 /**
  * A GComInterface view change listener interface that deals with changes to the

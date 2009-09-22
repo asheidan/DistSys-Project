@@ -1,4 +1,4 @@
-package se.luddoj.distsys.gcom.interfaces;
+package gcom.interfaces;
 
 public interface MessageOrderingModuleInterface {
 	public void queueMessage(MessageInterface m);

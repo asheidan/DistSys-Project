@@ -1,8 +1,8 @@
-package se.luddoj.distsys.gcom;
+package gcom;
 
-import se.luddoj.distsys.gcom.interfaces.*;
+import gcom.interfaces.*;
 
-public class Member implements se.luddoj.distsys.gcom.interfaces.Member {
+public class Member implements gcom.interfaces.Member {
 
 	private static final long serialVersionUID = 6940203241759957894L;
 	private String id;

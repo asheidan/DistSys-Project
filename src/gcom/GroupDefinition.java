@@ -1,6 +1,6 @@
-package se.luddoj.distsys.gcom;
+package gcom;
 
-import se.luddoj.distsys.gcom.interfaces.*;
+import gcom.interfaces.*;
 
 public class GroupDefinition implements GroupDefinitionInterface {
 

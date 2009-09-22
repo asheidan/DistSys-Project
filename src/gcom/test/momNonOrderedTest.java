@@ -1,14 +1,15 @@
-package se.luddoj.distsys.gcom.test;
+package gcom.test;
 
 import static org.junit.Assert.*;
+
+import gcom.*;
+import gcom.interfaces.MessageListener;
+import gcom.interfaces.MessageInterface.TYPE_MESSAGE;
 
 import java.io.Serializable;
 
 import org.junit.Before;
 import org.junit.Test;
-import se.luddoj.distsys.gcom.*;
-import se.luddoj.distsys.gcom.interfaces.MessageListener;
-import se.luddoj.distsys.gcom.interfaces.MessageInterface.TYPE_MESSAGE;
 
 public class momNonOrderedTest {
 

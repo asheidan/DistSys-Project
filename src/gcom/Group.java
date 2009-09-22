@@ -1,6 +1,7 @@
-package se.luddoj.distsys.gcom;
+package gcom;
 
-import se.luddoj.distsys.gcom.interfaces.*;
+import gcom.interfaces.Member;
+import gcom.interfaces.*;
 
 import java.util.List;
 import java.util.Vector;

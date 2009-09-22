@@ -1,10 +1,11 @@
-package se.luddoj.distsys.gcom.interfaces;
+package gcom.interfaces;
+
+import gcom.interfaces.GComInterface.TYPE_COMMUNICATION;
+import gcom.interfaces.GComInterface.TYPE_GROUP;
+import gcom.interfaces.GComInterface.TYPE_MESSAGEORDERING;
 
 import java.io.Serializable;
 
-import se.luddoj.distsys.gcom.interfaces.GComInterface.TYPE_COMMUNICATION;
-import se.luddoj.distsys.gcom.interfaces.GComInterface.TYPE_GROUP;
-import se.luddoj.distsys.gcom.interfaces.GComInterface.TYPE_MESSAGEORDERING;
 
 /**
  * A group definition specifies the type of group, the communication type,
