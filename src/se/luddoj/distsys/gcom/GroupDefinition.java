@@ -1,9 +1,9 @@
 package se.luddoj.distsys.gcom;
 
-import se.luddoj.distsys.gcom.GCom.GroupDefinitionInterface;
-import se.luddoj.distsys.gcom.GCom.TYPE_COMMUNICATION;
-import se.luddoj.distsys.gcom.GCom.TYPE_GROUP;
-import se.luddoj.distsys.gcom.GCom.TYPE_MESSAGEORDERING;
+import se.luddoj.distsys.gcom.GComInterface.GroupDefinitionInterface;
+import se.luddoj.distsys.gcom.GComInterface.TYPE_COMMUNICATION;
+import se.luddoj.distsys.gcom.GComInterface.TYPE_GROUP;
+import se.luddoj.distsys.gcom.GComInterface.TYPE_MESSAGEORDERING;
 
 public class GroupDefinition implements GroupDefinitionInterface {
 

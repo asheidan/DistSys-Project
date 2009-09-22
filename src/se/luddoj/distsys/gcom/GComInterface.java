@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * GCom is an interface for the GCom middleware to be developed in the
- * assignment parts of the course Distributed Systems (5DV020). The GCom
+ * GComInterface is an interface for the GComInterface middleware to be developed in the
+ * assignment parts of the course Distributed Systems (5DV020). The GComInterface
  * middleware is a middleware that facilitates group communication between
  * interconnected, distributed clients.
  * 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author Daniel Henriksson
  * 
  */
-public interface GCom {
+public interface GComInterface {
 
 	/**
 	 * A group type identifier. Consult the assignment specification for details
@@ -132,7 +132,7 @@ public interface GCom {
 	IllegalStateException;
 
 	/**
-	 * Sets the adress and port of the RMI registry to be used by this GCom
+	 * Sets the adress and port of the RMI registry to be used by this GComInterface
 	 * instance.
 	 * 
 	 * @param hostname
@@ -155,7 +155,7 @@ public interface GCom {
 	public void disconnect(String groupName) throws IOException;
 
 	/**
-	 * Get a list of groups currently accessible through this GCom instance.
+	 * Get a list of groups currently accessible through this GComInterface instance.
 	 * 
 	 * @return a list of group definitions.
 	 * @throws IOException
@@ -165,7 +165,7 @@ public interface GCom {
 	public List<GroupDefinitionInterface> listGroups() throws IOException;
 
 	/**
-	 * Return the local member for this GCom instance, in the specified group.
+	 * Return the local member for this GComInterface instance, in the specified group.
 	 * 
 	 * @param groupName
 	 *                the affected group
@@ -218,8 +218,8 @@ public interface GCom {
 	}
 
 	/**
-	 * A GCom Group member interface. Used to identify individual members in a
-	 * GCom group.
+	 * A GComInterface Group member interface. Used to identify individual members in a
+	 * GComInterface group.
 	 */
 	public interface MemberInterface extends Serializable {
 		// ---------------------------------------------------------
@@ -236,7 +236,7 @@ public interface GCom {
 
 
 	/**
-	 * A GCom view change listener interface that deals with changes to the
+	 * A GComInterface view change listener interface that deals with changes to the
 	 * group structure.
 	 */
 	public interface ViewChangeListener {
@@ -258,7 +258,7 @@ public interface GCom {
 	}
 
 	/**
-	 * A GCom message listener interface that deals with messages delivered to a
+	 * A GComInterface message listener interface that deals with messages delivered to a
 	 * group
 	 */
 	public interface MessageListener {

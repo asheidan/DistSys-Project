@@ -3,8 +3,8 @@ package se.luddoj.distsys.gcom;
 import java.util.List;
 import java.util.Vector;
 
-import se.luddoj.distsys.gcom.GCom.GroupDefinitionInterface;
-import se.luddoj.distsys.gcom.GCom.MemberInterface;
+import se.luddoj.distsys.gcom.GComInterface.GroupDefinitionInterface;
+import se.luddoj.distsys.gcom.GComInterface.MemberInterface;
 
 public class Group implements GroupInterface {
 

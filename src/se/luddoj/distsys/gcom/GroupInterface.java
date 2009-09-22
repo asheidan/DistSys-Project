@@ -2,7 +2,7 @@ package se.luddoj.distsys.gcom;
 
 import java.util.List;
 
-import se.luddoj.distsys.gcom.GCom.MemberInterface;
+import se.luddoj.distsys.gcom.GComInterface.MemberInterface;
 
 public interface GroupInterface {
 	public void addMember(MemberInterface member);
