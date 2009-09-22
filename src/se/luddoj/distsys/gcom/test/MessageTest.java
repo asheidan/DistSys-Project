@@ -15,17 +15,25 @@ public class MessageTest {
 
 	public Message m;
 	public HashVectorClock clock;
+	public Member source;
 	
 	@Before
 	public void setUp() {
 		clock = new HashVectorClock();
-		m = new Message(clock, "testGroup", "test", TYPE_MESSAGE.APPLICATION);
+		source = new Member("123", "test");
+		m = new Message(clock, "testGroup", source, "test", TYPE_MESSAGE.APPLICATION);
 	}
 	
 	@Test
 	public void testGetClock() {
 		HashVectorClock c = m.getClock();
 		assertEquals(clock, c);
+	}
+	
+	@Test
+	public void testGetMember() {
+		Member member = m.getMember();
+		assertEquals(source, member);
 	}
 
 	@Test

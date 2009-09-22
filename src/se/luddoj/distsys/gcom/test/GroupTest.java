@@ -23,7 +23,7 @@ public class GroupTest {
 	
 	@Test
 	public void testAddMember() {
-		Member member = new Member();
+		Member member = new Member("123", "test");
 		assertEquals(0, g.listMembers().size());
 		g.addMember(member);
 		assertEquals(1, g.listMembers().size());
@@ -32,7 +32,7 @@ public class GroupTest {
 
 	@Test
 	public void testRemoveMember() {
-		Member member = new Member();
+		Member member = new Member("123", "test");
 		assertEquals(0, g.listMembers().size());
 		g.addMember(member);
 		assertEquals(1, g.listMembers().size());
@@ -42,9 +42,9 @@ public class GroupTest {
 
 	@Test
 	public void testListMembers() {
-		Member member1 = new Member();
-		Member member2 = new Member();
-		Member member3 = new Member();
+		Member member1 = new Member("123", "test1");
+		Member member2 = new Member("456", "test2");
+		Member member3 = new Member("789", "test3");
 		assertEquals(0, g.listMembers().size());
 		g.addMember(member1);
 		g.addMember(member2);

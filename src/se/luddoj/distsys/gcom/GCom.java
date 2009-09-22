@@ -12,7 +12,7 @@ import java.util.List;
  * 
  * @version 1.1 Clarified group name/id/description
  * 
- * @author P-O Östberg
+ * @author P-O ï¿½stberg
  * @author Lars Larsson
  * @author Daniel Henriksson
  * 
@@ -170,7 +170,7 @@ public interface GCom {
 	 * @param groupName
 	 *                the affected group
 	 */
-	public Member getLocalMember(String groupName);
+	public MemberInterface getLocalMember(String groupName);
 
 	/**
 	 * Retrieves the group members.
@@ -179,7 +179,7 @@ public interface GCom {
 	 *                the affected group
 	 * @return an array containing group members
 	 */
-	public List<Member> getMembers(String groupName);
+	public List<MemberInterface> getMembers(String groupName);
 
 	/**
 	 * A group definition specifies the type of group, the communication type,
@@ -221,7 +221,7 @@ public interface GCom {
 	 * A GCom Group member interface. Used to identify individual members in a
 	 * GCom group.
 	 */
-	public interface Member extends Comparable<Member>, Serializable {
+	public interface MemberInterface extends Serializable {
 		// ---------------------------------------------------------
 		/**
 		 * @return a unique group member identifier.
@@ -246,7 +246,7 @@ public interface GCom {
 		 * @param member
 		 *                the new member who has joined
 		 */
-		public void newMember(Member member);
+		public void newMember(MemberInterface member);
 
 		/**
 		 * Callback method when a member leaves the group.
@@ -254,7 +254,7 @@ public interface GCom {
 		 * @param member
 		 *                the new member who has left
 		 */
-		public void lostMember(Member member);
+		public void lostMember(MemberInterface member);
 	}
 
 	/**
@@ -270,7 +270,7 @@ public interface GCom {
 		 * @param message
 		 *                the message object.
 		 */
-		public void messageReceived(Member source, Serializable message);
+		public void messageReceived(Serializable message);
 	}
 
 

@@ -1,23 +1,31 @@
 package se.luddoj.distsys.gcom;
 
-public class Member implements se.luddoj.distsys.gcom.GCom.Member {
+import se.luddoj.distsys.gcom.GCom.MemberInterface;
 
+public class Member implements se.luddoj.distsys.gcom.GCom.MemberInterface {
+
+	private static final long serialVersionUID = 6940203241759957894L;
+	private String id;
+	private String name;
+	
+	public Member(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
 	@Override
 	public String getID() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
-
-	@Override
-	public int compareTo(se.luddoj.distsys.gcom.GCom.Member o) {
-		// TODO Auto-generated method stub
-		return 0;
+	
+	public boolean equals(MemberInterface m) {
+		return m.getID().equals(this.id);
 	}
+	
 
 }
