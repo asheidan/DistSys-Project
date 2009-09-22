@@ -13,7 +13,8 @@ public class GroupTest {
 	
 	@Before
 	public void setUp() {
-		g = new Group();
+		GroupDefinition gdef = new GroupDefinition();
+		g = new Group(gdef);
 	}
 	
 	@Test

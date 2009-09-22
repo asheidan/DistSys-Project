@@ -2,8 +2,6 @@ package se.luddoj.distsys.gcom;
 
 import java.io.Serializable;
 import java.util.Vector;
-
-import se.luddoj.distsys.gcom.GCom.MemberInterface;
 import se.luddoj.distsys.gcom.GCom.MessageListener;
 
 public class momNonOrdered implements MessageOrderingModuleInterface {

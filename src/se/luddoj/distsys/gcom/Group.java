@@ -3,11 +3,17 @@ package se.luddoj.distsys.gcom;
 import java.util.List;
 import java.util.Vector;
 
+import se.luddoj.distsys.gcom.GCom.GroupDefinitionInterface;
 import se.luddoj.distsys.gcom.GCom.MemberInterface;
 
 public class Group implements GroupInterface {
 
 	private Vector<MemberInterface> members = new Vector<MemberInterface>();
+	private GroupDefinitionInterface groupDefinition;
+	
+	public Group(GroupDefinitionInterface group_definition) {
+		this.groupDefinition = group_definition;
+	}
 	
 	@Override
 	public void addMember(MemberInterface member) {
