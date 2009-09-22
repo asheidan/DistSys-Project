@@ -31,4 +31,8 @@ public class Group implements GroupInterface {
 		members.remove(index);
 	}
 
+	public GroupDefinitionInterface getGroupDefinition() {
+		return groupDefinition;
+	}
+
 }
