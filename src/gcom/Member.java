@@ -1,7 +1,5 @@
 package gcom;
 
-import gcom.interfaces.*;
-
 public class Member implements gcom.interfaces.Member {
 
 	private static final long serialVersionUID = 6940203241759957894L;

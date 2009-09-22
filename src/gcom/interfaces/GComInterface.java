@@ -97,7 +97,7 @@ public interface GComInterface {
 	 *                 name is not a member.
 	 * @return the group definition of the joined group.
 	 */
-	public GroupDefinitionInterface joinGroup(String groupName, String localMemberName)
+	public GroupDefinition joinGroup(String groupName, String localMemberName)
 	throws IOException, IllegalStateException;
 
 	/**
@@ -111,7 +111,7 @@ public interface GComInterface {
 	 *                 upon group creation failure
 	 * 
 	 */
-	public void createGroup(GroupDefinitionInterface description,
+	public void createGroup(GroupDefinition description,
 			String localMemberName) throws IOException;
 
 	/**
@@ -162,7 +162,7 @@ public interface GComInterface {
 	 *                 if the connection to the RMI registry previously
 	 *                 specified fails.
 	 */
-	public List<GroupDefinitionInterface> listGroups() throws IOException;
+	public List<GroupDefinition> listGroups() throws IOException;
 
 	/**
 	 * Return the local member for this GComInterface instance, in the specified group.

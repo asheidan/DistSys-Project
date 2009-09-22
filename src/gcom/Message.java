@@ -1,11 +1,8 @@
 package gcom;
 
-
-import gcom.interfaces.*;
-
 import java.io.Serializable;
 
-public class Message implements MessageInterface {
+public class Message implements gcom.interfaces.Message {
 
 	/**
 	 * 

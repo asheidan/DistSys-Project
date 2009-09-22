@@ -1,17 +1,16 @@
 package gcom;
 
 import gcom.interfaces.Member;
-import gcom.interfaces.*;
 
 import java.util.List;
 import java.util.Vector;
 
-public class Group implements GroupInterface {
+public class Group implements gcom.interfaces.Group {
 
 	private Vector<Member> members = new Vector<Member>();
-	private GroupDefinitionInterface groupDefinition;
+	private GroupDefinition groupDefinition;
 	
-	public Group(GroupDefinitionInterface group_definition) {
+	public Group(GroupDefinition group_definition) {
 		this.groupDefinition = group_definition;
 	}
 	

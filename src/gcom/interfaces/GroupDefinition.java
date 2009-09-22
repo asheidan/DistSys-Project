@@ -14,7 +14,7 @@ import java.io.Serializable;
  * group.
  * 
  */
-public interface GroupDefinitionInterface extends Serializable {
+public interface GroupDefinition extends Serializable {
 
 	/**
 	 * Returns the group type (Static / Dynamic) of this group

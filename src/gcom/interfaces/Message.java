@@ -4,7 +4,7 @@ import gcom.HashVectorClock;
 
 import java.io.Serializable;
 
-public interface MessageInterface extends Serializable {
+public interface Message extends Serializable {
 	public static enum TYPE_MESSAGE { APPLICATION };
 
 	// 

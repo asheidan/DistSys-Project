@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import gcom.*;
 import gcom.interfaces.MessageListener;
-import gcom.interfaces.MessageInterface.TYPE_MESSAGE;
+import gcom.interfaces.Message.TYPE_MESSAGE;
 
 import java.io.Serializable;
 
