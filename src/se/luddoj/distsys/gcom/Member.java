@@ -23,8 +23,12 @@ public class Member implements se.luddoj.distsys.gcom.GCom.MemberInterface {
 		return name;
 	}
 	
-	public boolean equals(MemberInterface m) {
-		return m.getID().equals(this.id);
+	public boolean equals(Object m) {
+		System.out.println("tja");
+		if(MemberInterface.class.isInstance(m)) {
+			return ((MemberInterface) m).getID().equals(this.id);
+		}
+		return false;
 	}
 	
 

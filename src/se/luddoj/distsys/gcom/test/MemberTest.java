@@ -34,5 +34,7 @@ public class MemberTest {
 		Member member2 = new Member("123", "test1");
 		assertEquals(member, member1);
 		assertEquals(member, member2);
+		assertFalse(member.equals("123"));
+		assertFalse(member.equals("test"));
 	}
 }
