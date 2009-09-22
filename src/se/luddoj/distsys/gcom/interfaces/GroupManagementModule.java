@@ -1,8 +1,6 @@
-package se.luddoj.distsys.gcom;
+package se.luddoj.distsys.gcom.interfaces;
 
 import java.util.List;
-
-import se.luddoj.distsys.gcom.GComInterface.GroupDefinitionInterface;
 
 public interface GroupManagementModule {
 	public void addGroup(GroupDefinitionInterface group);

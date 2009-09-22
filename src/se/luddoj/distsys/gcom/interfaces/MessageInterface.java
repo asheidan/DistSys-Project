@@ -1,5 +1,6 @@
-package se.luddoj.distsys.gcom;
+package se.luddoj.distsys.gcom.interfaces;
 
+import se.luddoj.distsys.gcom.HashVectorClock;
 import java.io.Serializable;
 
 public interface MessageInterface extends Serializable {

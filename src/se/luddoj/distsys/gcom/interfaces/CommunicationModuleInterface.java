@@ -1,4 +1,4 @@
-package se.luddoj.distsys.gcom;
+package se.luddoj.distsys.gcom.interfaces;
 
 public interface CommunicationModuleInterface {
 	public void receive(MessageInterface m);

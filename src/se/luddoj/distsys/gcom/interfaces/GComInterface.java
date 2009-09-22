@@ -1,4 +1,4 @@
-package se.luddoj.distsys.gcom;
+package se.luddoj.distsys.gcom.interfaces;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -180,98 +180,5 @@ public interface GComInterface {
 	 * @return an array containing group members
 	 */
 	public List<MemberInterface> getMembers(String groupName);
-
-	/**
-	 * A group definition specifies the type of group, the communication type,
-	 * the type of message order in use the group description and (for static
-	 * groups only) also the expected names of the members in the completed
-	 * group.
-	 * 
-	 */
-	public interface GroupDefinitionInterface extends Serializable {
-
-		/**
-		 * Returns the group type (Static / Dynamic) of this group
-		 * 
-		 * @return The group type
-		 */
-		public TYPE_GROUP getGroupType();
-
-		/**
-		 * Returns the communication type used in this group
-		 * 
-		 * @return The communication type
-		 */
-		public TYPE_COMMUNICATION getCommunicationType();
-
-		/**
-		 * Returns the message ordering type used in this group
-		 * 
-		 * @return The message ordering type
-		 */
-		public TYPE_MESSAGEORDERING getMessageOrderingType();
-
-		/**
-		 * @return The human-readable name or description of this group
-		 */
-		public String getGroupName();
-	}
-
-	/**
-	 * A GComInterface Group member interface. Used to identify individual members in a
-	 * GComInterface group.
-	 */
-	public interface MemberInterface extends Serializable {
-		// ---------------------------------------------------------
-		/**
-		 * @return a unique group member identifier.
-		 */
-		public String getID();
-
-		/**
-		 * @return the human readable name of this Member
-		 */
-		public String getName();
-	}
-
-
-	/**
-	 * A GComInterface view change listener interface that deals with changes to the
-	 * group structure.
-	 */
-	public interface ViewChangeListener {
-		/**
-		 * Callback method when a new member joins the group.
-		 * 
-		 * @param member
-		 *                the new member who has joined
-		 */
-		public void newMember(MemberInterface member);
-
-		/**
-		 * Callback method when a member leaves the group.
-		 * 
-		 * @param member
-		 *                the new member who has left
-		 */
-		public void lostMember(MemberInterface member);
-	}
-
-	/**
-	 * A GComInterface message listener interface that deals with messages delivered to a
-	 * group
-	 */
-	public interface MessageListener {
-		/**
-		 * Callback method when a message is delivered to the group.
-		 * 
-		 * @param source
-		 *                the source Member who sent the message.
-		 * @param message
-		 *                the message object.
-		 */
-		public void messageReceived(Serializable message);
-	}
-
 
 }

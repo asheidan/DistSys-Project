@@ -1,5 +1,7 @@
 package se.luddoj.distsys.gcom;
 
+import se.luddoj.distsys.gcom.interfaces.*;
+
 import java.util.Hashtable;
 import java.util.Map;
 

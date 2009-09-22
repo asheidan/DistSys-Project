@@ -1,8 +1,6 @@
-package se.luddoj.distsys.gcom;
+package se.luddoj.distsys.gcom.interfaces;
 
 import java.util.List;
-
-import se.luddoj.distsys.gcom.GComInterface.MemberInterface;
 
 public interface GroupInterface {
 	public void addMember(MemberInterface member);

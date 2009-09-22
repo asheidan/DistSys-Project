@@ -1,5 +1,7 @@
 package se.luddoj.distsys.gcom;
 
+import se.luddoj.distsys.gcom.interfaces.*;
+
 import java.io.Serializable;
 
 public class Message implements MessageInterface {

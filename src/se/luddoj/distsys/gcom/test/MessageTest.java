@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.luddoj.distsys.gcom.*;
-import se.luddoj.distsys.gcom.MessageInterface.TYPE_MESSAGE;
+import se.luddoj.distsys.gcom.interfaces.MessageInterface.TYPE_MESSAGE;
 
 
 public class MessageTest {

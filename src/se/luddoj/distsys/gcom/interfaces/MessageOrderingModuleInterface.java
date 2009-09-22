@@ -1,6 +1,4 @@
-package se.luddoj.distsys.gcom;
-
-import se.luddoj.distsys.gcom.GComInterface.MessageListener;
+package se.luddoj.distsys.gcom.interfaces;
 
 public interface MessageOrderingModuleInterface {
 	public void queueMessage(MessageInterface m);
