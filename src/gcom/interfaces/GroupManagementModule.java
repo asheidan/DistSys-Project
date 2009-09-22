@@ -6,6 +6,8 @@ public interface GroupManagementModule {
 	public void addGroup(GroupDefinition group);
 
 	public void removeGroup(String groupName);
+	
+	public Group getGroup(String groupName);
 
 	public List<GroupDefinition> listGroups();
 }

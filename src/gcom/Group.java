@@ -1,6 +1,7 @@
 package gcom;
 
 import gcom.interfaces.Member;
+import gcom.interfaces.GroupDefinition;
 
 import java.util.List;
 import java.util.Vector;
@@ -28,6 +29,12 @@ public class Group implements gcom.interfaces.Group {
 	public void removeMember(Member member) {
 		int index = members.indexOf(member);
 		members.remove(index);
+	}
+
+	@Override
+	public GroupDefinition getDefinition() {
+		// TODO Auto-generated method stub
+		return groupDefinition;
 	}
 
 }
