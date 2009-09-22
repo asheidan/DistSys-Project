@@ -6,21 +6,29 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * Implements the interface {@link VectorClock} with the use of a
+ * Implements the interface {@link VectorClockInterface} with the use of a
  * {@link Hashtable} instead of a vector. This is to allow for
  * disappearing nodes.
  */
-public class HashVectorClock implements VectorClock {
+public class HashVectorClock implements VectorClockInterface {
 	private static Logger logger = Logger.getLogger("gcom.HashVectorClock");
 
 	private Hashtable<Object, Integer> clocks;
+	private Object key;
 	
-	public HashVectorClock() {
+	public HashVectorClock(Object key) {
 		clocks = new Hashtable<Object, Integer>();
+		this.key = key;
+		clocks.put(key, 0);
 	}
 	
-	public HashVectorClock(Map<Object, Integer> m) {
+	public HashVectorClock(Object key, Map<Object, Integer> m) {
 		clocks = new Hashtable<Object, Integer>(m);
+		this.key = key;
+	}
+	
+	public void tick() {
+		clocks.put(key, clocks.get(key)+1);
 	}
 	
 	public void merge(HashVectorClock o) {
@@ -50,14 +58,12 @@ public class HashVectorClock implements VectorClock {
 		return earlier + later;
 	}
 
-	public int compareTo(VectorClock o) {
-		logger.error("This method isn't implemented");
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(VectorClockInterface o) {
+		throw(new RuntimeException("Method not implemented: compareTo(VectorClockInterface)"));
 	}
 	
 	public String toString() {
-		return "VectorClock" + clocks.toString(); 
+		return "VectorClock(" +this.key.toString() + ")"+ clocks.toString(); 
 	}
 
 }
