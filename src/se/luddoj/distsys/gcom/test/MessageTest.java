@@ -19,7 +19,7 @@ public class MessageTest {
 	
 	@Before
 	public void setUp() {
-		clock = new HashVectorClock();
+		clock = new HashVectorClock(0);
 		source = new Member("123", "test");
 		m = new Message(clock, "testGroup", source, "test", TYPE_MESSAGE.APPLICATION);
 	}
