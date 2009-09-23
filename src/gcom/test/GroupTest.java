@@ -56,7 +56,7 @@ public class GroupTest {
 
 	@Test
 	public void testGetGroupDefinition() {
-		GroupDefinition g = (GroupDefinition) group.getGroupDefinition();
+		GroupDefinition g = (GroupDefinition) group.getDefinition();
 		assertEquals(gdef, g);
 	}
 
