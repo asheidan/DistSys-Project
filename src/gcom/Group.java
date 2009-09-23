@@ -10,6 +10,7 @@ public class Group implements gcom.interfaces.Group {
 
 	private Vector<Member> members = new Vector<Member>();
 	private GroupDefinition groupDefinition;
+	private boolean leader;
 	
 	public Group(GroupDefinition group_definition) {
 		this.groupDefinition = group_definition;
@@ -33,8 +34,17 @@ public class Group implements gcom.interfaces.Group {
 
 	@Override
 	public GroupDefinition getDefinition() {
-		// TODO Auto-generated method stub
 		return groupDefinition;
+	}
+
+	@Override
+	public void setLeader(boolean leader) {
+		this.leader = leader;
+	}
+	
+	@Override
+	public boolean isLeader() {
+		return leader;
 	}
 
 }
