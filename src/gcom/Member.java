@@ -27,6 +27,5 @@ public class Member implements gcom.interfaces.Member {
 		}
 		return false;
 	}
-	
 
 }
