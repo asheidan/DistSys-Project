@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * GComInterface is an interface for the GComInterface middleware to be developed in the
- * assignment parts of the course Distributed Systems (5DV020). The GComInterface
+ * GCom is an interface for the GCom middleware to be developed in the
+ * assignment parts of the course Distributed Systems (5DV020). The GCom
  * middleware is a middleware that facilitates group communication between
  * interconnected, distributed clients.
  * 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author Daniel Henriksson
  * 
  */
-public interface GComInterface {
+public interface GCom {
 
 	/**
 	 * A group type identifier. Consult the assignment specification for details
@@ -132,7 +132,7 @@ public interface GComInterface {
 	IllegalStateException;
 
 	/**
-	 * Sets the adress and port of the RMI registry to be used by this GComInterface
+	 * Sets the adress and port of the RMI registry to be used by this GCom
 	 * instance.
 	 * 
 	 * @param hostname
@@ -155,7 +155,7 @@ public interface GComInterface {
 	public void disconnect(String groupName) throws IOException;
 
 	/**
-	 * Get a list of groups currently accessible through this GComInterface instance.
+	 * Get a list of groups currently accessible through this GCom instance.
 	 * 
 	 * @return a list of group definitions.
 	 * @throws IOException
@@ -165,7 +165,7 @@ public interface GComInterface {
 	public List<GroupDefinition> listGroups() throws IOException;
 
 	/**
-	 * Return the local member for this GComInterface instance, in the specified group.
+	 * Return the local member for this GCom instance, in the specified group.
 	 * 
 	 * @param groupName
 	 *                the affected group
