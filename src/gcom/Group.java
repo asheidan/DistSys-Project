@@ -9,11 +9,11 @@ public class Group implements gcom.interfaces.Group {
 
 	private Vector<Member> members = new Vector<Member>();
 	private GroupDefinition groupDefinition;
-	
+
 	public Group(GroupDefinition group_definition) {
 		this.groupDefinition = group_definition;
 	}
-	
+
 	@Override
 	public void addMember(Member member) {
 		members.add(member);
@@ -28,6 +28,10 @@ public class Group implements gcom.interfaces.Group {
 	public void removeMember(Member member) {
 		int index = members.indexOf(member);
 		members.remove(index);
+	}
+
+	public GroupDefinition getGroupDefinition() {
+		return groupDefinition;
 	}
 
 }

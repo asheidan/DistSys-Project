@@ -22,7 +22,6 @@ public class Member implements gcom.interfaces.Member {
 	}
 	
 	public boolean equals(Object m) {
-		System.out.println("tja");
 		if(Member.class.isInstance(m)) {
 			return ((Member) m).getID().equals(this.id);
 		}
