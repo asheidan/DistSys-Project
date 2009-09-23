@@ -3,7 +3,7 @@ package gcom.interfaces;
 import java.io.Serializable;
 
 /**
- * A GComInterface message listener interface that deals with messages delivered to a
+ * A GCom message listener interface that deals with messages delivered to a
  * group
  */
 public interface MessageListener {

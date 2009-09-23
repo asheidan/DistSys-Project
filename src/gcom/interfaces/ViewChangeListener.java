@@ -1,7 +1,7 @@
 package gcom.interfaces;
 
 /**
- * A GComInterface view change listener interface that deals with changes to the
+ * A GCom view change listener interface that deals with changes to the
  * group structure.
  */
 public interface ViewChangeListener {

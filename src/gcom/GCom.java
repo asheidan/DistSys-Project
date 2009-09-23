@@ -1,4 +1,4 @@
-package se.luddoj.distsys.gcom;
+package gcom;
 
 import java.io.IOException;
 import java.io.Serializable;
