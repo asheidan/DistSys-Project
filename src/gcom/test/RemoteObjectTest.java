@@ -1,11 +1,12 @@
-package gcom;
+package gcom.test;
 
 import static org.junit.Assert.*;
 
 import java.io.Serializable;
 
-import gcom.interfaces.CommunicationModule;
-import gcom.interfaces.Message;
+import gcom.HashVectorClock;
+import gcom.RemoteObject;
+import gcom.interfaces.*;
 
 import org.junit.Before;
 import org.junit.Test;
