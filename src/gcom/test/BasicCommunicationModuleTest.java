@@ -1,29 +1,65 @@
 package gcom.test;
 
 import static org.junit.Assert.*;
+
+import java.io.Serializable;
+
 import gcom.BasicCommunicationModule;
-import gcom.momNonOrdered;
-import gcom.interfaces.Message;
-import gcom.interfaces.MessageListener;
-import gcom.interfaces.MessageOrderingModule;
+import gcom.HashVectorClock;
+import gcom.interfaces.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class BasicCommunicationModuleTest {
-
+	Group group;
+	MessageOrderingMockup mom;
+	BasicCommunicationModule com;
+	
+	
 	@Before
 	public void setUp() throws Exception {
+		group = new gcom.Group(new gcom.GroupDefinition("De små nissarna"));
+		mom = new MessageOrderingMockup();
+		com = new BasicCommunicationModule(mom,group);
 	}
 
 	@Test
 	public void testBasicCommunicationModule() {
-		assertNotNull("Constructor should work", new BasicCommunicationModule(new momNonOrdered(), null));
+		assertNotNull("Constructor should work", com);
 	}
 
+	@SuppressWarnings("serial")
 	@Test
 	public void testReceive() {
-		fail("Not yet implemented");
+		Message m = new Message() {
+			
+			@Override
+			public TYPE_MESSAGE getMessageType() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Serializable getMessage() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public String getGroupName() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public HashVectorClock getClock() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		com.receive(m);
+		assertEquals(m, mom.lastMessage);
 	}
 
 	@Test
@@ -31,20 +67,16 @@ public class BasicCommunicationModuleTest {
 		fail("Not yet implemented");
 	}
 	
-	private class TestException extends Throwable {
-		private Message message;
-		public TestException(Message m) { this.message = m; }
-		public Message getPayload() { return message; }
-	}
-	
-	private class MessageOrderingModuleMockup implements MessageOrderingModule {
+	public class MessageOrderingMockup implements MessageOrderingModule {
+		public Message lastMessage = null;
+		
 		@Override
 		public void addMessageListener(MessageListener listener) {
 		}
 
 		@Override
 		public void queueMessage(Message m) {
-			throw new TestException(m);
+			lastMessage = m;
 		}
 		
 	}

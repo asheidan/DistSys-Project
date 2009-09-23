@@ -17,4 +17,6 @@ public interface Member extends Serializable {
 	 * @return the human readable name of this Member
 	 */
 	public String getName();
+	
+	public RemoteObject getRemoteObject();
 }

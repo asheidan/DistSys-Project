@@ -7,8 +7,6 @@ import java.io.Serializable;
 public interface Message extends Serializable {
 	public static enum TYPE_MESSAGE { APPLICATION, JOIN };
 
-	// 
-
 	public Serializable getMessage();
 
 	public HashVectorClock getClock();
