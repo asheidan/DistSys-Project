@@ -4,8 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import se.luddoj.distsys.gcom.Group;
 import se.luddoj.distsys.gcom.GroupDefinition;
 import se.luddoj.distsys.gcom.GComInterface.TYPE_COMMUNICATION;
 import se.luddoj.distsys.gcom.GComInterface.TYPE_GROUP;
