@@ -2,6 +2,7 @@ package gcom;
 
 import gcom.interfaces.Group;
 import gcom.interfaces.GroupDefinition;
+import gcom.interfaces.Member;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -38,8 +39,21 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 	}
 
 	@Override
-	public Group getGroup(String groupName) {
-		return groups.get(groupName);
+	public GroupDefinition getGroupDefinition(String groupName) {
+		Group g = groups.get(groupName);
+		if(g == null) { return null; }
+		return g.getDefinition();
 	}
 
+	@Override
+	public void addMember(String groupName, Member member) {
+		Group g = groups.get(groupName);
+		g.addMember(member);
+	}
+
+	@Override
+	public List<Member> listGroupMembers(String groupName) {
+		Group g = groups.get(groupName);
+		return g.listMembers();
+	}
 }
