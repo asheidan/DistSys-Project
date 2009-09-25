@@ -3,8 +3,8 @@ package gcom.interfaces;
 import java.io.Serializable;
 
 /**
- * A GComInterface Group member interface. Used to identify individual members in a
- * GComInterface group.
+ * A GCom Group member interface. Used to identify individual members in a
+ * GCom group.
  */
 public interface Member extends Serializable {
 	// ---------------------------------------------------------

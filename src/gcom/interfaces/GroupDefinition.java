@@ -1,8 +1,8 @@
 package gcom.interfaces;
 
-import gcom.interfaces.GComInterface.TYPE_COMMUNICATION;
-import gcom.interfaces.GComInterface.TYPE_GROUP;
-import gcom.interfaces.GComInterface.TYPE_MESSAGEORDERING;
+import gcom.interfaces.GCom.TYPE_COMMUNICATION;
+import gcom.interfaces.GCom.TYPE_GROUP;
+import gcom.interfaces.GCom.TYPE_MESSAGEORDERING;
 
 import java.io.Serializable;
 
