@@ -8,6 +8,7 @@ import gcom.HashVectorClock;
 import gcom.RemoteObject;
 import gcom.interfaces.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +20,7 @@ public class RemoteObjectTest {
 	public void setUp() throws Exception {
 		com = new CommunicationMockup();
 		ro = new RemoteObject(com);
+		ro.start();
 	}
 
 	@Test
@@ -27,12 +29,18 @@ public class RemoteObjectTest {
 	}
 
 	@Test
-	public void testSend() {
+	public void testSend() throws InterruptedException {
 		Message m = new MessageMockup();
 		ro.send(m);
+		Thread.sleep(1000);
 		assertEquals(m, com.lastMessage);
 	}
 	
+	@After
+	public void tearDown() {
+		ro.stop();
+	}
+
 	@SuppressWarnings("serial")
 	private class MessageMockup implements Message {
 
