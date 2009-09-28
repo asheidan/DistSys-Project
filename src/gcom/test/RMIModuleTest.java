@@ -3,7 +3,6 @@ package gcom.test;
 import static org.junit.Assert.*;
 
 import gcom.RMIModule;
-import gcom.interfaces.CommunicationModule;
 import gcom.interfaces.Message;
 import gcom.interfaces.RemoteObject;
 
@@ -13,7 +12,6 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
 import org.junit.Before;
 import org.junit.Test;
