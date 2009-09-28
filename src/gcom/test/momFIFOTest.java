@@ -26,6 +26,10 @@ public class momFIFOTest {
 		HashVectorClock clock0 = new HashVectorClock(source.getID());
 		HashVectorClock clock1 = new HashVectorClock(source.getID());
 		HashVectorClock clock2 = new HashVectorClock(source.getID());
+		
+		clock1.tick();
+		clock2.tick();
+		clock2.tick();
 
 		Message m0 = new Message(clock0, "group1", source, "test data0", TYPE_MESSAGE.APPLICATION);
 		Message m1 = new Message(clock1, "group1", source, "test data1", TYPE_MESSAGE.APPLICATION);
@@ -49,6 +53,10 @@ public class momFIFOTest {
 		HashVectorClock clock0 = new HashVectorClock(source.getID());
 		HashVectorClock clock1 = new HashVectorClock(source.getID());
 		HashVectorClock clock2 = new HashVectorClock(source.getID());
+
+		clock1.tick();
+		clock2.tick();
+		clock2.tick();
 
 		Message m0 = new Message(clock0, "group1", source, "test data0", TYPE_MESSAGE.APPLICATION);
 		Message m1 = new Message(clock1, "group1", source, "test data1", TYPE_MESSAGE.APPLICATION);

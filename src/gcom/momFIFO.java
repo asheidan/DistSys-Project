@@ -42,6 +42,7 @@ public class momFIFO implements MessageOrderingModule {
 			sendToListeners(m);
 			return;
 		}
+		messages.add(m);
 		checkMessages();
 	}
 	
