@@ -69,4 +69,9 @@ public class HashVectorClock implements VectorClock {
 		return "VectorClock(" +this.key.toString() + ")"+ clocks.toString(); 
 	}
 
+
+	public Integer getValue(Object key) {
+		return clocks.get(key);
+	}
+
 }

@@ -32,8 +32,8 @@ public class MessageTest {
 	}
 	
 	@Test
-	public void testGetMember() {
-		Member member = m.getMember();
+	public void testGetSoruce() {
+		Member member = m.getSource();
 		assertEquals(source, member);
 	}
 
