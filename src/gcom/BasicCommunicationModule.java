@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 
 import org.apache.log4j.Logger;
 
+import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
@@ -13,11 +14,13 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	private Logger logger = Logger.getLogger("gcom.CommunicationModule.Basic");
 	
 	private MessageOrderingModule mom;
-	private Group group;
+	private GroupManagementModule gmm;
+	private String group;
 	
-	public BasicCommunicationModule(MessageOrderingModule mom, Group group) {
+	public BasicCommunicationModule(MessageOrderingModule mom, GroupManagementModule gmm, String groupName) {
 		this.mom = mom;
-		this.group = group;
+		this.gmm = gmm;
+		this.group = groupName;
 	}
 	
 	@Override
@@ -29,7 +32,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 
 	@Override
 	public void send(Message message) {
-		for(Member m : group.listMembers()) {
+		for(Member m : gmm.listGroupMembers(group)) {
 			logger.debug("Sending message to: " + m.toString());
 			try {
 				m.getRemoteObject().send(message);

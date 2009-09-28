@@ -2,18 +2,38 @@ package gcom;
 
 import gcom.interfaces.CommunicationModule;
 import gcom.interfaces.GroupManagementModule;
+import gcom.interfaces.Message;
 import gcom.interfaces.MessageListener;
+import gcom.interfaces.MessageOrderingModule;
+import gcom.interfaces.RemoteObject;
 import gcom.interfaces.ViewChangeListener;
 import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Member;
+import gcom.interfaces.RMIModule;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.util.Hashtable;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 public class GCom implements gcom.interfaces.GCom {
+	private Logger log = Logger.getLogger("gcom");
 
 	private GroupManagementModule gmm = new gcom.GroupManagementModule();
+	private RMIModule rmi;
+	private Hashtable<String, CommunicationModule> comModules = new Hashtable<String, CommunicationModule>();
+	
+	public GCom() {
+		BasicConfigurator.configure();
+		log.setLevel(Level.ALL);
+		log.debug("gcom-object created");
+	}
 	
 	@Override
 	public void addMessageListener(String groupName, MessageListener listener) {
@@ -30,14 +50,45 @@ public class GCom implements gcom.interfaces.GCom {
 
 	@Override
 	public void connectToRegistry(String host, int port) throws IOException {
-		// TODO Auto-generated method stub
-
+		rmi = new gcom.RMIModule(host,port);
 	}
 
 	@Override
 	public void createGroup(GroupDefinition description,
 			String localMemberName) throws IOException {
 		// TODO Auto-generated method stub
+		String groupName = description.getGroupName();
+		
+		MessageOrderingModule mom;
+		switch (description.getMessageOrderingType()) {
+		case NONORDERED:
+			mom = new gcom.momNonOrdered();
+			break;
+
+		default:
+			log.error("Unknown message-ordering type: " + description.getMessageOrderingType());
+			return;
+		}
+		
+		CommunicationModule com;
+		switch(description.getCommunicationType()) {
+		case BASIC_UNRELIABLE_MULTICAST :
+			com = new BasicCommunicationModule(mom, gmm, groupName);
+			break;
+			
+		default:
+			log.error("Unknown communication type: " + description.getCommunicationType());
+			return;
+		}
+		
+		try {
+			rmi.bind(groupName, new gcom.RemoteObject(com));
+			gmm.addGroup(description);
+			comModules.put(groupName, com);
+		}
+		catch (AlreadyBoundException e) {
+			log.debug("Trying to bind object for new group which already exists: " + groupName);
+		}
 	}
 
 	@Override
@@ -66,8 +117,7 @@ public class GCom implements gcom.interfaces.GCom {
 
 	@Override
 	public List<GroupDefinition> listGroups() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return gmm.listGroups();
 	}
 
 	@Override
