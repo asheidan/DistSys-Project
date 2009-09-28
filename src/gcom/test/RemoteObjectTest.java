@@ -55,6 +55,11 @@ public class RemoteObjectTest {
 		public TYPE_MESSAGE getMessageType() {
 			return null;
 		}
+
+		@Override
+		public Member getSource() {
+			return null;
+		}
 		
 	}
 	

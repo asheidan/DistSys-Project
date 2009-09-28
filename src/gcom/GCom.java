@@ -54,7 +54,7 @@ public class GCom implements gcom.interfaces.GCom {
 
 	@Override
 	public List<Member> getMembers(String groupName) {
-		return gmm.getGroup(groupName).listMembers();
+		return gmm.listGroupMembers(groupName);
 	}
 
 	@Override
