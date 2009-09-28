@@ -1,11 +1,13 @@
-package se.luddoj.distsys.gcom;
+package gcom;
+
+import gcom.interfaces.Message;
+import gcom.interfaces.*;
 
 import java.io.Serializable;
 import java.util.Vector;
-import se.luddoj.distsys.gcom.GComInterface.MessageListener;
 
-public class momNonOrdered implements MessageOrderingModuleInterface {
-
+public class momNonOrdered implements MessageOrderingModule {
+	// TODO make sure that a message isn't delivered more than once
 	
 	private Vector<MessageListener> listeners;
 	
@@ -25,7 +27,7 @@ public class momNonOrdered implements MessageOrderingModuleInterface {
 	}
 	
 	@Override
-	public void queueMessage(MessageInterface m) {
+	public void queueMessage(Message m) {
 		sendToListeners(m);
 	}
 

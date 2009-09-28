@@ -1,5 +1,7 @@
-package se.luddoj.distsys.gcom.test;
+package gcom.test;
 import static org.junit.Assert.*;
+
+import gcom.HashVectorClock;
 
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -9,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.luddoj.distsys.gcom.HashVectorClock;
 
 public class HashVectorClockTest {
 	static Logger logger = Logger.getLogger("gcom.HashVectorClock.test"); 

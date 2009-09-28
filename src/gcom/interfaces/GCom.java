@@ -1,12 +1,12 @@
-package se.luddoj.distsys.gcom;
+package gcom.interfaces;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * GComInterface is an interface for the GComInterface middleware to be developed in the
- * assignment parts of the course Distributed Systems (5DV020). The GComInterface
+ * GCom is an interface for the GCom middleware to be developed in the
+ * assignment parts of the course Distributed Systems (5DV020). The GCom
  * middleware is a middleware that facilitates group communication between
  * interconnected, distributed clients.
  * 
@@ -17,7 +17,7 @@ import java.util.List;
  * @author Daniel Henriksson
  * 
  */
-public interface GComInterface {
+public interface GCom {
 
 	/**
 	 * A group type identifier. Consult the assignment specification for details
@@ -97,7 +97,7 @@ public interface GComInterface {
 	 *                 name is not a member.
 	 * @return the group definition of the joined group.
 	 */
-	public GroupDefinitionInterface joinGroup(String groupName, String localMemberName)
+	public GroupDefinition joinGroup(String groupName, String localMemberName)
 	throws IOException, IllegalStateException;
 
 	/**
@@ -111,7 +111,7 @@ public interface GComInterface {
 	 *                 upon group creation failure
 	 * 
 	 */
-	public void createGroup(GroupDefinitionInterface description,
+	public void createGroup(GroupDefinition description,
 			String localMemberName) throws IOException;
 
 	/**
@@ -132,7 +132,7 @@ public interface GComInterface {
 	IllegalStateException;
 
 	/**
-	 * Sets the adress and port of the RMI registry to be used by this GComInterface
+	 * Sets the adress and port of the RMI registry to be used by this GCom
 	 * instance.
 	 * 
 	 * @param hostname
@@ -155,22 +155,22 @@ public interface GComInterface {
 	public void disconnect(String groupName) throws IOException;
 
 	/**
-	 * Get a list of groups currently accessible through this GComInterface instance.
+	 * Get a list of groups currently accessible through this GCom instance.
 	 * 
 	 * @return a list of group definitions.
 	 * @throws IOException
 	 *                 if the connection to the RMI registry previously
 	 *                 specified fails.
 	 */
-	public List<GroupDefinitionInterface> listGroups() throws IOException;
+	public List<GroupDefinition> listGroups() throws IOException;
 
 	/**
-	 * Return the local member for this GComInterface instance, in the specified group.
+	 * Return the local member for this GCom instance, in the specified group.
 	 * 
 	 * @param groupName
 	 *                the affected group
 	 */
-	public MemberInterface getLocalMember(String groupName);
+	public Member getLocalMember(String groupName);
 
 	/**
 	 * Retrieves the group members.
@@ -179,99 +179,6 @@ public interface GComInterface {
 	 *                the affected group
 	 * @return an array containing group members
 	 */
-	public List<MemberInterface> getMembers(String groupName);
-
-	/**
-	 * A group definition specifies the type of group, the communication type,
-	 * the type of message order in use the group description and (for static
-	 * groups only) also the expected names of the members in the completed
-	 * group.
-	 * 
-	 */
-	public interface GroupDefinitionInterface extends Serializable {
-
-		/**
-		 * Returns the group type (Static / Dynamic) of this group
-		 * 
-		 * @return The group type
-		 */
-		public TYPE_GROUP getGroupType();
-
-		/**
-		 * Returns the communication type used in this group
-		 * 
-		 * @return The communication type
-		 */
-		public TYPE_COMMUNICATION getCommunicationType();
-
-		/**
-		 * Returns the message ordering type used in this group
-		 * 
-		 * @return The message ordering type
-		 */
-		public TYPE_MESSAGEORDERING getMessageOrderingType();
-
-		/**
-		 * @return The human-readable name or description of this group
-		 */
-		public String getGroupName();
-	}
-
-	/**
-	 * A GComInterface Group member interface. Used to identify individual members in a
-	 * GComInterface group.
-	 */
-	public interface MemberInterface extends Serializable {
-		// ---------------------------------------------------------
-		/**
-		 * @return a unique group member identifier.
-		 */
-		public String getID();
-
-		/**
-		 * @return the human readable name of this Member
-		 */
-		public String getName();
-	}
-
-
-	/**
-	 * A GComInterface view change listener interface that deals with changes to the
-	 * group structure.
-	 */
-	public interface ViewChangeListener {
-		/**
-		 * Callback method when a new member joins the group.
-		 * 
-		 * @param member
-		 *                the new member who has joined
-		 */
-		public void newMember(MemberInterface member);
-
-		/**
-		 * Callback method when a member leaves the group.
-		 * 
-		 * @param member
-		 *                the new member who has left
-		 */
-		public void lostMember(MemberInterface member);
-	}
-
-	/**
-	 * A GComInterface message listener interface that deals with messages delivered to a
-	 * group
-	 */
-	public interface MessageListener {
-		/**
-		 * Callback method when a message is delivered to the group.
-		 * 
-		 * @param source
-		 *                the source Member who sent the message.
-		 * @param message
-		 *                the message object.
-		 */
-		public void messageReceived(Serializable message);
-	}
-
+	public List<Member> getMembers(String groupName);
 
 }
