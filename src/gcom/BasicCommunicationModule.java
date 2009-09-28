@@ -1,5 +1,7 @@
 package gcom;
 
+import java.rmi.RemoteException;
+
 import org.apache.log4j.Logger;
 
 import gcom.interfaces.Member;
@@ -29,7 +31,12 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	public void send(Message message) {
 		for(Member m : group.listMembers()) {
 			logger.debug("Sending message to: " + m.toString());
-			m.getRemoteObject().send(message);
+			try {
+				m.getRemoteObject().send(message);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
