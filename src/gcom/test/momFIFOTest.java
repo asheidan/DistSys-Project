@@ -74,6 +74,47 @@ public class momFIFOTest {
 		assertEquals(listener.recieved.get(2), m2);
 	}
 
+	@Test
+	public void testUnorderedMessagesDifferentSenders() {
+		Member source1 = new Member("123", "test1");
+		Member source2 = new Member("345", "test2");
+		
+		testMessageListener listener = new testMessageListener();
+		mom.addMessageListener(listener);
+
+		Message m1_0 = getMessage(source1, 0);
+		Message m1_1 = getMessage(source1, 1);
+		Message m1_2 = getMessage(source1, 2);
+		Message m2_0 = getMessage(source2, 0);
+		Message m2_1 = getMessage(source2, 1);
+		Message m2_2 = getMessage(source2, 2);
+
+		mom.queueMessage(m1_0);
+		mom.queueMessage(m2_0);
+		mom.queueMessage(m2_1);
+		mom.queueMessage(m1_2);
+		mom.queueMessage(m2_2);
+		mom.queueMessage(m1_1);
+
+		assertEquals("All messages recieved", 6, listener.recieved.size());
+		assertEquals(m1_0, listener.recieved.get(0));
+		assertEquals(m2_0, listener.recieved.get(1));
+		assertEquals(m2_1, listener.recieved.get(2));
+		assertEquals(m2_2, listener.recieved.get(3));
+		assertEquals(m1_1, listener.recieved.get(4));
+		assertEquals(m1_2, listener.recieved.get(5));
+	}
+
+
+	private Message getMessage(Member source, int ticks) {
+		HashVectorClock clock = new HashVectorClock(source.getID());
+		for(int i=0; i<ticks; i++) {
+			clock.tick();
+		}
+		Message m = new Message(clock, "group1", source, "test data"+ticks, TYPE_MESSAGE.APPLICATION);
+		return m;
+	}
+
 	private class testMessageListener implements MessageListener {
 		public Vector<Serializable> recieved;
 		

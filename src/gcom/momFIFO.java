@@ -37,8 +37,8 @@ public class momFIFO implements MessageOrderingModule {
 	public void queueMessage(Message m) {
 		String key = m.getSource().getID();
 		Integer value = m.getClock().getValue(key);
-		Integer highest = lastDelivered.get(key);
-		if(highest == null) {
+		Integer last = lastDelivered.get(key);
+		if(last == null) {
 			sendToListeners(m);
 			return;
 		}
@@ -52,8 +52,8 @@ public class momFIFO implements MessageOrderingModule {
 		for(Message m : messages) {
 			String key = m.getSource().getID();
 			Integer value = m.getClock().getValue(key);
-			Integer highest = lastDelivered.get(key);
-			if(value == highest+1) {
+			Integer last = lastDelivered.get(key);
+			if(value == last+1) {
 				sendToListeners(m);
 				remove.add(m);
 			}
