@@ -15,13 +15,15 @@ public class BasicCommunicationModuleTest {
 	Group group;
 	MessageOrderingMockup mom;
 	BasicCommunicationModule com;
+	String name;
 	
 	
 	@Before
 	public void setUp() throws Exception {
+		name = "Nisse";
 		group = new gcom.Group(new gcom.GroupDefinition("De små nissarna"));
 		mom = new MessageOrderingMockup();
-		com = new BasicCommunicationModule(mom,group);
+		com = new BasicCommunicationModule(mom,null,name);
 	}
 
 	@Test
@@ -54,6 +56,12 @@ public class BasicCommunicationModuleTest {
 			
 			@Override
 			public HashVectorClock getClock() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Member getMember() {
 				// TODO Auto-generated method stub
 				return null;
 			}
