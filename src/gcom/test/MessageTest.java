@@ -2,7 +2,8 @@ package gcom.test;
 
 import static org.junit.Assert.*;
 
-import gcom.*;
+import gcom.HashVectorClock;
+import gcom.interfaces.*;
 import gcom.interfaces.Message.TYPE_MESSAGE;
 
 import java.io.Serializable;
@@ -21,8 +22,8 @@ public class MessageTest {
 	@Before
 	public void setUp() {
 		clock = new HashVectorClock(0);
-		source = new Member("123", "test");
-		m = new Message(clock, "testGroup", source, "test", TYPE_MESSAGE.APPLICATION);
+		source = new gcom.Member("123", "test");
+		m = new gcom.Message(clock, "testGroup", source, "test", TYPE_MESSAGE.APPLICATION);
 	}
 	
 	@Test

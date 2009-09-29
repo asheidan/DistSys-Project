@@ -1,6 +1,7 @@
 package gcom;
 
 import java.io.Serializable;
+import gcom.interfaces.Member;
 
 public class Message implements gcom.interfaces.Message {
 

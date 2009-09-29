@@ -23,6 +23,7 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 		BasicConfigurator.configure();
 		this.com = com;
 		t = new Thread(this);
+		this.start();
 	}
 	
 	public void start() {

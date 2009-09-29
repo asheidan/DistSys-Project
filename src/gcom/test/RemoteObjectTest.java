@@ -63,6 +63,12 @@ public class RemoteObjectTest {
 		public TYPE_MESSAGE getMessageType() {
 			return null;
 		}
+
+		@Override
+		public Member getMember() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		
 	}
 	

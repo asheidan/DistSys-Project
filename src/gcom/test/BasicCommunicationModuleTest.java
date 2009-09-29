@@ -59,6 +59,12 @@ public class BasicCommunicationModuleTest {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			@Override
+			public Member getMember() {
+				// TODO Auto-generated method stub
+				return null;
+			}
 		};
 		com.receive(m);
 		assertEquals(m, mom.lastMessage);
