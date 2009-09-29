@@ -12,6 +12,8 @@ public interface Message extends Serializable {
 	public HashVectorClock getClock();
 
 	public String getGroupName();
+
+	public Member getSource();
 	
 	public Member getMember();
 	

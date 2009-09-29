@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momNonOrdered implements MessageOrderingModule {
-	// TODO make sure that a message isn't delivered more than once
-	
 	private Vector<MessageListener> listeners;
 	
 	public momNonOrdered() {
