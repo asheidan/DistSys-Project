@@ -42,6 +42,7 @@ public class momFIFO implements MessageOrderingModule {
 			sendToListeners(m);
 			return;
 		}
+		if(value < last) { return; }
 		messages.add(m);
 		checkMessages();
 	}

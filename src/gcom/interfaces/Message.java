@@ -15,7 +15,5 @@ public interface Message extends Serializable {
 
 	public Member getSource();
 	
-	public Member getMember();
-	
 	public TYPE_MESSAGE getMessageType();
 }

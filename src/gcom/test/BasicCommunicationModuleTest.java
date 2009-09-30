@@ -61,7 +61,7 @@ public class BasicCommunicationModuleTest {
 			}
 
 			@Override
-			public Member getMember() {
+			public Member getSource() {
 				// TODO Auto-generated method stub
 				return null;
 			}

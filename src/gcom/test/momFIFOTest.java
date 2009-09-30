@@ -69,6 +69,7 @@ public class momFIFOTest {
 		mom.queueMessage(m2);
 		mom.queueMessage(m1);
 		
+		assertEquals("All messages recieved", 3, listener.recieved.size());
 		assertEquals(listener.recieved.get(0), m0);
 		assertEquals(listener.recieved.get(1), m1);
 		assertEquals(listener.recieved.get(2), m2);
@@ -105,6 +106,25 @@ public class momFIFOTest {
 		assertEquals(m1_2, listener.recieved.get(5));
 	}
 
+	@Test
+	public void testFirstMessageDelayed() {
+		Member source1 = new Member("123", "test1");
+		
+		testMessageListener listener = new testMessageListener();
+		mom.addMessageListener(listener);
+
+		Message m0 = getMessage(source1, 0);
+		Message m1 = getMessage(source1, 1);
+		Message m2 = getMessage(source1, 2);
+
+		mom.queueMessage(m1);
+		mom.queueMessage(m0);
+		mom.queueMessage(m2);
+
+		assertEquals("All messages recieved", 2, listener.recieved.size());
+		assertEquals(m1, listener.recieved.get(0));
+		assertEquals(m2, listener.recieved.get(1));
+	}
 
 	private Message getMessage(Member source, int ticks) {
 		HashVectorClock clock = new HashVectorClock(source.getID());
