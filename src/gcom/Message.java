@@ -48,4 +48,10 @@ public class Message implements gcom.interfaces.Message {
 		return source;
 	}
 
+
+	public String toString() {
+		return "Message " + this.clock.toString();
+	}
+
+
 }

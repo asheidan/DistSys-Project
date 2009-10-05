@@ -73,6 +73,21 @@ public class HashVectorClock implements VectorClock {
 		return earlier + later;
 	}
 
+	public int excludedCompareTo(HashVectorClock o, Object excluded) {
+		int later = 0;
+		int earlier = 0;
+		for(Object key : clocks.keySet()){
+			Integer otherClockValue = o.clocks.get(key);
+			if(otherClockValue != null && key != excluded) { 
+				switch(clocks.get(key).compareTo(otherClockValue)) {
+					case -1: earlier = -1; break;
+					case 1: later = 1; break;
+				}
+			}
+		}
+		return earlier + later;
+	}
+
 	public int compareTo(VectorClock o) {
 		throw(new RuntimeException("Method not implemented: compareTo(VectorClock)"));
 	}
