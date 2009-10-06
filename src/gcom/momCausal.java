@@ -36,6 +36,11 @@ public class momCausal implements MessageOrderingModule {
 	
 	@Override
 	public void queueMessage(Message m) {
+		if(this.clock.getValue(m.getSource().getID()) == null) {
+			String id = m.getSource().getID();
+			Integer val = m.getClock().getValue(id);
+			this.clock.put(id, val-1);
+		}
 		messages.add(m);
 		checkMessages();
 	}
@@ -49,8 +54,7 @@ public class momCausal implements MessageOrderingModule {
 			System.out.println("mcv " + m_clock.getValue(id));
 			System.out.println("tcv " + (this.clock.getValue(id)+1));
 			System.out.println("cmp " + this.clock.excludedCompareTo(m_clock, id) + " t: " + this.clock + " m: " + m_clock);
-			if(m_clock.getValue(id) == this.clock.getValue(id)+1 &&
-				this.clock.excludedCompareTo(m_clock, id) >= 0) {
+			if(m_clock.getValue(id) == this.clock.getValue(id)+1 && this.clock.excludedCompareTo(m_clock, id) >= 0) {
 				sendToListeners(m);
 				remove.add(m);
 			}

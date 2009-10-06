@@ -42,6 +42,10 @@ public class HashVectorClock implements VectorClock {
 		clocks.put(k, clocks.get(k)+1);
 	}
 
+	public void put(Object key, int value) {
+		clocks.put(key, value);
+	}
+
 	public void merge(HashVectorClock o) {
 		//logger.debug(String.format("Merging %s with %s", toString(), o.toString()));
 		for(Object key : o.clocks.keySet()) {
@@ -98,7 +102,6 @@ public class HashVectorClock implements VectorClock {
 
 
 	public Integer getValue(Object key) {
-		if(clocks.get(key) == null) return 0;
 		return clocks.get(key);
 	}
 

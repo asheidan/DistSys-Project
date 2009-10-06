@@ -37,10 +37,9 @@ public class momCausalTest {
 		mom.queueMessage(m0);
 		mom.queueMessage(m2);
 
-		assertEquals("All messages recieved", 3, listener.recieved.size());
-		assertEquals(m0, listener.recieved.get(0));
-		assertEquals(m1, listener.recieved.get(1));
-		assertEquals(m2, listener.recieved.get(2));
+		assertEquals("All messages recieved", 2, listener.recieved.size());
+		assertEquals(m1, listener.recieved.get(0));
+		assertEquals(m2, listener.recieved.get(1));
 	}
 
 	@Test
