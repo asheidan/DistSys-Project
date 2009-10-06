@@ -49,8 +49,7 @@ public class Message implements gcom.interfaces.Message {
 	}
 
 	@Override
-	public Member getMember() {
-		throw new UnsupportedOperationException("Not supported yet.");
+	public String toString() {
+		return "Message " + this.clock.toString();
 	}
-
 }
