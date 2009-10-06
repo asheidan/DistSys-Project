@@ -2,6 +2,7 @@ package gcom.interfaces;
 
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 public interface RMIModule {
@@ -9,4 +10,9 @@ public interface RMIModule {
 		throws AccessException, RemoteException, AlreadyBoundException;
 	
 	public void unbind(String name) throws AccessException, RemoteException;
+
+	public String[] list() throws AccessException, RemoteException;
+
+	public RemoteObject getReference(String name)
+			throws AccessException, RemoteException, NotBoundException;
 }

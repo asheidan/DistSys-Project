@@ -17,7 +17,8 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 	private Registry registry;
 	
 	public RMIModule(String serverAddress, int serverPort) throws RemoteException {
-		registry = LocateRegistry.getRegistry(serverAddress, serverPort);	
+		registry = LocateRegistry.getRegistry(serverAddress, serverPort);
+		registry.list();
 	}
 	
 	@Override
@@ -33,6 +34,16 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 		catch(NotBoundException e){
 			logger.debug("Trying to unbind something that isn't there" + e.getMessage());
 		}
+	}
+
+	@Override
+	public String[] list() throws AccessException, RemoteException {
+		return registry.list();
+	}
+
+	@Override
+	public RemoteObject getReference(String name) throws AccessException, RemoteException, NotBoundException {
+		return (RemoteObject)registry.lookup(name);
 	}
 
 }

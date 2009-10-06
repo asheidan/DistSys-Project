@@ -48,4 +48,9 @@ public class Message implements gcom.interfaces.Message {
 		return source;
 	}
 
+	@Override
+	public Member getMember() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 }

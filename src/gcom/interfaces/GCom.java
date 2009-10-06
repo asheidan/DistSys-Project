@@ -2,6 +2,9 @@ package gcom.interfaces;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.rmi.AccessException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 
 /**
@@ -98,7 +101,7 @@ public interface GCom {
 	 * @return the group definition of the joined group.
 	 */
 	public GroupDefinition joinGroup(String groupName, String localMemberName)
-	throws IOException, IllegalStateException;
+	throws IOException, IllegalStateException,NotBoundException;
 
 	/**
 	 * Creates a group using the provided parameters.
@@ -181,4 +184,5 @@ public interface GCom {
 	 */
 	public List<Member> getMembers(String groupName);
 
+	public String[] listReferences() throws AccessException, RemoteException;
 }

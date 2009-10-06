@@ -3,6 +3,7 @@ package gcom.test;
 import static org.junit.Assert.*;
 
 import gcom.RMIModule;
+import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Message;
 import gcom.interfaces.RemoteObject;
 
@@ -57,5 +58,10 @@ public class RMIModuleTest {
 	private class RemoteMockup implements gcom.interfaces.RemoteObject {
 		@Override
 		public void send(Message m) {}
+
+		@Override
+		public GroupDefinition getDefinition() {
+			return null;
+		}
 	}
 }

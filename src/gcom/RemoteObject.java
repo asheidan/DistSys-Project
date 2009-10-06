@@ -4,37 +4,36 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-
 import gcom.interfaces.CommunicationModule;
+import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Message;
 
 public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
-	private Logger logger = Logger.getLogger("gcom.RemoteObject");
+	//private Logger logger = Logger.getLogger("gcom.RemoteObject");
+	private GroupDefinition definition;
 	private transient CommunicationModule com;
 	private transient BlockingQueue<Message> localQueue = new LinkedBlockingQueue<Message>();
 	private transient boolean run = false;
 	private transient Thread t;
 
-	public RemoteObject(CommunicationModule com) {
-		logger.setLevel(Level.ERROR);
-		BasicConfigurator.configure();
+	public RemoteObject(CommunicationModule com, GroupDefinition definition) {
+		//logger.setLevel(Level.ERROR);
+		//BasicConfigurator.configure();
+		this.definition = definition;
 		this.com = com;
 		t = new Thread(this);
 		this.start();
 	}
 	
 	public void start() {
-		logger.debug("Starting thread");
+		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Starting thread");
 		run = true;
 		t.start();
 	}
 	
 	@Override
 	public void send(Message m) {
-		logger.debug("Queueing message");
+		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queueing message");
 		localQueue.add(m);
 	}
 
@@ -45,10 +44,10 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 				Message m = localQueue.poll(500,TimeUnit.MILLISECONDS);
 				if(m != null) {
 					com.receive(m);
-					logger.debug("Received a Message");
+					Debug.log("gcom.RemoteObject",Debug.DEBUG,"Received a Message");
 				}
 				else {
-					logger.debug("Queue poll timed out");
+					Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queue poll timed out");
 				}
 			}
 			catch(InterruptedException e) {
@@ -58,8 +57,13 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	}
 	
 	public void stop() {
-		logger.debug("Someone told thread to stop");
+		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Someone told thread to stop");
 		run = false;
+	}
+
+	@Override
+	public GroupDefinition getDefinition() {
+		return definition;
 	}
 
 }

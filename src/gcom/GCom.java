@@ -9,10 +9,14 @@ import gcom.interfaces.ViewChangeListener;
 import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Member;
 import gcom.interfaces.RMIModule;
+import gcom.interfaces.RemoteObject;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -20,7 +24,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public class GCom implements gcom.interfaces.GCom {
+public class GCom implements gcom.interfaces.GCom,gcom.interfaces.MessageListener {
 	private Logger log = Logger.getLogger("gcom");
 
 	private GroupManagementModule gmm = new gcom.GroupManagementModule();
@@ -87,7 +91,7 @@ public class GCom implements gcom.interfaces.GCom {
 		
 		try {
 			// TODO: Should this throw an exception if we aren't connected to RMI?
-			RemoteObject remote = new gcom.RemoteObject(com); 
+			RemoteObject remote = new gcom.RemoteObject(com,description);
 			rmi.bind(groupName, remote);
 			Member me = new gcom.Member(processID,localMemberName, remote);
 			gmm.addGroup(description);
@@ -133,9 +137,39 @@ public class GCom implements gcom.interfaces.GCom {
 
 	@Override
 	public GroupDefinition joinGroup(String groupName,
-			String localMemberName) throws IOException, IllegalStateException {
-		// TODO Auto-generated method stub
-		return null;
+			String localMemberName) throws IOException, IllegalStateException,NotBoundException {
+		RemoteObject remoteRemote = rmi.getReference(groupName);
+		GroupDefinition definition = remoteRemote.getDefinition();
+
+		MessageOrderingModule mom;
+		switch (definition.getMessageOrderingType()) {
+		case NONORDERED:
+			mom = new gcom.momNonOrdered();
+			break;
+
+		default:
+			log.error("Unknown message-ordering type: " + definition.getMessageOrderingType());
+			return null;
+		}
+
+
+		CommunicationModule com;
+		switch(definition.getCommunicationType()) {
+		case BASIC_UNRELIABLE_MULTICAST :
+			com = new BasicCommunicationModule(mom, gmm, groupName);
+			break;
+
+		default:
+			log.error("Unknown communication type: " + definition.getCommunicationType());
+			return null;
+		}
+		RemoteObject localRemote = new gcom.RemoteObject(com, definition);
+		Member me = new gcom.Member(processID, localMemberName, localRemote);
+		remoteRemote.send(new gcom.Message(null, groupName, me, null, Message.TYPE_MESSAGE.JOIN));
+		comModules.put(groupName, com);
+		moModules.put(groupName, mom);
+		gmm.addGroup(definition);
+		return definition;
 	}
 
 	@Override
@@ -161,4 +195,13 @@ public class GCom implements gcom.interfaces.GCom {
 		}
 	}
 
+	@Override
+	public String[] listReferences() throws AccessException, RemoteException {
+		return rmi.list();
+	}
+
+	@Override
+	public void messageReceived(Serializable message) {
+		//TODO !!!
+	}
 }
