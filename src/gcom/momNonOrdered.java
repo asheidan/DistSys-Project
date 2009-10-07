@@ -18,7 +18,7 @@ public class momNonOrdered implements MessageOrderingModule {
 		listeners.add(listener);
 	}
 
-	private void sendToListeners(Serializable message) {
+	private void sendToListeners(Message message) {
 		// TODO: This needs to still be a Message
 		for(MessageListener l : listeners) {
 			l.messageReceived(message);
