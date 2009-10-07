@@ -24,7 +24,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public class GCom implements gcom.interfaces.GCom,gcom.interfaces.MessageListener {
+public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageListener {
 	private Logger log = Logger.getLogger("gcom");
 
 	private GroupManagementModule gmm = new gcom.GroupManagementModule();
@@ -201,7 +201,8 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.MessageListene
 	}
 
 	@Override
-	public void messageReceived(Serializable message) {
-		//TODO !!!
+	public void messageReceived(Message message) {
+		// TODO !!!
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
