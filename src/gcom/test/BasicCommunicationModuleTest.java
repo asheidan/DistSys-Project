@@ -62,12 +62,6 @@ public class BasicCommunicationModuleTest {
 
 			@Override
 			public Member getSource() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Member getSource() {
 				throw new UnsupportedOperationException("Not supported yet.");
 			}
 		};
