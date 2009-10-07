@@ -62,8 +62,10 @@ public class BasicCommunicationModuleTest {
 
 			@Override
 			public Member getSource() {
-				throw new UnsupportedOperationException("Not supported yet.");
+				// TODO Auto-generated method stub
+				return null;
 			}
+
 		};
 		com.receive(m);
 		assertEquals(m, mom.lastMessage);
