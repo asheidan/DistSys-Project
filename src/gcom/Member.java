@@ -14,6 +14,12 @@ public class Member implements gcom.interfaces.Member {
 		this.name = name;
 	}
 	
+	public Member(String id, String name, RemoteObject remote) {
+		this.id = id;
+		this.name = name;
+		this.remote = remote;
+	}
+	
 	@Override
 	public String getID() {
 		return id;

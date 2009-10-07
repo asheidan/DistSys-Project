@@ -3,6 +3,7 @@ package gcom.test;
 import static org.junit.Assert.*;
 
 import gcom.RMIModule;
+import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Message;
 import gcom.interfaces.RemoteObject;
 
@@ -24,6 +25,7 @@ public class RMIModuleTest {
 	@Before
 	public void setUp() throws Exception {
 		port = (int) (Math.floor(Math.random() * 400) + 10240);
+		// -Djava.rmi.server.codebase=file://${workspace_loc}/"RMI%20Test/bin/"
 		registry = LocateRegistry.createRegistry(port);
 		rmi = new RMIModule("localhost", port);
 	}
@@ -36,10 +38,11 @@ public class RMIModuleTest {
 	@Test
 	public void testBind() {
 		String name = "Nisse";
-		RemoteObject ro = new RemoteMockup();
+		RemoteMockup ro = new RemoteMockup();
 		try {
 			rmi.bind(name, ro);
-			assertEquals(ro, registry.lookup(name));
+			RemoteObject payload = (RemoteObject) registry.lookup(name);
+			assertNotNull(payload);
 		}
 		catch(AlreadyBoundException e) {
 			fail("Already bound: " + e.getMessage());
@@ -55,5 +58,10 @@ public class RMIModuleTest {
 	private class RemoteMockup implements gcom.interfaces.RemoteObject {
 		@Override
 		public void send(Message m) {}
+
+		@Override
+		public GroupDefinition getDefinition() {
+			return null;
+		}
 	}
 }

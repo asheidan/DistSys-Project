@@ -22,8 +22,8 @@ public class momNonOrderedTest {
 	
 	@Test
 	public void testAddMessageListener() {
-		HashVectorClock clock = new HashVectorClock(0);
 		Member source = new Member("123", "test");
+		HashVectorClock clock = new HashVectorClock(source.getID());
 		final Message m = new Message(clock, "group1", source, "test data", TYPE_MESSAGE.APPLICATION);
 		testMessageListener listener = new testMessageListener();
 		

@@ -1,6 +1,7 @@
 package gcom;
 
 import java.io.Serializable;
+import gcom.interfaces.Member;
 
 public class Message implements gcom.interfaces.Message {
 
@@ -41,9 +42,14 @@ public class Message implements gcom.interfaces.Message {
 	public TYPE_MESSAGE getMessageType() {
 		return type;
 	}
-
-	public Member getMember() {
+	
+	@Override
+	public Member getSource() {
 		return source;
 	}
 
+	@Override
+	public String toString() {
+		return "Message " + this.clock.toString();
+	}
 }
