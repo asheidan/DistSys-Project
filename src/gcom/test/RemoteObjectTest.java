@@ -100,11 +100,6 @@ public class RemoteObjectTest {
 			// TODO Auto-generated method stub
 			return null;
 		}
-
-		@Override
-		public Member getMember() {
-			throw new UnsupportedOperationException("Not supported yet.");
-		}
 		
 	}
 	

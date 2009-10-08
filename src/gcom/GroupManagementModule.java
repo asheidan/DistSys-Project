@@ -4,9 +4,11 @@ import gcom.interfaces.Group;
 import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Member;
 
+import gcom.interfaces.ViewChangeListener;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
+import org.apache.log4j.Level;
 
 public class GroupManagementModule implements gcom.interfaces.GroupManagementModule {
 	Hashtable<String, Group> groups;
@@ -47,6 +49,7 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 
 	@Override
 	public void addMember(String groupName, Member member) {
+		Debug.log("gcom.GroupManagementModule", Level.DEBUG, "Adding member: " + member.toString());
 		Group g = groups.get(groupName);
 		g.addMember(member);
 	}
@@ -55,5 +58,13 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 	public List<Member> listGroupMembers(String groupName) {
 		Group g = groups.get(groupName);
 		return g.listMembers();
+	}
+
+	@Override
+	public void addViewChangeListener(String groupName, ViewChangeListener listener) {
+		Group g = groups.get(groupName);
+		if(g != null) {
+			g.addViewChangeListener(listener);
+		}
 	}
 }

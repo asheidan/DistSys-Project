@@ -185,4 +185,6 @@ public interface GCom {
 	public List<Member> getMembers(String groupName);
 
 	public String[] listReferences() throws AccessException, RemoteException;
+
+	public String getProcessID();
 }

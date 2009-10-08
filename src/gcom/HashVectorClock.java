@@ -3,6 +3,7 @@ package gcom;
 
 import gcom.interfaces.*;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import org.apache.log4j.Logger;
  * {@link Hashtable} instead of a vector. This is to allow for
  * disappearing nodes.
  */
-public class HashVectorClock implements VectorClock {
+public class HashVectorClock implements VectorClock, Serializable {
 	private static Logger logger = Logger.getLogger("gcom.HashVectorClock");
 
 	private Hashtable<Object, Integer> clocks;

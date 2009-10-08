@@ -12,7 +12,7 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	//private Logger logger = Logger.getLogger("gcom.RemoteObject");
 	private GroupDefinition definition;
 	private transient CommunicationModule com;
-	private transient BlockingQueue<Message> localQueue = new LinkedBlockingQueue<Message>();
+	private BlockingQueue<Message> localQueue = new LinkedBlockingQueue<Message>();
 	private transient boolean run = false;
 	private transient Thread t;
 
@@ -47,7 +47,7 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 					Debug.log("gcom.RemoteObject",Debug.DEBUG,"Received a Message");
 				}
 				else {
-					Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queue poll timed out");
+					Debug.log("gcom.RemoteObject",Debug.TRACE,"Queue poll timed out");
 				}
 			}
 			catch(InterruptedException e) {

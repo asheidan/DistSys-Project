@@ -13,18 +13,21 @@ import gcom.interfaces.RemoteObject;
 
 import java.io.IOException;
 import java.io.Serializable;
+
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageListener {
+public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageListener,gcom.interfaces.GComViewChangeListener {
 	private Logger log = Logger.getLogger("gcom");
 
 	private GroupManagementModule gmm = new gcom.GroupManagementModule();
@@ -33,28 +36,32 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 	private Hashtable<String, MessageOrderingModule> moModules = new Hashtable<String, MessageOrderingModule>();
 	private Hashtable<String, HashVectorClock> clocks = new Hashtable<String, HashVectorClock>();
 	private Hashtable<String, Member> identities = new Hashtable<String, Member>();
+	private Hashtable<String, Vector<MessageListener>> messageListeners = new Hashtable<String, Vector<MessageListener>>();
+	private Hashtable<String, Vector<ViewChangeListener>> viewChangeListeners = new Hashtable<String, Vector<ViewChangeListener>>();
 	private String processID;
 	
 	public GCom() {
-		processID = String.valueOf(String.valueOf(Math.random()).hashCode());
+		//processID = String.valueOf(String.valueOf(Math.random()).hashCode());
+		processID = "0x" + String.format("%06x",(int)Math.floor(Math.random() * Math.pow(2, 24))).toUpperCase();
 		BasicConfigurator.configure();
-		log.setLevel(Level.ALL);
+		log.setLevel(Level.DEBUG);
 		log.debug("gcom-object created");
 	}
 	
 	@Override
 	public void addMessageListener(String groupName, MessageListener listener) {
-		MessageOrderingModule mom = moModules.get(groupName);
-		if( mom != null ) {
-			mom.addMessageListener(listener);
+		Vector<MessageListener> listeners = messageListeners.get(groupName);
+		if( listeners == null ) {
+			listeners = new Vector<MessageListener>();
+			messageListeners.put(groupName, listeners);
 		}
+		listeners.add(listener);
 	}
 
 	@Override
 	public void addViewChangeListener(String groupName,
 			ViewChangeListener listener) {
-		// TODO Auto-generated method stub
-
+		gmm.addViewChangeListener(groupName, listener);
 	}
 
 	@Override
@@ -88,7 +95,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 			log.error("Unknown communication type: " + description.getCommunicationType());
 			return;
 		}
-		
+		mom.addMessageListener(this);
 		try {
 			// TODO: Should this throw an exception if we aren't connected to RMI?
 			RemoteObject remote = new gcom.RemoteObject(com,description);
@@ -97,7 +104,8 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 			gmm.addGroup(description);
 			gmm.addMember(groupName, me);
 			identities.put(groupName,me);
-			
+
+			clocks.put(groupName, new HashVectorClock(processID));
 			moModules.put(groupName, mom);
 			comModules.put(groupName, com);
 		}
@@ -116,7 +124,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 							groupName,
 							identities.get(groupName),
 							"",
-							Message.TYPE_MESSAGE.PART));
+							Message.TYPE_MESSAGE.PARTREQUEST));
 			gmm.removeGroup(groupName);
 			comModules.remove(groupName);
 			moModules.remove(groupName);
@@ -163,9 +171,13 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 			log.error("Unknown communication type: " + definition.getCommunicationType());
 			return null;
 		}
+
+		mom.addMessageListener(this);
 		RemoteObject localRemote = new gcom.RemoteObject(com, definition);
 		Member me = new gcom.Member(processID, localMemberName, localRemote);
-		remoteRemote.send(new gcom.Message(null, groupName, me, null, Message.TYPE_MESSAGE.JOIN));
+		HashVectorClock clock = new HashVectorClock(processID);
+		remoteRemote.send(new gcom.Message(clock, groupName, me, null, Message.TYPE_MESSAGE.JOINREQUEST));
+		clocks.put(groupName, clock);
 		comModules.put(groupName, com);
 		moModules.put(groupName, mom);
 		gmm.addGroup(definition);
@@ -202,7 +214,47 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 
 	@Override
 	public void messageReceived(Message message) {
-		// TODO !!!
+		Debug.log("gcom.GCom.messageReceived", Debug.DEBUG, "Got a " + message.getMessageType());
+		String groupName = message.getGroupName();
+		List<Member> view;
+		GroupDefinition definition = gmm.getGroupDefinition(groupName);
+		if(definition == null) {
+			Debug.log("gcom.GCom", Debug.DEBUG,
+					"Got message from a group I'm not a member of." + message.toString());
+			return;
+		}
+		switch(message.getMessageType()) {
+			case JOINREQUEST:
+				// Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), message.getSource(), Message.TYPE_MESSAGE.GOTMEMBER);
+				//comModules.get(groupName).send(msg);
+				
+				gmm.addMember(groupName, message.getSource());
+				view = gmm.listGroupMembers(groupName);
+				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
+				//comModules.get(groupName).send(msg);
+				try {
+					// TODO: COM should be expanded with private messages
+					message.getSource().getRemoteObject().send(msg);
+				} catch (RemoteException ex) {
+					Debug.log(GCom.class.getName(),Debug.WARN, "Got remote exception", ex);
+				}
+				break;
+			case WELCOME:
+				for(Member m : (List<Member>)message.getMessage()) {
+					gmm.addMember(groupName, m);
+				}
+				break;
+
+		}
+	}
+
+	@Override
+	public String getProcessID() {
+		return processID;
+	}
+
+	@Override
+	public void viewChanged(String groupName, List<Member> list) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

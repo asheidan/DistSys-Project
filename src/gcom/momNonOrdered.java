@@ -5,28 +5,31 @@ import gcom.interfaces.*;
 
 import java.io.Serializable;
 import java.util.Vector;
+import org.apache.log4j.Level;
 
 public class momNonOrdered implements MessageOrderingModule {
-	private Vector<MessageListener> listeners;
+	private Vector<GComMessageListener> listeners;
 	
 	public momNonOrdered() {
-		listeners = new Vector<MessageListener>();
+		listeners = new Vector<GComMessageListener>();
 	}
 	
 	@Override
-	public void addMessageListener(MessageListener listener) {
+	public void addMessageListener(GComMessageListener listener) {
 		listeners.add(listener);
 	}
 
-	private void sendToListeners(Serializable message) {
+	private void sendToListeners(Message message) {
 		// TODO: This needs to still be a Message
-		for(MessageListener l : listeners) {
+		for(GComMessageListener l : listeners) {
+			Debug.log("gcom.momNonOrdered", Level.DEBUG, "Sent message to: " + l.toString());
 			l.messageReceived(message);
 		}
 	}
 	
 	@Override
 	public void queueMessage(Message m) {
+		Debug.log("gcom.momNonOrdered", Level.DEBUG, "Queued message: " + m.toString());
 		sendToListeners(m);
 	}
 

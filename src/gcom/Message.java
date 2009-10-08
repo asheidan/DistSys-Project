@@ -50,6 +50,6 @@ public class Message implements gcom.interfaces.Message {
 
 	@Override
 	public String toString() {
-		return "Message " + this.clock.toString();
+		return "Message " + this.type + ":" + this.clock.toString();
 	}
 }

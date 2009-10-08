@@ -5,19 +5,6 @@ package gcom.interfaces;
  * group structure.
  */
 public interface ViewChangeListener {
-	/**
-	 * Callback method when a new member joins the group.
-	 * 
-	 * @param member
-	 *                the new member who has joined
-	 */
-	public void newMember(Member member);
-
-	/**
-	 * Callback method when a member leaves the group.
-	 * 
-	 * @param member
-	 *                the new member who has left
-	 */
+	public void gotMember(Member member);
 	public void lostMember(Member member);
 }

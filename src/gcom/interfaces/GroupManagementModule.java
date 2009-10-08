@@ -14,4 +14,6 @@ public interface GroupManagementModule {
 	public void addMember(String groupName, Member member);
 
 	public List<Member> listGroupMembers(String groupName);
+
+	public void addViewChangeListener(String groupName, ViewChangeListener listener);
 }

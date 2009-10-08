@@ -9,4 +9,5 @@ public interface Group {
 	public GroupDefinition getDefinition();
 	public void setLeader(boolean leader);
 	public boolean isLeader();
+	public void addViewChangeListener(ViewChangeListener listener);
 }
