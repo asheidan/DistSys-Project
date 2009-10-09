@@ -12,9 +12,9 @@ public class momNonOrdered implements MessageOrderingModule {
 	private Vector<GComMessageListener> listeners;
 	private HashVectorClock clock;
 
-	public momNonOrdered(Member me) {
+	public momNonOrdered(String id) {
 		listeners = new Vector<GComMessageListener>();
-		this.clock = new HashVectorClock(me.getID());
+		this.clock = new HashVectorClock(id);
 	}
 
 	@Override

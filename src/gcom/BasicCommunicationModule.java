@@ -34,7 +34,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	@Override
 	public void send(Message message) {
 		for(Member m : gmm.listGroupMembers(group)) {
-			if(processID.equals(m.getID())) {
+			if(!processID.equals(m.getID())) {
 				logger.debug("Sending message to: " + m.toString());
 				try {
 					m.getRemoteObject().send(message);

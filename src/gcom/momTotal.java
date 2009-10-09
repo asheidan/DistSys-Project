@@ -9,15 +9,15 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momTotal implements MessageOrderingModule {
-	private Vector<MessageListener> listeners;
+	private Vector<GComMessageListener> listeners;
 	private Vector<Message> messages;
 	private Integer lastDelivered;
 	private HashVectorClock clock;
 
-	public momTotal(Member me) {
-		listeners = new Vector<MessageListener>();
+	public momTotal(String id) {
+		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
-		this.clock = new HashVectorClock(me.getID());
+		this.clock = new HashVectorClock(id);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class momTotal implements MessageOrderingModule {
 	}
 	
 	@Override
-	public void addMessageListener(MessageListener listener) {
+	public void addMessageListener(GComMessageListener listener) {
 		listeners.add(listener);
 	}
 
@@ -40,7 +40,7 @@ public class momTotal implements MessageOrderingModule {
 		Integer value = message.getClock().getValue("serialNo");
 		this.lastDelivered++;
 
-		for(MessageListener l : listeners) {
+		for(GComMessageListener l : listeners) {
 			l.messageReceived(message);
 		}
 	}
