@@ -12,10 +12,10 @@ public class momCausal implements MessageOrderingModule {
 	private Vector<Message> messages;
 	private HashVectorClock clock;
 
-	public momCausal (Member me) {
+	public momCausal (String id) {
 		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
-		this.clock = new HashVectorClock(me.getID());
+		this.clock = new HashVectorClock(id);
 	}
 
 	@Override

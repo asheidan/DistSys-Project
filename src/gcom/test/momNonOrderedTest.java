@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import gcom.*;
 import gcom.interfaces.MessageListener;
 import gcom.interfaces.Message.TYPE_MESSAGE;
+import gcom.interfaces.GComMessageListener;
 
 import java.io.Serializable;
 
@@ -17,8 +18,7 @@ public class momNonOrderedTest {
 	
 	@Before
 	public void setUp() {
-		Member me = new Member("0", "test0");
-		mom = new momNonOrdered(me);
+		mom = new momNonOrdered("0");
 	}
 	
 	@Test
@@ -34,11 +34,11 @@ public class momNonOrderedTest {
 		assertEquals(listener.recieved, m);
 	}
 
-	private class testMessageListener implements MessageListener {
+	private class testMessageListener implements GComMessageListener {
 		public Serializable recieved;
 		
 		@Override
-		public void messageReceived(Serializable message) {
+		public void messageReceived(gcom.interfaces.Message message) {
 			recieved = message;
 		}	
 	}

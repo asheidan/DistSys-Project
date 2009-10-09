@@ -14,10 +14,10 @@ public class momTotal implements MessageOrderingModule {
 	private Integer lastDelivered;
 	private HashVectorClock clock;
 
-	public momTotal(Member me) {
+	public momTotal(String id) {
 		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
-		this.clock = new HashVectorClock(me.getID());
+		this.clock = new HashVectorClock(id);
 	}
 
 	@Override

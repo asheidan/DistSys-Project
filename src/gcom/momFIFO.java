@@ -14,11 +14,11 @@ public class momFIFO implements MessageOrderingModule {
 	//private Hashtable<Object, Integer> lastDelivered;
 	private HashVectorClock clock;
 
-	public momFIFO(Member me) {
+	public momFIFO(String id) {
 		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
 		//lastDelivered = new Hashtable<Object, Integer>();
-		this.clock = new HashVectorClock(me.getID());
+		this.clock = new HashVectorClock(id);
 	}
 
 	@Override
