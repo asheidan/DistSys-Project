@@ -9,13 +9,13 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momFIFO implements MessageOrderingModule {
-	private Vector<MessageListener> listeners;
+	private Vector<GComMessageListener> listeners;
 	private Vector<Message> messages;
 	//private Hashtable<Object, Integer> lastDelivered;
 	private HashVectorClock clock;
 
 	public momFIFO(Member me) {
-		listeners = new Vector<MessageListener>();
+		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
 		//lastDelivered = new Hashtable<Object, Integer>();
 		this.clock = new HashVectorClock(me.getID());
@@ -32,7 +32,7 @@ public class momFIFO implements MessageOrderingModule {
 	}
 	
 	@Override
-	public void addMessageListener(MessageListener listener) {
+	public void addMessageListener(GComMessageListener listener) {
 		listeners.add(listener);
 	}
 
@@ -42,7 +42,7 @@ public class momFIFO implements MessageOrderingModule {
 		//lastDelivered.put(key, value);
 		clock.put(key, value);
 
-		for(MessageListener l : listeners) {
+		for(GComMessageListener l : listeners) {
 			l.messageReceived(message);
 		}
 	}

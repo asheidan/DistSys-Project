@@ -77,7 +77,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 		MessageOrderingModule mom;
 		switch (description.getMessageOrderingType()) {
 		case NONORDERED:
-			mom = new gcom.momNonOrdered();
+			mom = new gcom.momNonOrdered(null);
 			break;
 
 		default:
@@ -152,7 +152,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 		MessageOrderingModule mom;
 		switch (definition.getMessageOrderingType()) {
 		case NONORDERED:
-			mom = new gcom.momNonOrdered();
+			mom = new gcom.momNonOrdered(null);
 			break;
 
 		default:

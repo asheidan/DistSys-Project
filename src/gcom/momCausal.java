@@ -8,12 +8,12 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momCausal implements MessageOrderingModule {
-	private Vector<MessageListener> listeners;
+	private Vector<GComMessageListener> listeners;
 	private Vector<Message> messages;
 	private HashVectorClock clock;
 
 	public momCausal (Member me) {
-		listeners = new Vector<MessageListener>();
+		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
 		this.clock = new HashVectorClock(me.getID());
 	}
@@ -29,13 +29,13 @@ public class momCausal implements MessageOrderingModule {
 	}
 
 	@Override
-	public void addMessageListener(MessageListener listener) {
+	public void addMessageListener(GComMessageListener listener) {
 		listeners.add(listener);
 	}
 
 	private void sendToListeners(Message message) {
 		this.clock.tickKey(message.getSource().getID());
-		for(MessageListener l : listeners) {
+		for(GComMessageListener l : listeners) {
 			l.messageReceived(message);
 		}
 	}
