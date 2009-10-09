@@ -24,6 +24,11 @@ public class momCausal implements MessageOrderingModule {
 	}
 
 	@Override
+	public void tick() {
+		this.clock.tick();
+	}
+
+	@Override
 	public void addMessageListener(MessageListener listener) {
 		listeners.add(listener);
 	}
