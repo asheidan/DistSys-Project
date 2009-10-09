@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import gcom.*;
 import gcom.interfaces.MessageListener;
 import gcom.interfaces.Message.TYPE_MESSAGE;
+import gcom.interfaces.GComMessageListener;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -17,8 +18,7 @@ public class momCausalTest {
 	
 	@Before
 	public void setUp() {
-		Member me = new Member("0", "test0");
-		mom = new momCausal(me);
+		mom = new momCausal("0");
 	}
 	
 	@Test
@@ -88,7 +88,7 @@ public class momCausalTest {
 		return m;
 	}
 
-	private class testMessageListener implements MessageListener {
+	private class testMessageListener implements GComMessageListener {
 		public Vector<Serializable> recieved;
 		
 		public testMessageListener() {
@@ -96,7 +96,7 @@ public class momCausalTest {
 		}
 
 		@Override
-		public void messageReceived(Serializable message) {
+		public void messageReceived(gcom.interfaces.Message message) {
 			recieved.add(message);
 		}	
 	}
