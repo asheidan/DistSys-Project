@@ -1,7 +1,11 @@
 package gcom.interfaces;
 
-public interface MessageOrderingModule {
-	public void queueMessage(Message m);
+import gcom.HashVectorClock;
 
+public interface MessageOrderingModule {
+
+	public void queueMessage(Message m);
 	public void addMessageListener(MessageListener listener);
+	public HashVectorClock getClock();
+
 }

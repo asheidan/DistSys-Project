@@ -17,7 +17,8 @@ public class momTotalTest {
 	
 	@Before
 	public void setUp() {
-		mom = new momTotal();
+		Member me = new Member("0", "test0");
+		mom = new momTotal(me);
 	}
 	
 	@Test

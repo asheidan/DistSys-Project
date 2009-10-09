@@ -17,9 +17,8 @@ public class momCausalTest {
 	
 	@Before
 	public void setUp() {
-		mom = new momCausal();
-		HashVectorClock c = new HashVectorClock("");
-		mom.setVectorClock(c);
+		Member me = new Member("0", "test0");
+		mom = new momCausal(me);
 	}
 	
 	@Test

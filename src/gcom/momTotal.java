@@ -2,6 +2,7 @@ package gcom;
 
 import gcom.interfaces.Message;
 import gcom.interfaces.*;
+import gcom.HashVectorClock;
 
 import java.util.Hashtable;
 import java.io.Serializable;
@@ -11,10 +12,17 @@ public class momTotal implements MessageOrderingModule {
 	private Vector<MessageListener> listeners;
 	private Vector<Message> messages;
 	private Integer lastDelivered;
+	private HashVectorClock clock;
 
-	public momTotal () {
+	public momTotal(Member me) {
 		listeners = new Vector<MessageListener>();
 		messages = new Vector<Message>();
+		this.clock = new HashVectorClock(me.getID());
+	}
+
+	@Override
+	public HashVectorClock getClock() {
+		return this.clock;	
 	}
 	
 	@Override

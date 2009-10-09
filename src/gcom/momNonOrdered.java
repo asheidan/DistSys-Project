@@ -2,15 +2,23 @@ package gcom;
 
 import gcom.interfaces.Message;
 import gcom.interfaces.*;
+import gcom.HashVectorClock;
 
 import java.io.Serializable;
 import java.util.Vector;
 
 public class momNonOrdered implements MessageOrderingModule {
 	private Vector<MessageListener> listeners;
-	
-	public momNonOrdered() {
+	private HashVectorClock clock;
+
+	public momNonOrdered(Member me) {
 		listeners = new Vector<MessageListener>();
+		this.clock = new HashVectorClock(me.getID());
+	}
+
+	@Override
+	public HashVectorClock getClock() {
+		return this.clock;	
 	}
 	
 	@Override

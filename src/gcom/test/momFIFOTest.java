@@ -17,7 +17,8 @@ public class momFIFOTest {
 	
 	@Before
 	public void setUp() {
-		mom = new momFIFO();
+		Member me = new Member("0", "test0");
+		mom = new momFIFO(me);
 	}
 	
 	@Test
