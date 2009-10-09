@@ -77,7 +77,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 		MessageOrderingModule mom;
 		switch (description.getMessageOrderingType()) {
 		case NONORDERED:
-			mom = new gcom.momNonOrdered();
+			mom = new gcom.momNonOrdered(processID);
 			break;
 
 		default:
@@ -88,7 +88,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 		CommunicationModule com;
 		switch(description.getCommunicationType()) {
 		case BASIC_UNRELIABLE_MULTICAST :
-			com = new BasicCommunicationModule(mom, gmm, groupName);
+			com = new BasicCommunicationModule(mom, gmm, groupName, processID);
 			break;
 			
 		default:
@@ -152,7 +152,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 		MessageOrderingModule mom;
 		switch (definition.getMessageOrderingType()) {
 		case NONORDERED:
-			mom = new gcom.momNonOrdered();
+			mom = new gcom.momNonOrdered(processID);
 			break;
 
 		default:
@@ -164,7 +164,7 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 		CommunicationModule com;
 		switch(definition.getCommunicationType()) {
 		case BASIC_UNRELIABLE_MULTICAST :
-			com = new BasicCommunicationModule(mom, gmm, groupName);
+			com = new BasicCommunicationModule(mom, gmm, groupName, processID);
 			break;
 
 		default:

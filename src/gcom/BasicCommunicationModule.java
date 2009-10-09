@@ -8,7 +8,6 @@ import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
-import gcom.interfaces.Group;
 
 public class BasicCommunicationModule implements gcom.interfaces.CommunicationModule {
 	private Logger logger = Logger.getLogger("gcom.CommunicationModule.Basic");
@@ -16,11 +15,13 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	private MessageOrderingModule mom;
 	private GroupManagementModule gmm;
 	private String group;
+	private String processID;
 	
-	public BasicCommunicationModule(MessageOrderingModule mom, GroupManagementModule gmm, String groupName) {
+	public BasicCommunicationModule(MessageOrderingModule mom, GroupManagementModule gmm, String groupName, String processID) {
 		this.mom = mom;
 		this.gmm = gmm;
 		this.group = groupName;
+		this.processID = processID;
 	}
 	
 	@Override
@@ -33,12 +34,14 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	@Override
 	public void send(Message message) {
 		for(Member m : gmm.listGroupMembers(group)) {
-			logger.debug("Sending message to: " + m.toString());
-			try {
-				m.getRemoteObject().send(message);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(processID.equals(m.getID())) {
+				logger.debug("Sending message to: " + m.toString());
+				try {
+					m.getRemoteObject().send(message);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
