@@ -1,6 +1,8 @@
 package gcom;
 
 import gcom.interfaces.CommunicationModule;
+import gcom.interfaces.GComMessageListener;
+import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageListener;
@@ -8,6 +10,7 @@ import gcom.interfaces.MessageOrderingModule;
 import gcom.interfaces.ViewChangeListener;
 import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Member;
+import gcom.interfaces.MessageSender;
 import gcom.interfaces.RMIModule;
 import gcom.interfaces.RemoteObject;
 
@@ -27,7 +30,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageListener,gcom.interfaces.GComViewChangeListener {
+public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewChangeListener,MessageSender {
 	private Logger log = Logger.getLogger("gcom");
 
 	private GroupManagementModule gmm = new gcom.GroupManagementModule();
@@ -248,9 +251,18 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 			case GOTMEMBER:
 				gmm.addMember(message.getGroupName(), (Member)message.getMessage());
 				break;
+			case APPLICATION:
+				sendToMessageListeners(groupName,message.getMessage());
+				break;
 		}
 	}
 
+	private void sendToMessageListeners(String groupName, Serializable message) {
+		for(MessageListener l : messageListeners.get(groupName)) {
+			l.messageReceived(message);
+		}
+	}
+	
 	@Override
 	public String getProcessID() {
 		return processID;
@@ -260,4 +272,5 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 	public void viewChanged(String groupName, List<Member> list) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+
 }
