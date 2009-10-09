@@ -225,15 +225,16 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 		}
 		switch(message.getMessageType()) {
 			case JOINREQUEST:
-				// Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), message.getSource(), Message.TYPE_MESSAGE.GOTMEMBER);
-				//comModules.get(groupName).send(msg);
+				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), message.getSource(), Message.TYPE_MESSAGE.GOTMEMBER);
+				comModules.get(groupName).send(msg);
 				
 				gmm.addMember(groupName, message.getSource());
 				view = gmm.listGroupMembers(groupName);
-				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
+				msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
 				//comModules.get(groupName).send(msg);
 				try {
 					// TODO: COM should be expanded with private messages
+					Debug.log(this, Level.DEBUG, "Welcoming " + message.getSource().toString() + " to " + groupName + " via " + message.getSource().getRemoteObject());
 					message.getSource().getRemoteObject().send(msg);
 				} catch (RemoteException ex) {
 					Debug.log(GCom.class.getName(),Debug.WARN, "Got remote exception", ex);
@@ -244,7 +245,9 @@ public class GCom implements gcom.interfaces.GCom,gcom.interfaces.GComMessageLis
 					gmm.addMember(groupName, m);
 				}
 				break;
-
+			case GOTMEMBER:
+				gmm.addMember(message.getGroupName(), (Member)message.getMessage());
+				break;
 		}
 	}
 

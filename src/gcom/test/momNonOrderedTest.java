@@ -17,7 +17,8 @@ public class momNonOrderedTest {
 	
 	@Before
 	public void setUp() {
-		mom = new momNonOrdered();
+		Member me = new Member("0", "test0");
+		mom = new momNonOrdered(me);
 	}
 	
 	@Test

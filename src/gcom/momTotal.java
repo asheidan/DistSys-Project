@@ -8,16 +8,15 @@ import java.util.Hashtable;
 import java.io.Serializable;
 import java.util.Vector;
 
-public class momFIFO implements MessageOrderingModule {
+public class momTotal implements MessageOrderingModule {
 	private Vector<MessageListener> listeners;
 	private Vector<Message> messages;
-	//private Hashtable<Object, Integer> lastDelivered;
+	private Integer lastDelivered;
 	private HashVectorClock clock;
 
-	public momFIFO(Member me) {
+	public momTotal(Member me) {
 		listeners = new Vector<MessageListener>();
 		messages = new Vector<Message>();
-		//lastDelivered = new Hashtable<Object, Integer>();
 		this.clock = new HashVectorClock(me.getID());
 	}
 
@@ -28,7 +27,8 @@ public class momFIFO implements MessageOrderingModule {
 	
 	@Override
 	public void tick() {
-		this.clock.tick();
+		// Are we the sequencer?
+		//this.clock.tick();
 	}
 	
 	@Override
@@ -37,10 +37,8 @@ public class momFIFO implements MessageOrderingModule {
 	}
 
 	private void sendToListeners(Message message) {
-		String key = message.getSource().getID();
-		Integer value = message.getClock().getValue(key);
-		//lastDelivered.put(key, value);
-		clock.put(key, value);
+		Integer value = message.getClock().getValue("serialNo");
+		this.lastDelivered++;
 
 		for(MessageListener l : listeners) {
 			l.messageReceived(message);
@@ -49,26 +47,23 @@ public class momFIFO implements MessageOrderingModule {
 	
 	@Override
 	public void queueMessage(Message m) {
-		String key = m.getSource().getID();
-		Integer value = m.getClock().getValue(key);
-		Integer last = clock.getValue(key);
-		if(last == null) {
+		Integer value = m.getClock().getValue("serialNo");
+		if(this.lastDelivered == null) {
+			this.lastDelivered = value-1;
 			sendToListeners(m);
 			return;
 		}
-		if(value < last) { return; }
+		if(value < this.lastDelivered) { return; }
 		messages.add(m);
 		checkMessages();
 	}
 	
 	private void checkMessages() {
 		Vector<Message> remove = new Vector<Message>();
-
+		
 		for(Message m : messages) {
-			String key = m.getSource().getID();
-			Integer value = m.getClock().getValue(key);
-			Integer last = clock.getValue(key);
-			if(value == last+1) {
+			Integer value = m.getClock().getValue("serialNo");
+			if(value == this.lastDelivered+1) {
 				sendToListeners(m);
 				remove.add(m);
 			}

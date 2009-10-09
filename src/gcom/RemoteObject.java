@@ -26,14 +26,14 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	}
 	
 	public void start() {
-		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Starting thread");
+		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Starting thread in " + this);
 		run = true;
 		t.start();
 	}
 	
 	@Override
 	public void send(Message m) {
-		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queueing message");
+		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queueing message in " + this);
 		localQueue.add(m);
 	}
 
@@ -44,7 +44,7 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 				Message m = localQueue.poll(500,TimeUnit.MILLISECONDS);
 				if(m != null) {
 					com.receive(m);
-					Debug.log("gcom.RemoteObject",Debug.DEBUG,"Received a Message");
+					Debug.log("gcom.RemoteObject",Debug.DEBUG,"Received a Message in " + this);
 				}
 				else {
 					Debug.log("gcom.RemoteObject",Debug.TRACE,"Queue poll timed out");

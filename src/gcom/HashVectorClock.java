@@ -48,7 +48,7 @@ public class HashVectorClock implements VectorClock, Serializable {
 	}
 
 	public void merge(HashVectorClock o) {
-		//logger.debug(String.format("Merging %s with %s", toString(), o.toString()));
+		logger.debug(String.format("Merging %s with %s", toString(), o.toString()));
 		for(Object key : o.clocks.keySet()) {
 			Integer my_value = clocks.get(key);
 			Integer other_value = o.clocks.get(key);
@@ -63,7 +63,7 @@ public class HashVectorClock implements VectorClock, Serializable {
 	}
 
 	public int compareTo(HashVectorClock o) {
-		//logger.debug(String.format("Comparing %s with %s", toString(), o.toString()));
+		logger.debug(String.format("Comparing %s with %s", toString(), o.toString()));
 		int later = 0;
 		int earlier = 0;
 		for(Object key : clocks.keySet()){

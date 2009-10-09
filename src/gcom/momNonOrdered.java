@@ -2,6 +2,7 @@ package gcom;
 
 import gcom.interfaces.Message;
 import gcom.interfaces.*;
+import gcom.HashVectorClock;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -9,11 +10,25 @@ import org.apache.log4j.Level;
 
 public class momNonOrdered implements MessageOrderingModule {
 	private Vector<GComMessageListener> listeners;
-	
-	public momNonOrdered() {
+	private HashVectorClock clock;
+
+	public momNonOrdered(Member me) {
 		listeners = new Vector<GComMessageListener>();
+		this.clock = new HashVectorClock(me.getID());
+	}
+
+	@Override
+	public HashVectorClock getClock() {
+		return this.clock;	
 	}
 	
+	@Override
+	public void tick() {
+		// WE DO NOT CARE ABOUT TICKS AND CLOCKS
+		// WE ARE UNORDERED
+		// ORDER IS FOR THE WEAK
+	}
+
 	@Override
 	public void addMessageListener(GComMessageListener listener) {
 		listeners.add(listener);
