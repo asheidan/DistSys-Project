@@ -1,7 +1,7 @@
 package gcom;
 
 import java.rmi.RemoteException;
-import java.rmi.ConnectionException;
+import java.rmi.ConnectException;
 
 import org.apache.log4j.Logger;
 
@@ -40,7 +40,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 				try {
 					m.getRemoteObject().send(message);
 				}
-				catch(ConnectionException e) {
+				catch(ConnectException e) {
 					Debug.log(this, Debug.DEBUG, "Connection refused to " + m);
 					// TODO: Remove user from group and tell other members of group
 				}
