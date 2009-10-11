@@ -23,7 +23,7 @@ public class BasicCommunicationModuleTest {
 		name = "Nisse";
 		group = new gcom.Group(new gcom.GroupDefinition("De små nissarna"));
 		mom = new MessageOrderingMockup();
-		com = new BasicCommunicationModule(mom,null,name);
+		com = new BasicCommunicationModule(mom,null,name,null);
 	}
 
 	@Test
@@ -80,13 +80,18 @@ public class BasicCommunicationModuleTest {
 		public Message lastMessage = null;
 		
 		@Override
-		public void addMessageListener(MessageListener listener) {
-		}
-
-		@Override
 		public void queueMessage(Message m) {
 			lastMessage = m;
 		}
+		
+		@Override
+		public void tick() {}
+		
+		@Override
+		public HashVectorClock getClock() { return null; }
+		
+		@Override
+		public void addMessageListener(GComMessageListener l) {}
 		
 	}
 

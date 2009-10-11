@@ -1,15 +1,22 @@
 <!--
 	build.xml
 -->
-<project name="GCom" default="compile.src" basedir=".">
+<project name="GCom" default="compile" basedir=".">
 	<!-- taskdef resource="net/sf/antcontrib/antlib.xml"/ -->
-	<property name="src" location="src" />
+	<property name="src.gcom" location="src/gcom" />
+	<property name="src.gui" location="src/gui" />
 	<property name="build" location="bin" />
 	<property name="reports" location="reports" />
+	
+	<!-- FIXME: This should have worked, even in osx -->
+	<property name="build.compiler" value="javac1.6" />
 
-	<!-- property name="junit.jar" location="/usr/share/java/junit.jar" / -->
-	<property name="junit.jar" location="junit-4.7.jar" />
-	<property name="log4j.jar" location="log4j-1.2.15.jar" />
+	<property name="junit.jar" location="libs/junit-4.7.jar" />
+	<property name="log4j.jar" location="libs/log4j-1.2.15.jar" />
+	<property name="beans.jar" location="libs/beansbinding-1.2.1.jar" />
+	<property name="appframework.jar" location="libs/appframework-1.0.3.jar" />
+	<property name="layout.jar" location="libs/swing-layout-1.0.3.jar" />
+	<property name="worker.jar" location="libs/swing-worker-1.1.jar" />
 
 	<target name="version">
 		<echo>This is version ${ant.java.version}</echo>
@@ -21,8 +28,11 @@
 		<mkdir dir="${reports}" />
 	</target>
 
-	<target name="compile.src" depends="init" description="Compiling source-files">
-		<javac srcdir="${src}" destdir="${build}">
+	<target name="compile" depends="compile.gui.src" />
+
+	<target name="compile.gcom.src" depends="init" description="Compiling source-files">
+		<javac srcdir="${src.gcom}" destdir="${build}">
+			<!--compilerarg value="-Xlint" /-->
 			<classpath>
 				<pathelement location="${build}" />
 				<pathelement location="${junit.jar}" />
@@ -32,12 +42,53 @@
 		</javac>
 	</target>
 
+	<target name="compile.gui.src" depends="compile.gcom.src" description="Compiling source-files">
+		<javac srcdir="${src.gui}" destdir="${build}">
+			<!--compilerarg value="-Xlint" /-->
+			<classpath>
+				<pathelement location="${build}" />
+				<pathelement location="${junit.jar}" />
+				<pathelement location="${log4j.jar}" />
+				<pathelement location="${beans.jar}" />
+				<pathelement location="${appframework.jar}" />
+				<pathelement location="${layout.jar}" />
+				<pathelement location="${worker.jar}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="copy.gui.resources">
+		<copy todir="${build}/gui/resources" verbose="true">
+			<fileset dir="${src.gui}/resources">
+				<include name="**/*" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="gui" depends="compile.gui.src,copy.gui.resources">
+		<java classname="gui.NetBeansGUIApp" fork="true" failonerror="true">
+			<jvmarg value="-Djava.rmi.server.codebase=file://${build}/"/>
+			<classpath>
+				<pathelement location="${build}" />
+				<pathelement location="${junit.jar}" />
+				<pathelement location="${log4j.jar}" />
+				<pathelement location="${beans.jar}" />
+				<pathelement location="${appframework.jar}" />
+				<pathelement location="${layout.jar}" />
+				<pathelement location="${worker.jar}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</java>
+	</target>
+
 	<target name="clean.all" description="Removes ${build}">
 		<delete dir="${build}" />
 		<delete dir="${reports}" />
+		<delete dir="build/" />
 	</target>
 
-	<target name="test" depends="compile.src">
+	<target name="test" depends="compile.gcom.src">
 		<junit printsummary="true" haltonfailure="true">
 			<classpath>
 				<pathelement location="${build}" />
