@@ -56,6 +56,7 @@ public class RMIModuleTest {
 	}
 	
 	private class RemoteMockup implements gcom.interfaces.RemoteObject {
+	    private static final long serialVersionUID = 0L;
 		@Override
 		public void send(Message m) {}
 

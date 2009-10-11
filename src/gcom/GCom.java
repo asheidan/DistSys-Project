@@ -1,5 +1,6 @@
 package gcom;
 
+// Imports
 import gcom.interfaces.CommunicationModule;
 import gcom.interfaces.GComMessageListener;
 import gcom.interfaces.GComViewChangeListener;
@@ -196,7 +197,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public void removeGroup(String groupName) throws IOException,
 			IllegalStateException {
 		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -216,6 +217,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void messageReceived(Message message) {
 		Debug.log("gcom.GCom.messageReceived", Debug.DEBUG, "Got a " + message.getMessageType());
 		String groupName = message.getGroupName();

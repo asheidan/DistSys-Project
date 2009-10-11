@@ -8,9 +8,9 @@
 	<property name="src.rmi" location="src/rmi" />
 	<property name="build" location="bin" />
 	<property name="reports" location="reports" />
-	
-	<!-- FIXME: This should have worked, even in osx -->
-	<property name="build.compiler" value="javac1.6" />
+	<property name="ant.build.javac.source" value="1.6" />
+	<property name="ant.build.javac.target" value="1.6" />
+	<property file="local.properties" />
 
 	<property name="junit.jar" location="libs/junit-4.7.jar" />
 	<property name="log4j.jar" location="libs/log4j-1.2.15.jar" />
@@ -19,8 +19,13 @@
 	<property name="layout.jar" location="libs/swing-layout-1.0.3.jar" />
 	<property name="worker.jar" location="libs/swing-worker-1.1.jar" />
 
-	<target name="version">
-		<echo>This is version ${ant.java.version}</echo>
+	<target name="setversion">
+		<condition property="version">
+			<equals arg1="1.6" arg2="${ant.java.version}" trim="true"/>
+		</condition>
+	</target>
+	<target name="version" depends="setversion" unless="version">
+		<echo>This is version "${ant.java.version}"</echo>
 		<echo>Some of the code we use only work in Java 1.6.</echo>
 	</target>
 
@@ -29,11 +34,11 @@
 		<mkdir dir="${reports}" />
 	</target>
 
-	<target name="compile" depends="compile.gui.src" />
+	<target name="compile" depends="compile.gcom.src,compile.gui.src,compile.rmi.src" />
 
 	<target name="compile.gcom.src" depends="init" description="Compiling source-files">
 		<javac srcdir="${src.gcom}" destdir="${build}">
-			<!--compilerarg value="-Xlint" /-->
+			<compilerarg value="-Xlint" />
 			<classpath>
 				<pathelement location="${build}" />
 				<pathelement location="${junit.jar}" />
@@ -55,7 +60,7 @@
 	
 	<target name="rmi" depends="compile.rmi.src">
 		<java classname="rmi.RMIServer" fork="true" spawn="true">
-			<arg value="1234" />
+			<arg value="${rmi.port}" />
 			<classpath>
 				<pathelement location="${build}" />
 				<pathelement location="${log4j.jar}" />
@@ -79,17 +84,14 @@
 				<pathelement path="${java.class.path}" />
 			</classpath>
 		</javac>
-	</target>
-
-	<target name="copy.gui.resources">
-		<copy todir="${build}/gui/resources" verbose="true">
+		<copy todir="${build}/gui/resources" verbose="false">
 			<fileset dir="${src.gui}/resources">
 				<include name="**/*" />
 			</fileset>
 		</copy>
 	</target>
 
-	<target name="gui" depends="compile.gui.src,copy.gui.resources">
+	<target name="gui" depends="compile.gui.src">
 		<java classname="gui.NetBeansGUIApp" fork="true" failonerror="true">
 			<jvmarg value="-Djava.rmi.server.codebase=file://${build}/"/>
 			<classpath>

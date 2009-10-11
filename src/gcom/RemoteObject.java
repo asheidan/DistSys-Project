@@ -10,6 +10,7 @@ import gcom.interfaces.Message;
 
 public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	//private Logger logger = Logger.getLogger("gcom.RemoteObject");
+	private static final long serialVersionUID = 1740402897021175632L;
 	private GroupDefinition definition;
 	private transient CommunicationModule com;
 	private BlockingQueue<Message> localQueue = new LinkedBlockingQueue<Message>();

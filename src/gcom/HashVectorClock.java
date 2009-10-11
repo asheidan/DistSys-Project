@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
  * disappearing nodes.
  */
 public class HashVectorClock implements VectorClock, Serializable {
+    private static final long serialVersionUID = -5166402897945275632L;
 	private static Logger logger = Logger.getLogger("gcom.HashVectorClock");
 
 	private Hashtable<Object, Integer> clocks;
