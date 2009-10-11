@@ -84,7 +84,7 @@ public interface GCom {
 	 * @param listener
 	 *                the new listener
 	 */
-	public void addMessageListener(String groupName, MessageListener listener);
+	public void addMessageListener(String groupName, GComMessageListener listener);
 
 	/**
 	 * Connects to a group.

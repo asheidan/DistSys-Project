@@ -17,7 +17,7 @@ import javax.swing.DefaultListModel;
  *
  * @author emil
  */
-public class GroupPanel extends javax.swing.JPanel implements ActionListener,gcom.interfaces.ViewChangeListener,gcom.interfaces.MessageListener {
+public class GroupPanel extends javax.swing.JPanel implements ActionListener,gcom.interfaces.ViewChangeListener,gcom.interfaces.GComMessageListener {
 	private NetBeansGUIView mainPanel;
 	private Vector<MessageSender> senders = new Vector<MessageSender>();
 	private String groupName;
@@ -133,8 +133,13 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 	}
 
 	@Override
-	public void messageReceived(Serializable message) {
-		append(message.toString());
+	public void messageReceived(Message message) {
+		/* This allows for primitive formatting
+		 * %0s - senders id
+		 * %1s - senders chosen nick
+		 * %2s - message
+		 */
+		append(String.format("<%1s> %2s",message.getSource().getID(),message.getSource().getName(),message.getMessage().toString()));
 	}
 
 	public void append(String line) {

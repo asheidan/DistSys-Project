@@ -40,7 +40,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	private Hashtable<String, MessageOrderingModule> moModules = new Hashtable<String, MessageOrderingModule>();
 	private Hashtable<String, HashVectorClock> clocks = new Hashtable<String, HashVectorClock>();
 	private Hashtable<String, Member> identities = new Hashtable<String, Member>();
-	private Hashtable<String, Vector<MessageListener>> messageListeners = new Hashtable<String, Vector<MessageListener>>();
+	private Hashtable<String, Vector<GComMessageListener>> messageListeners = new Hashtable<String, Vector<GComMessageListener>>();
 	private Hashtable<String, Vector<ViewChangeListener>> viewChangeListeners = new Hashtable<String, Vector<ViewChangeListener>>();
 	private String processID;
 	
@@ -53,10 +53,10 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	}
 	
 	@Override
-	public void addMessageListener(String groupName, MessageListener listener) {
-		Vector<MessageListener> listeners = messageListeners.get(groupName);
+	public void addMessageListener(String groupName, GComMessageListener listener) {
+		Vector<GComMessageListener> listeners = messageListeners.get(groupName);
 		if( listeners == null ) {
-			listeners = new Vector<MessageListener>();
+			listeners = new Vector<GComMessageListener>();
 			messageListeners.put(groupName, listeners);
 		}
 		listeners.add(listener);
@@ -184,6 +184,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		clocks.put(groupName, clock);
 		comModules.put(groupName, com);
 		moModules.put(groupName, mom);
+		identities.put(groupName, me);
 		gmm.addGroup(definition);
 		return definition;
 	}
@@ -253,14 +254,17 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			case GOTMEMBER:
 				gmm.addMember(message.getGroupName(), (Member)message.getMessage());
 				break;
+			case LOSTMEMBER:
+				// TODO: Should we try to contact the lost member?
+				break;
 			case APPLICATION:
-				sendToMessageListeners(groupName,message.getMessage());
+				sendToMessageListeners(groupName,message);
 				break;
 		}
 	}
 
-	private void sendToMessageListeners(String groupName, Serializable message) {
-		for(MessageListener l : messageListeners.get(groupName)) {
+	private void sendToMessageListeners(String groupName, Message message) {
+		for(GComMessageListener l : messageListeners.get(groupName)) {
 			l.messageReceived(message);
 		}
 	}

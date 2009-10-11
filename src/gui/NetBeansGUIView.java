@@ -733,7 +733,6 @@ public class NetBeansGUIView extends FrameView {
 
 	@Action
 	public void joinGroup() {
-		// TODO: Join group in gcom
 		String nickname = joinNickField.getText();
 		String groupName = (String)groupList.getSelectedValue();
 		if( nickname.equals("") ) {
@@ -763,7 +762,6 @@ public class NetBeansGUIView extends FrameView {
 
 	@Action
 	public void toggleToolbar() {
-		// TODO: This seems to work, needs testing on other platforms
 		// TODO: Set default property for this (save state between starts)
 		if(toolBar.isVisible()) {
 			toolBar.setVisible(false);
@@ -782,7 +780,6 @@ public class NetBeansGUIView extends FrameView {
 
 	@Action
 	public void createGroup() {
-		// TODO: Create group in gcom
 		String nickName = createNickField.getText();
 		String groupName = groupNameField.getText();
 		if( nickName.equals("") ) {

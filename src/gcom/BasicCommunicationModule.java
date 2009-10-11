@@ -1,6 +1,7 @@
 package gcom;
 
 import java.rmi.RemoteException;
+import java.rmi.ConnectionException;
 
 import org.apache.log4j.Logger;
 
@@ -38,8 +39,12 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 				logger.debug("Sending message to: " + m.toString());
 				try {
 					m.getRemoteObject().send(message);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
+				}
+				catch(ConnectionException e) {
+					Debug.log(this, Debug.DEBUG, "Connection refused to " + m);
+					// TODO: Remove user from group and tell other members of group
+				}
+				catch(RemoteException e) {
 					e.printStackTrace();
 				}
 			}

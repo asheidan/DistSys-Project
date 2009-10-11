@@ -126,7 +126,7 @@
 			<formatter type="plain" />
 
 			<batchtest todir="${reports}" failureproperty="test.failed" haltonfailure="no">
-				<fileset dir="${src}">
+				<fileset dir="src/">
 					<include name="**/*Test.java" />
 				</fileset>
 			</batchtest>

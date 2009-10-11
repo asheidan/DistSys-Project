@@ -35,7 +35,6 @@ public class momNonOrdered implements MessageOrderingModule {
 	}
 
 	private void sendToListeners(Message message) {
-		// TODO: This needs to still be a Message
 		for(GComMessageListener l : listeners) {
 			Debug.log("gcom.momNonOrdered", Level.DEBUG, "Sent message to: " + l.toString());
 			l.messageReceived(message);
