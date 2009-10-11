@@ -5,6 +5,7 @@
 	<!-- taskdef resource="net/sf/antcontrib/antlib.xml"/ -->
 	<property name="src.gcom" location="src/gcom" />
 	<property name="src.gui" location="src/gui" />
+	<property name="src.rmi" location="src/rmi" />
 	<property name="build" location="bin" />
 	<property name="reports" location="reports" />
 	
@@ -42,6 +43,28 @@
 		</javac>
 	</target>
 
+	<target name="compile.rmi.src" depends="init,compile.gcom.src">
+		<javac srcdir="${src.rmi}" destdir="${build}">
+			<classpath>
+				<pathelement location="${build}" />
+				<pathelement location="${log4j.jar}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="rmi" depends="compile.rmi.src">
+		<java classname="rmi.RMIServer" fork="true" spawn="true">
+			<arg value="1234" />
+			<classpath>
+				<pathelement location="${build}" />
+				<pathelement location="${log4j.jar}" />
+				<pathelement location="${layout.jar}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</java>
+	</target>
+	
 	<target name="compile.gui.src" depends="compile.gcom.src" description="Compiling source-files">
 		<javac srcdir="${src.gui}" destdir="${build}">
 			<!--compilerarg value="-Xlint" /-->
