@@ -13,12 +13,13 @@ import gcom.GroupDefinition;
 import gcom.HashVectorClock;
 import gcom.interfaces.Member;
 import gcom.interfaces.Message;
+import gcom.interfaces.GComViewChangeListener;
 
 import java.util.Hashtable;
 
 public class Sequencer extends RMIServer {
 
-	public Sequencer(int port) {
+	public Sequencer(int port) throws Exception {
 		super(port);
 
 		SequencerCommunicationModule com = new SequencerCommunicationModule();
@@ -56,7 +57,7 @@ public class Sequencer extends RMIServer {
 			
 			}
 		}
-
+		public void addGComViewChangeListener(GComViewChangeListener listener) {}
 	}
 
 	private class groupSequencer {
