@@ -2,6 +2,7 @@ package rmi;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -10,6 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import gcom.RemoteObject;
 import gcom.GroupDefinition;
 import gcom.HashVectorClock;
+import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 
 import java.util.Hashtable;
@@ -46,8 +48,13 @@ public class Sequencer extends RMIServer {
 			send(seq.sequence(m));
 		}
 
-		public void send(Message m) {
-
+		public void send(Message message) {
+			Member member = message.getSource();
+			try {
+				member.getRemoteObject().send(message);
+			} catch(Exception e) {
+			
+			}
 		}
 
 	}
