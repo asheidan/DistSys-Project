@@ -19,6 +19,12 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 	}
 	
 	@Override
+	public boolean isLeader(String groupName) {
+		// TODO: nullpointerexception
+		return groups.get(groupName).isLeader();
+	}
+
+	@Override
 	public void addGroup(GroupDefinition group) {
 		//groups.put(group.getGroupName(),new gcom.Group(group,group.getGroupType()));
 		groups.put(group.getGroupName(),new gcom.Group(group));
@@ -52,6 +58,19 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 		Debug.log("gcom.GroupManagementModule", Level.DEBUG, "Adding member: " + member.toString());
 		Group g = groups.get(groupName);
 		g.addMember(member);
+	}
+
+	@Override
+	public void removeMember(String groupName, Member member) {
+		Debug.log(this, Level.DEBUG, "Removing member: " + member.toString());
+		Group g = groups.get(groupName);
+		g.removeMember(member);
+	}
+
+	public boolean memberIsInGroup(String groupName, Member member){
+		// TODO: nullpointer exception
+		Group g = groups.get(groupName);
+		return g.isMember(member);
 	}
 
 	@Override

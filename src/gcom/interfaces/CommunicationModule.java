@@ -5,4 +5,6 @@ public interface CommunicationModule {
 	public void receive(Message m);
 	
 	public void send(Message m);
+
+	public void addGComViewChangeListener(GComViewChangeListener listener);
 }

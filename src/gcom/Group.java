@@ -10,7 +10,6 @@ import org.apache.log4j.Level;
 
 public class Group implements gcom.interfaces.Group {
 
-
 	private Vector<ViewChangeListener> viewChangeListeners = new Vector<ViewChangeListener>();
 	private Vector<Member> members = new Vector<Member>();
 	private GroupDefinition groupDefinition;
@@ -32,6 +31,11 @@ public class Group implements gcom.interfaces.Group {
 	@Override
 	public synchronized List<Member> listMembers() {
 		return members;
+	}
+
+	@Override
+	public boolean isMember(Member member) {
+		return members.contains(member);
 	}
 
 	@Override

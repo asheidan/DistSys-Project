@@ -6,7 +6,7 @@ import java.rmi.registry.*;
 import javax.swing.JOptionPane;
 
 public class RMIServer {
-	Registry registry;
+	protected Registry registry;
 	public static void main(String [] args) {
 		
 		try {
@@ -16,15 +16,13 @@ public class RMIServer {
 		catch(ArrayIndexOutOfBoundsException e) {
 			Debug.log("RMIServer",Debug.ERROR, "You must supply a portnumber");
 		}
-		System.exit(0);
-	}
-	
-	public RMIServer(int port) {
-		try {
-			registry = LocateRegistry.createRegistry(port);
-		}
 		catch(RemoteException e) {
 			Debug.log("RMIServer",Debug.ERROR, "Got remote exception", e);
 		}
+		System.exit(0);
+	}
+	
+	public RMIServer(int port) throws RemoteException {
+		registry = LocateRegistry.createRegistry(port);
 	}
 }

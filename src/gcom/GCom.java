@@ -73,33 +73,44 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		rmi = new gcom.RMIModule(host,port);
 	}
 
-	@Override
-	public void createGroup(GroupDefinition description,
-			String localMemberName) throws IOException {
-		String groupName = description.getGroupName();
-		
+	private MessageOrderingModule setupMOM(GroupDefinition definition) {
 		MessageOrderingModule mom;
-		switch (description.getMessageOrderingType()) {
+		switch (definition.getMessageOrderingType()) {
 		case NONORDERED:
 			mom = new gcom.momNonOrdered(processID);
 			break;
 
 		default:
-			log.error("Unknown message-ordering type: " + description.getMessageOrderingType());
-			return;
+			log.error("Unknown message-ordering type: " + definition.getMessageOrderingType());
+			return null;
 		}
-		
+		mom.addMessageListener(this);
+		return mom;
+	}
+
+	private CommunicationModule setupCom(GroupDefinition definition, MessageOrderingModule mom) {
 		CommunicationModule com;
-		switch(description.getCommunicationType()) {
+		switch(definition.getCommunicationType()) {
 		case BASIC_UNRELIABLE_MULTICAST :
-			com = new BasicCommunicationModule(mom, gmm, groupName, processID);
+			com = new BasicCommunicationModule(mom, gmm, definition.getGroupName(), processID);
 			break;
 			
 		default:
-			log.error("Unknown communication type: " + description.getCommunicationType());
-			return;
+			log.error("Unknown communication type: " + definition.getCommunicationType());
+			return null;
 		}
-		mom.addMessageListener(this);
+		com.addGComViewChangeListener(this);
+		return com;
+	}
+
+	@Override
+	public void createGroup(GroupDefinition description,
+			String localMemberName) throws IOException {
+		String groupName = description.getGroupName();
+		
+		MessageOrderingModule mom = setupMOM(description);
+		CommunicationModule com = setupCom(description,mom);
+
 		try {
 			// TODO: Should this throw an exception if we aren't connected to RMI?
 			RemoteObject remote = new gcom.RemoteObject(com,description);
@@ -153,30 +164,9 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		RemoteObject remoteRemote = rmi.getReference(groupName);
 		GroupDefinition definition = remoteRemote.getDefinition();
 
-		MessageOrderingModule mom;
-		switch (definition.getMessageOrderingType()) {
-		case NONORDERED:
-			mom = new gcom.momNonOrdered(processID);
-			break;
+		MessageOrderingModule mom = setupMOM(definition);
+		CommunicationModule com = setupCom(definition,mom);
 
-		default:
-			log.error("Unknown message-ordering type: " + definition.getMessageOrderingType());
-			return null;
-		}
-
-
-		CommunicationModule com;
-		switch(definition.getCommunicationType()) {
-		case BASIC_UNRELIABLE_MULTICAST :
-			com = new BasicCommunicationModule(mom, gmm, groupName, processID);
-			break;
-
-		default:
-			log.error("Unknown communication type: " + definition.getCommunicationType());
-			return null;
-		}
-
-		mom.addMessageListener(this);
 		RemoteObject localRemote = new gcom.RemoteObject(com, definition);
 		Member me = new gcom.Member(processID, localMemberName, localRemote);
 		HashVectorClock clock = new HashVectorClock(processID);
@@ -222,7 +212,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public void messageReceived(Message message) {
 		Debug.log("gcom.GCom.messageReceived", Debug.DEBUG, "Got a " + message.getMessageType());
 		String groupName = message.getGroupName();
-		List<Member> view;
 		GroupDefinition definition = gmm.getGroupDefinition(groupName);
 		if(definition == null) {
 			Debug.log("gcom.GCom", Debug.DEBUG,
@@ -230,20 +219,18 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			return;
 		}
 		switch(message.getMessageType()) {
+			// TODO: should information about parting/joining be sent to "gui"?
 			case JOINREQUEST:
-				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), message.getSource(), Message.TYPE_MESSAGE.GOTMEMBER);
-				comModules.get(groupName).send(msg);
-				
-				gmm.addMember(groupName, message.getSource());
-				view = gmm.listGroupMembers(groupName);
-				msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
+				gotMember(groupName, message.getSource());
+				List<Member> view = gmm.listGroupMembers(groupName);
+				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
 				//comModules.get(groupName).send(msg);
 				try {
 					// TODO: COM should be expanded with private messages
 					Debug.log(this, Level.DEBUG, "Welcoming " + message.getSource().toString() + " to " + groupName + " via " + message.getSource().getRemoteObject());
 					message.getSource().getRemoteObject().send(msg);
 				} catch (RemoteException ex) {
-					Debug.log(GCom.class.getName(),Debug.WARN, "Got remote exception", ex);
+					Debug.log(this,Debug.WARN, "Got remote exception", ex);
 				}
 				break;
 			case WELCOME:
@@ -252,10 +239,15 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				}
 				break;
 			case GOTMEMBER:
-				gmm.addMember(message.getGroupName(), (Member)message.getMessage());
+				gmm.addMember(groupName, (Member)message.getMessage());
+				break;
+			case PARTREQUEST:
+				lostMember(groupName, message.getSource());
+				// TODO: Will we send a reject now? Right now a node will remove itself but still be able to send messages
 				break;
 			case LOSTMEMBER:
 				// TODO: Should we try to contact the lost member?
+				gmm.removeMember(groupName, (Member)message.getMessage());
 				break;
 			case APPLICATION:
 				sendToMessageListeners(groupName,message);
@@ -275,8 +267,27 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	}
 
 	@Override
-	public void viewChanged(String groupName, List<Member> list) {
-		throw new UnsupportedOperationException("Not supported yet.");
+	public void lostMember(String groupName, Member member) {
+		// TODO: send out lostmember-message
+		if(gmm.memberIsInGroup(groupName, member)) {
+			gmm.removeMember(groupName, member);
+
+			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
+			comModules.get(groupName).send(msg);
+		}
+	}
+
+	@Override
+	public void gotMember(String groupName, Member member) {
+		if(!gmm.memberIsInGroup(groupName, member)) {
+			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.GOTMEMBER);
+			comModules.get(groupName).send(msg);
+			
+			gmm.addMember(groupName, member);
+		}
+		else {
+			Debug.log(this, Debug.DEBUG, "Trying to remove member which isn't present: " + member.toString());
+		}
 	}
 
 }

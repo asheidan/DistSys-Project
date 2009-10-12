@@ -33,6 +33,10 @@ public class Debug {
 		}
 	}
 
+	private static String objName(Object obj) {
+		return obj.getClass().getName();
+	}
+
 	public static void setLevel(Level level) {
 		init();
 		root.setLevel(level);
@@ -44,12 +48,15 @@ public class Debug {
 	}
 
 	public static void log(Object obj, Level level, String message) {
-		String name = obj.getClass().getName();
-		log(name, level, message);
+		log(objName(obj), level, message);
 	}
 
 	public static void log(String name, Level level, String message, Throwable t){
 		init();
 		Logger.getLogger(name).log(level, message, t);
+	}
+
+	public static void log(Object obj, Level level, String message, Throwable t){
+		log(objName(obj),level, message, t);
 	}
 }

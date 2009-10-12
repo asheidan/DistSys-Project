@@ -7,5 +7,6 @@ import java.util.List;
  * group structure.
  */
 public interface GComViewChangeListener {
-	public void viewChanged(String groupName, List<Member> list);
+	public void gotMember(String groupName, Member member);
+	public void lostMember(String groupName, Member member);
 }

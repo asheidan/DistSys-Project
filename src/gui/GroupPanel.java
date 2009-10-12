@@ -139,7 +139,7 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		 * %1s - senders chosen nick
 		 * %2s - message
 		 */
-		append(String.format("<%1s> %2s",message.getSource().getID(),message.getSource().getName(),message.getMessage().toString()));
+		append(String.format("<%s> %s",message.getSource().getName(),message.getMessage().toString()));
 	}
 
 	public void append(String line) {
