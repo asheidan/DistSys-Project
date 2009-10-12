@@ -70,6 +70,18 @@
 		</java>
 	</target>
 	
+	<target name="seq" depends="compile.rmi.src">
+		<java classname="gcom.Sequencer" fork="true" spawn="true">
+			<arg value="${rmi.port}" />
+			<classpath>
+				<pathelement location="${build}" />
+				<pathelement location="${log4j.jar}" />
+				<pathelement location="${layout.jar}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</java>
+	</target>
+	
 	<target name="compile.gui.src" depends="compile.gcom.src" description="Compiling source-files">
 		<javac srcdir="${src.gui}" destdir="${build}">
 			<!--compilerarg value="-Xlint" /-->

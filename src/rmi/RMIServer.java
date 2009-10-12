@@ -6,7 +6,7 @@ import java.rmi.registry.*;
 import javax.swing.JOptionPane;
 
 public class RMIServer {
-	Registry registry;
+	protected Registry registry;
 	public static void main(String [] args) {
 		
 		try {

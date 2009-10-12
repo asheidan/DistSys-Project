@@ -52,4 +52,10 @@ public class Message implements gcom.interfaces.Message {
 	public String toString() {
 		return "Message " + this.type + ":" + this.clock.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
 }
