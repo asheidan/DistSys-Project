@@ -16,6 +16,7 @@ import gcom.HashVectorClock;
 import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 import gcom.interfaces.GComViewChangeListener;
+import gcom.interfaces.Message.TYPE_MESSAGE;
 
 import java.util.Hashtable;
 
@@ -58,16 +59,27 @@ public class Sequencer extends RMIServer {
 		}
 
 		public void receive(Message m) {
-			GroupSequencer seq = sequencers.get(m.getGroupName());
-			if(seq == null) {
-				seq = new GroupSequencer();
-				sequencers.put(m.getGroupName(), seq);
+			if(m.getMessageType() == TYPE_MESSAGE.SEQUENCE) {
+				Debug.log(this, Debug.DEBUG, "Got: " + m.toString());
+				Message msg = (Message)m.getMessage();
+				GroupSequencer seq = sequencers.get(msg.getGroupName());
+				if(seq == null) {
+					seq = new GroupSequencer();
+					sequencers.put(msg.getGroupName(), seq);
+				}
+				sendBack(m.getSource(),seq.sequence(msg));
 			}
-			send(seq.sequence(m));
+			else {
+				Debug.log(this, Debug.WARN, "Got unwanted messagetype: " + m.getMessageType().toString());
+			}
 		}
 
 		public void send(Message message) {
-			Member member = message.getSource();
+			Debug.log(this, Debug.WARN, "Using unimplemented method send()");
+		}
+		
+		public void sendBack(Member member, Message message) {
+			//Member member = message.getSource();
 			try {
 				member.getRemoteObject().send(message);
 			} catch(Exception e) {
