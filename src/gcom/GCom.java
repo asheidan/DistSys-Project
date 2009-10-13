@@ -252,6 +252,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				for(Member m : (List<Member>)message.getMessage()) {
 					gmm.addMember(groupName, m);
 				}
+				gmm.setLeader(groupName,message.getSource());
 				break;
 			case GOTMEMBER:
 				gmm.addMember(groupName, (Member)message.getMessage());
@@ -289,6 +290,10 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 
 			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
 			comModules.get(groupName).send(msg);
+			if(member == gmm.getLeader(groupName)) {
+				// TODO: Commence election
+				Debug.log(this, Debug.WARN, "We lost our leader: " + member.toString());
+			}
 		}
 		else {
 			Debug.log(this, Debug.DEBUG, "Trying to remove member which isn't present: " + member.toString());

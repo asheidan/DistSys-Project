@@ -8,7 +8,7 @@ public interface Group {
 	public List<Member> listMembers();
 	public boolean isMember(Member member);
 	public GroupDefinition getDefinition();
-	public void setLeader(boolean leader);
-	public boolean isLeader();
+	public void setLeader(Member leader);
+	public Member getLeader();
 	public void addViewChangeListener(ViewChangeListener listener);
 }

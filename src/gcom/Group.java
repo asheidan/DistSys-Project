@@ -12,7 +12,7 @@ public class Group implements gcom.interfaces.Group {
 	private Vector<ViewChangeListener> viewChangeListeners = new Vector<ViewChangeListener>();
 	private Vector<Member> members = new Vector<Member>();
 	private GroupDefinition groupDefinition;
-	private boolean leader;
+	private Member leader;
 
 	public Group(GroupDefinition group_definition) {
 		this.groupDefinition = group_definition;
@@ -54,12 +54,12 @@ public class Group implements gcom.interfaces.Group {
 
 
 	@Override
-	public void setLeader(boolean leader) {
+	public void setLeader(Member leader) {
 		this.leader = leader;
 	}
 	
 	@Override
-	public boolean isLeader() {
+	public Member getLeader() {
 		return leader;
 	}
 

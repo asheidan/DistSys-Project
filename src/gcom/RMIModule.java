@@ -22,6 +22,11 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 	public void bind(String name, RemoteObject ro) throws AccessException, RemoteException, AlreadyBoundException {
 		registry.bind(name, UnicastRemoteObject.exportObject(ro,0));
 	}
+	
+	@Override
+	public void rebind(String name, RemoteObject ro) throws AccessException, RemoteException {
+		registry.rebind(name, UnicastRemoteObject.exportObject(ro,0));
+	}
 
 	@Override
 	public void unbind(String name) throws AccessException, RemoteException {

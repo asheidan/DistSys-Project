@@ -18,9 +18,14 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 	}
 	
 	@Override
-	public boolean isLeader(String groupName) {
+	public Member getLeader(String groupName) {
 		// TODO: nullpointerexception
-		return groups.get(groupName).isLeader();
+		return groups.get(groupName).getLeader();
+	}
+	
+	@Override
+	public void setLeader(String groupName, Member leader) {
+		groups.get(groupName).setLeader(leader);
 	}
 
 	@Override

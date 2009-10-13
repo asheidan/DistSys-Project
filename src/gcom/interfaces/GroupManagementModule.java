@@ -9,7 +9,9 @@ public interface GroupManagementModule {
 	
 	public List<GroupDefinition> listGroups();
 
-	public boolean isLeader(String groupName);
+	public void setLeader(String groupName, Member member);
+
+	public Member getLeader(String groupName);
 
 	public GroupDefinition getGroupDefinition(String groupName);
 
