@@ -1,11 +1,8 @@
 package gcom;
 
 import gcom.interfaces.RemoteObject;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Member implements gcom.interfaces.Member {
 

@@ -6,7 +6,6 @@ import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.ViewChangeListener;
 import java.util.List;
 import java.util.Vector;
-import org.apache.log4j.Level;
 
 public class Group implements gcom.interfaces.Group {
 
@@ -21,7 +20,7 @@ public class Group implements gcom.interfaces.Group {
 
 	@Override
 	public synchronized void addMember(Member member) {
-		Debug.log("gcom.Group", Level.DEBUG, groupDefinition.getGroupName() + ": adding member: " + member);
+		Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding member: " + member);
 		members.add(member);
 		for(ViewChangeListener l : viewChangeListeners) {
 			l.gotMember(member);
@@ -66,7 +65,7 @@ public class Group implements gcom.interfaces.Group {
 
 	@Override
 	public void addViewChangeListener(ViewChangeListener listener) {
-		Debug.log("gcom.Group", Level.DEBUG, groupDefinition.getGroupName() + ": adding listener: " + listener);
+		Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding listener: " + listener);
 		for(Member m : members) {
 			listener.gotMember(m);
 		}

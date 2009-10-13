@@ -6,7 +6,6 @@ import gcom.HashVectorClock;
 
 import java.io.Serializable;
 import java.util.Vector;
-import org.apache.log4j.Level;
 
 public class momNonOrdered implements MessageOrderingModule {
 	private Vector<GComMessageListener> listeners;
@@ -36,14 +35,14 @@ public class momNonOrdered implements MessageOrderingModule {
 
 	private void sendToListeners(Message message) {
 		for(GComMessageListener l : listeners) {
-			Debug.log("gcom.momNonOrdered", Level.DEBUG, "Sent message to: " + l.toString());
+			Debug.log("gcom.momNonOrdered", Debug.DEBUG, "Sent message to: " + l.toString());
 			l.messageReceived(message);
 		}
 	}
 	
 	@Override
 	public void queueMessage(Message m) {
-		Debug.log("gcom.momNonOrdered", Level.DEBUG, "Queued message: " + m.toString());
+		Debug.log("gcom.momNonOrdered", Debug.DEBUG, "Queued message: " + m.toString());
 		sendToListeners(m);
 	}
 

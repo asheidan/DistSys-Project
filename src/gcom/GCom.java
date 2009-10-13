@@ -26,13 +26,10 @@ import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+
 
 public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewChangeListener,MessageSender {
-	private Logger log = Logger.getLogger("gcom");
 
 	private GroupManagementModule gmm = new gcom.GroupManagementModule();
 	private RMIModule rmi;
@@ -47,9 +44,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public GCom() {
 		//processID = String.valueOf(String.valueOf(Math.random()).hashCode());
 		processID = "0x" + String.format("%06x",(int)Math.floor(Math.random() * Math.pow(2, 24))).toUpperCase();
-		BasicConfigurator.configure();
-		log.setLevel(Level.DEBUG);
-		log.debug("gcom-object created");
+		Debug.log(this, Level.DEBUG, "gcom-object created");
 	}
 	
 	@Override
@@ -92,7 +87,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			}
 			break;
 		default:
-			log.error("Unknown message-ordering type: " + definition.getMessageOrderingType());
+			Debug.log(this, Debug.ERROR, "Unknown message-ordering type: " + definition.getMessageOrderingType());
 			return null;
 		}
 		mom.addMessageListener(this);
@@ -106,7 +101,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			com = new BasicCommunicationModule(mom, gmm, definition.getGroupName(), processID);
 			break;
 		default:
-			log.error("Unknown communication type: " + definition.getCommunicationType());
+			Debug.log(this, Debug.ERROR, "Unknown communication type: " + definition.getCommunicationType());
 			return null;
 		}
 		com.addGComViewChangeListener(this);
@@ -135,7 +130,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			comModules.put(groupName, com);
 		}
 		catch (AlreadyBoundException e) {
-			log.debug("Trying to bind object for new group while name already exists: " + groupName);
+			Debug.log(this, Debug.DEBUG, "Trying to bind object for new group while name already exists: " + groupName);
 		}
 	}
 

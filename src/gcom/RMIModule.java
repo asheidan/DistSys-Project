@@ -8,12 +8,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.apache.log4j.Logger;
-
 import gcom.interfaces.RemoteObject;
 
 public class RMIModule implements gcom.interfaces.RMIModule {
-	private Logger logger = Logger.getLogger("gcom.RMIModule");
 	private Registry registry;
 	
 	public RMIModule(String serverAddress, int serverPort) throws RemoteException {
@@ -32,7 +29,7 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 			registry.unbind(name);
 		}
 		catch(NotBoundException e){
-			logger.debug("Trying to unbind something that isn't there" + e.getMessage());
+			Debug.log(this, Debug.DEBUG, "Trying to unbind something that isn't there" + e.getMessage());
 		}
 	}
 

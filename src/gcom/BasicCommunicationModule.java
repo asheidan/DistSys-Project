@@ -5,8 +5,6 @@ import java.rmi.ConnectException;
 
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.Member;
@@ -14,7 +12,6 @@ import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
 
 public class BasicCommunicationModule implements gcom.interfaces.CommunicationModule {
-	private Logger logger = Logger.getLogger("gcom.CommunicationModule.Basic");
 	
 	private MessageOrderingModule mom;
 	private GroupManagementModule gmm;
@@ -41,7 +38,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	public void send(Message message) {
 		for(Member m : gmm.listGroupMembers(group)) {
 			if(!processID.equals(m.getID())) {
-				logger.debug("Sending message to: " + m.toString());
+				Debug.log(this, Debug.DEBUG, "Sending message to: " + m.toString());
 				try {
 					m.getRemoteObject().send(message);
 				}
@@ -63,6 +60,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 		}
 	}
 
+	@Override
 	public void addGComViewChangeListener(GComViewChangeListener listener) {
 		listeners.add(listener);
 	}
