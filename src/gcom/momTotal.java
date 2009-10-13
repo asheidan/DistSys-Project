@@ -13,6 +13,7 @@ public class momTotal implements MessageOrderingModule {
 	private Vector<Message> messages;
 	private Integer lastDelivered;
 	private HashVectorClock clock;
+	private RemoteObject sequencer;
 
 	public momTotal(String id) {
 		listeners = new Vector<GComMessageListener>();
@@ -25,8 +26,8 @@ public class momTotal implements MessageOrderingModule {
 		return this.clock;	
 	}
 	
-	public setSequencer() {
-		
+	public void setSequencer(RemoteObject sequencer) {
+		this.sequencer = sequencer;
 	}
 
 	@Override
@@ -52,6 +53,10 @@ public class momTotal implements MessageOrderingModule {
 	@Override
 	public void queueMessage(Message m) {
 		Integer value = m.getClock().getValue("serialNo");
+		if(value == null) {
+			sequencer.send(m); // Request serialNo for message
+			return; // Will be resent to us when stamped, so we discard
+		}
 		if(this.lastDelivered == null) {
 			this.lastDelivered = value-1;
 			sendToListeners(m);
