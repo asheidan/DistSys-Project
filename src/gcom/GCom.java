@@ -6,7 +6,6 @@ import gcom.interfaces.GComMessageListener;
 import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.Message;
-import gcom.interfaces.MessageListener;
 import gcom.interfaces.MessageOrderingModule;
 import gcom.interfaces.ViewChangeListener;
 import gcom.interfaces.GroupDefinition;
@@ -68,6 +67,12 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		rmi = new gcom.RMIModule(host,port);
 	}
 
+	private void setIdentityInMOM(MessageOrderingModule mom, GroupDefinition def) {
+		if(def.getMessageOrderingType() == GCom.TYPE_MESSAGEORDERING.TOTAL) {
+			((momTotal)mom).setIdentity(identities.get(def.getGroupName()));
+		}
+	}
+	
 	private MessageOrderingModule setupMOM(GroupDefinition definition) {
 		MessageOrderingModule mom;
 		switch (definition.getMessageOrderingType()) {
@@ -133,7 +138,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			gmm.addGroup(description);
 			gmm.addMember(groupName, me);
 			identities.put(groupName,me);
-			setIdentityInMom(mom, description);
+			
+			setIdentityInMOM(mom,description);
 
 			clocks.put(groupName, new HashVectorClock(processID));
 			moModules.put(groupName, mom);
@@ -192,19 +198,11 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		comModules.put(groupName, com);
 		moModules.put(groupName, mom);
 		identities.put(groupName, me);
-		setIdentityInMom(mom, definition);
+		
+		setIdentityInMOM(mom,definition);
+	
 		gmm.addGroup(definition);
 		return definition;
-	}
-
-	private void setIdentityInMom(MessageOrderingModule mom, GroupDefinition def) {
-		switch(def.getMessageOrderingType()) {
-			case TOTAL:
-				((momTotal)mom).setMember(identities.get(def.getGroupName()));
-				break;
-			default:
-				break;
-		}
 	}
 
 	@Override

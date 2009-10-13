@@ -10,7 +10,6 @@ import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
 import java.rmi.ConnectException;
 import java.rmi.RemoteException;
-import java.util.Iterator;
 
 public class BasicCommunicationModule implements gcom.interfaces.CommunicationModule {
 	

@@ -101,15 +101,6 @@ public class RemoteObjectTest {
 			return null;
 		}
 		
-		@Override
-		public Member getReciever() {
-			return null;
-		}
-
-		@Override
-		public void setReciever(Member source) {
-		}
-
 	}
 	
 }

@@ -1,13 +1,15 @@
 package gcom;
 
-import gcom.interfaces.Message;
-import gcom.interfaces.*;
 import gcom.HashVectorClock;
-import gcom.interfaces.RemoteObject;
+
+import gcom.interfaces.*;
 import gcom.interfaces.Member;
+import gcom.interfaces.Message;
+import gcom.interfaces.RemoteObject;
+
+import java.io.Serializable;
 
 import java.util.Hashtable;
-import java.io.Serializable;
 import java.util.Vector;
 
 public class momTotal implements MessageOrderingModule {
@@ -16,12 +18,16 @@ public class momTotal implements MessageOrderingModule {
 	private Integer lastDelivered;
 	private HashVectorClock clock;
 	private RemoteObject sequencer;
-	private Member me;
+	private Member identity;
 
 	public momTotal(String id) {
 		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
 		this.clock = new HashVectorClock(id);
+	}
+	
+	public void setIdentity(Member me) {
+		this.identity = me;
 	}
 
 	@Override
@@ -31,10 +37,6 @@ public class momTotal implements MessageOrderingModule {
 	
 	public void setSequencer(RemoteObject sequencer) {
 		this.sequencer = sequencer;
-	}
-
-	public void setMember(Member me) {
-		this.me = me;
 	}
 
 	@Override
@@ -61,9 +63,9 @@ public class momTotal implements MessageOrderingModule {
 		Debug.log(this, Debug.DEBUG, String.format("Got message from %s with %s", m.getSource(), m.getClock()));
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {
-			m.setReciever(this.me);
 			try {
-				sequencer.send(m); // Request serialNo for message
+				// FIXME: This is where the problem is. The message is never altered with correct source so the message is returned to the original sender instead of the one requesting serialNo.
+				sequencer.send(new gcom.Message(null, null, identity, m, Message.TYPE_MESSAGE.SEQUENCE)); // Request serialNo for message
 			}
 			catch(Exception e) {
 				Debug.log(this, Debug.ERROR, "sequncer exception", e);
