@@ -53,10 +53,12 @@ public class momTotal implements MessageOrderingModule {
 	
 	@Override
 	public void queueMessage(Message m) {
+		Debug.log(this, Debug.DEBUG, String.format("Got message from %s with %s", m.getSource(), m.getClock()));
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {
 			try {
-			sequencer.send(m); // Request serialNo for message
+				// FIXME: This is where the problem is. The message is never altered with correct source so the message is returned to the original sender instead of the one requesting serialNo.
+				sequencer.send(m); // Request serialNo for message
 			}
 			catch(Exception e) {
 				Debug.log(this, Debug.ERROR, "sequncer exception", e);
