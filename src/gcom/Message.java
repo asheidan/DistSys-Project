@@ -12,6 +12,7 @@ public class Message implements gcom.interfaces.Message {
 	private HashVectorClock clock;
 	private String groupName;
 	private Member source;
+	private Member reciever; // Used by sequencer only
 	private Serializable data;
 	private TYPE_MESSAGE type;
 	
@@ -46,6 +47,16 @@ public class Message implements gcom.interfaces.Message {
 	@Override
 	public Member getSource() {
 		return source;
+	}
+	
+	@Override
+	public Member getReciever() {
+		return reciever;
+	}
+
+	@Override
+	public void setReciever(Member reciever) {
+		this.reciever = reciever;
 	}
 
 	@Override

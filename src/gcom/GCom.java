@@ -133,6 +133,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			gmm.addGroup(description);
 			gmm.addMember(groupName, me);
 			identities.put(groupName,me);
+			setIdentityInMom(mom, description);
 
 			clocks.put(groupName, new HashVectorClock(processID));
 			moModules.put(groupName, mom);
@@ -191,8 +192,19 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		comModules.put(groupName, com);
 		moModules.put(groupName, mom);
 		identities.put(groupName, me);
+		setIdentityInMom(mom, definition);
 		gmm.addGroup(definition);
 		return definition;
+	}
+
+	private void setIdentityInMom(MessageOrderingModule mom, GroupDefinition def) {
+		switch(def.getMessageOrderingType()) {
+			case TOTAL:
+				((momTotal)mom).setMember(identities.get(def.getGroupName()));
+				break;
+			default:
+				break;
+		}
 	}
 
 	@Override

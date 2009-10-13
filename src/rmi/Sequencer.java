@@ -67,7 +67,7 @@ public class Sequencer extends RMIServer {
 		}
 
 		public void send(Message message) {
-			Member member = message.getSource();
+			Member member = message.getReciever();
 			try {
 				member.getRemoteObject().send(message);
 			} catch(Exception e) {
