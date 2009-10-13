@@ -586,12 +586,12 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="createNickField" alignment="1" pref="193" max="32767" attributes="1"/>
-                              <Component id="jComboBox2" alignment="0" pref="193" max="32767" attributes="1"/>
+                              <Component id="castType" alignment="0" pref="193" max="32767" attributes="1"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jComboBox1" alignment="0" max="32767" attributes="1"/>
+                                  <Component id="groupType" alignment="0" max="32767" attributes="1"/>
                                   <Component id="groupNameField" alignment="0" pref="193" max="32767" attributes="1"/>
                               </Group>
-                              <Component id="jComboBox3" alignment="0" pref="193" max="32767" attributes="0"/>
+                              <Component id="orderType" alignment="0" pref="193" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -616,17 +616,17 @@
                   <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="groupType" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="castType" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jComboBox3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="orderType" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="7" max="32767" attributes="0"/>
@@ -688,7 +688,7 @@
             <Property name="name" type="java.lang.String" value="jButton4" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox1">
+        <Component class="javax.swing.JComboBox" name="groupType">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
@@ -696,7 +696,7 @@
                 <StringItem index="1" value="Static"/>
               </StringArray>
             </Property>
-            <Property name="name" type="java.lang.String" value="jComboBox1" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="groupType" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
@@ -706,7 +706,7 @@
             <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox2">
+        <Component class="javax.swing.JComboBox" name="castType">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="2">
@@ -714,7 +714,7 @@
                 <StringItem index="1" value="Reliable"/>
               </StringArray>
             </Property>
-            <Property name="name" type="java.lang.String" value="jComboBox2" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="castType" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
@@ -724,7 +724,7 @@
             <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox3">
+        <Component class="javax.swing.JComboBox" name="orderType">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="5">
@@ -735,7 +735,7 @@
                 <StringItem index="4" value="CAUSALTOTAL"/>
               </StringArray>
             </Property>
-            <Property name="name" type="java.lang.String" value="jComboBox3" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="orderType" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">

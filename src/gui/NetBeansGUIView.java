@@ -168,11 +168,11 @@ public class NetBeansGUIView extends FrameView {
         createNickField = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox();
+        groupType = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
+        castType = new javax.swing.JComboBox();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
+        orderType = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jSplitPane2 = new javax.swing.JSplitPane();
@@ -542,22 +542,22 @@ public class NetBeansGUIView extends FrameView {
         jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
         jButton4.setName("jButton4"); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dynamic", "Static" }));
-        jComboBox1.setName("jComboBox1"); // NOI18N
+        groupType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dynamic", "Static" }));
+        groupType.setName("groupType"); // NOI18N
 
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Basic", "Reliable" }));
-        jComboBox2.setName("jComboBox2"); // NOI18N
+        castType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Basic", "Reliable" }));
+        castType.setName("castType"); // NOI18N
 
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "NONORDERED", "FIFO", "CAUSAL", "TOTAL", "CAUSALTOTAL" }));
-        jComboBox3.setName("jComboBox3"); // NOI18N
+        orderType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "NONORDERED", "FIFO", "CAUSAL", "TOTAL", "CAUSALTOTAL" }));
+        orderType.setName("orderType"); // NOI18N
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
@@ -588,11 +588,11 @@ public class NetBeansGUIView extends FrameView {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, createNickField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                            .add(jComboBox2, 0, 193, Short.MAX_VALUE)
+                            .add(castType, 0, 193, Short.MAX_VALUE)
                             .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
-                                .add(org.jdesktop.layout.GroupLayout.LEADING, jComboBox1, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(org.jdesktop.layout.GroupLayout.LEADING, groupType, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .add(org.jdesktop.layout.GroupLayout.LEADING, groupNameField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
-                            .add(jComboBox3, 0, 193, Short.MAX_VALUE))))
+                            .add(orderType, 0, 193, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         createGroupDialogLayout.setVerticalGroup(
@@ -610,15 +610,15 @@ public class NetBeansGUIView extends FrameView {
                 .add(jSeparator2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(7, 7, 7)
                 .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(groupType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel7))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBox2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(castType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel8))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jComboBox3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(orderType, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel9))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 7, Short.MAX_VALUE)
                 .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -794,6 +794,7 @@ public class NetBeansGUIView extends FrameView {
 		else{
 			appendLog(String.format("Creating group: %s", groupName));
 			try {
+				Debug.log(this,Debug.DEBUG, orderType.getSelectedItem().toString());
 				gcom.createGroup(new gcom.GroupDefinition(groupName), nickName);
 				Debug.log(NetBeansGUIView.class.getName(),Debug.DEBUG,"Group Created");
 				createGroupDialog.setVisible(false);
@@ -821,6 +822,7 @@ public class NetBeansGUIView extends FrameView {
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox castType;
     private javax.swing.JButton connectRMIButton;
     private javax.swing.JDialog connectRMIDialog;
     private javax.swing.JMenuItem connectRMIMenuItem;
@@ -830,15 +832,13 @@ public class NetBeansGUIView extends FrameView {
     private javax.swing.JTextField createNickField;
     private javax.swing.JList groupList;
     private javax.swing.JTextField groupNameField;
+    private javax.swing.JComboBox groupType;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -866,6 +866,7 @@ public class NetBeansGUIView extends FrameView {
     private javax.swing.JTextField joinNickField;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JComboBox orderType;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JTextField rmiAddressField;
     private javax.swing.JTextField rmiPortField;
