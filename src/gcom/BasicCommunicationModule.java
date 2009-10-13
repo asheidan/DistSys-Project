@@ -1,7 +1,5 @@
 package gcom;
 
-import java.rmi.RemoteException;
-import java.rmi.ConnectException;
 
 import java.util.Vector;
 
@@ -10,6 +8,9 @@ import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
+import java.rmi.ConnectException;
+import java.rmi.RemoteException;
+import java.util.Iterator;
 
 public class BasicCommunicationModule implements gcom.interfaces.CommunicationModule {
 	
@@ -36,6 +37,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 
 	@Override
 	public void send(Message message) {
+		Vector<Member> lostMembers = new Vector<Member>();
 		for(Member m : gmm.listGroupMembers(group)) {
 			if(!processID.equals(m.getID())) {
 				Debug.log(this, Debug.DEBUG, "Sending message to: " + m.toString());
@@ -45,12 +47,15 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 				catch(ConnectException e) {
 					Debug.log(this, Debug.DEBUG, "Connection refused to " + m);
 					// CHANGED: Removes user from group and tell other members
-					looseMember(m);
+					lostMembers.add(m);
 				}
 				catch(RemoteException e) {
 					e.printStackTrace();
 				}
 			}
+		}
+		for(Member m : lostMembers) {
+			looseMember(m);
 		}
 	}
 
