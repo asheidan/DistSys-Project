@@ -71,7 +71,7 @@
 	</target>
 	
 	<target name="seq" depends="compile.rmi.src">
-		<java classname="gcom.Sequencer" fork="true" spawn="true">
+		<java classname="rmi.Sequencer" fork="true" spawn="true">
 			<arg value="${rmi.port}" />
 			<classpath>
 				<pathelement location="${build}" />

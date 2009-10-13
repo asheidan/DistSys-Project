@@ -8,6 +8,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import gcom.Debug;
+import javax.swing.JOptionPane;
 import gcom.RemoteObject;
 import gcom.GroupDefinition;
 import gcom.HashVectorClock;
@@ -19,6 +21,20 @@ import java.util.Hashtable;
 
 public class Sequencer extends RMIServer {
 
+	public static void main(String [] args) {
+		try {
+			new RMIServer(Integer.valueOf(args[0]));
+			JOptionPane.showMessageDialog(null,"RMIRegistry is launched\nListening on port " + args[0],"RMI:" + args[0],JOptionPane.INFORMATION_MESSAGE);
+		}
+		catch(ArrayIndexOutOfBoundsException e) {
+			Debug.log("RMIServer",Debug.ERROR, "You must supply a portnumber");
+		}
+		catch(RemoteException e) {
+			Debug.log("RMIServer",Debug.ERROR, "Got remote exception", e);
+		}
+		System.exit(0);
+	}
+
 	public Sequencer(int port) throws Exception {
 		super(port);
 
@@ -28,7 +44,7 @@ public class Sequencer extends RMIServer {
 		try {
 			registry.bind("sequencer", UnicastRemoteObject.exportObject(ro, 0));
 		} catch(Exception e) {
-
+			Debug.log("Sequencer",Debug.ERROR, "Got exception", e);
 		}
 	}
 
@@ -54,7 +70,7 @@ public class Sequencer extends RMIServer {
 			try {
 				member.getRemoteObject().send(message);
 			} catch(Exception e) {
-			
+				Debug.log("Sequencer",Debug.ERROR, "Got other exception", e);
 			}
 		}
 		public void addGComViewChangeListener(GComViewChangeListener listener) {}
