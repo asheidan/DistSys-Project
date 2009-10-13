@@ -2,6 +2,7 @@ package gcom;
 
 import gcom.interfaces.RemoteObject;
 import java.rmi.RemoteException;
+import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class Member implements gcom.interfaces.Member {
@@ -21,9 +22,13 @@ public class Member implements gcom.interfaces.Member {
 		this.name = name;
 		try {
 			this.remote = (RemoteObject) UnicastRemoteObject.exportObject(remote,0);
-		} catch (RemoteException ex) {
+		}
+		catch (ExportException ex) {
 			Debug.log(this, Debug.WARN, "Trying to export already exported RemoteObject");
 			this.remote = remote;
+		}
+		catch(RemoteException ex) {
+			Debug.log(this, Debug.WARN, "Trying to export got RemoteException", ex);
 		}
 	}
 	

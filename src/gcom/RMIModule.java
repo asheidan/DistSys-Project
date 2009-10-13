@@ -6,6 +6,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
 import gcom.interfaces.RemoteObject;
@@ -20,12 +21,24 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 	
 	@Override
 	public void bind(String name, RemoteObject ro) throws AccessException, RemoteException, AlreadyBoundException {
-		registry.bind(name, UnicastRemoteObject.exportObject(ro,0));
+		try {
+			registry.bind(name, UnicastRemoteObject.exportObject(ro,0));
+		}
+		catch(ExportException e) {
+			Debug.log(this, Debug.DEBUG, "Object already exported");
+			registry.bind(name,ro);
+		}
 	}
 	
 	@Override
 	public void rebind(String name, RemoteObject ro) throws AccessException, RemoteException {
-		registry.rebind(name, UnicastRemoteObject.exportObject(ro,0));
+		try {
+			registry.rebind(name, UnicastRemoteObject.exportObject(ro,0));
+		}
+		catch(ExportException e) {
+			Debug.log(this, Debug.DEBUG, "Object already exported");
+			registry.rebind(name,ro);
+		}
 	}
 
 	@Override

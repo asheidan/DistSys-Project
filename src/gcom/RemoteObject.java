@@ -11,6 +11,7 @@ import gcom.interfaces.Message;
 public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	//private Logger logger = Logger.getLogger("gcom.RemoteObject");
 	private static final long serialVersionUID = 1740402897021175632L;
+	private final double uuid = Math.random();
 	private GroupDefinition definition;
 	private transient CommunicationModule com;
 	private BlockingQueue<Message> localQueue = new LinkedBlockingQueue<Message>();
@@ -67,5 +68,40 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 		return definition;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		// TODO: This doesn't work since we get a proxyobject from registry and not a proper remote
+		if (obj == null) {
+			Debug.log(this, Debug.DEBUG, "Compared to null");
+			return false;
+		}
+		/*
+		if (getClass() != obj.getClass()) {
+			Debug.log(this, Debug.DEBUG, "Compared to other class: " + obj.getClass().getName());
+			return false;
+		}
+		*/
+		final RemoteObject other = (RemoteObject) obj;
+		if (this.uuid != other.uuid) {
+			Debug.log(this, Debug.DEBUG, "Compared to other uuid");
+			return false;
+		}
+		/*
+		if (this.definition != other.definition && (this.definition == null || !this.definition.equals(other.definition))) {
+			return false;
+		}
+		*/
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 19 * hash + (int) (Double.doubleToLongBits(this.uuid) ^ (Double.doubleToLongBits(this.uuid) >>> 32));
+		hash = 19 * hash + (this.definition != null ? this.definition.hashCode() : 0);
+		return hash;
+	}
+
+	
 }
 

@@ -33,7 +33,7 @@ public class ReferenceKeeper implements Runnable {
 		while(run) {
 			try {
 				RemoteObject r = rmi.getReference(name);
-				if( r != reference ) {
+				if( !reference.equals(r) ) {
 					Debug.log(this, Debug.DEBUG, "Something else than our reference was in registry");
 					rmi.bind(name, reference);
 				}
@@ -56,7 +56,11 @@ public class ReferenceKeeper implements Runnable {
 			}
 			catch (InterruptedException ex) {
 				Debug.log(this,Debug.WARN, "Wait was interrupted, stopping thread.");
-				stop();
+				this.stop();
+			}
+			catch(IllegalMonitorStateException ex) {
+				Debug.log(this, Debug.ERROR, "We got illegalstate", ex);
+				this.stop(); // ??
 			}
 		}
 	}

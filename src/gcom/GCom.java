@@ -137,6 +137,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			clocks.put(groupName, new HashVectorClock(processID));
 			moModules.put(groupName, mom);
 			comModules.put(groupName, com);
+			// ReferenceKeeper is broken
+			//new ReferenceKeeper(rmi, groupName, remote);
 		}
 		catch (AlreadyBoundException e) {
 			Debug.log(this, Debug.DEBUG, "Trying to bind object for new group while name already exists: " + groupName);
