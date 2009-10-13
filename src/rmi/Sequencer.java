@@ -23,7 +23,7 @@ public class Sequencer extends RMIServer {
 
 	public static void main(String [] args) {
 		try {
-			new RMIServer(Integer.valueOf(args[0]));
+			new Sequencer(Integer.valueOf(args[0]));
 			JOptionPane.showMessageDialog(null,"RMIRegistry is launched\nListening on port " + args[0],"RMI:" + args[0],JOptionPane.INFORMATION_MESSAGE);
 		}
 		catch(ArrayIndexOutOfBoundsException e) {
@@ -35,8 +35,9 @@ public class Sequencer extends RMIServer {
 		System.exit(0);
 	}
 
-	public Sequencer(int port) throws Exception {
+	public Sequencer(int port) throws RemoteException {
 		super(port);
+		Debug.log(this,Debug.DEBUG,"Returned from superconstructor");
 
 		SequencerCommunicationModule com = new SequencerCommunicationModule();
 		GroupDefinition group = new gcom.GroupDefinition("sequencer");

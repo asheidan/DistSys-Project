@@ -3,6 +3,7 @@ package gcom;
 import gcom.interfaces.Message;
 import gcom.interfaces.*;
 import gcom.HashVectorClock;
+import gcom.interfaces.RemoteObject;
 
 import java.util.Hashtable;
 import java.io.Serializable;
@@ -54,7 +55,12 @@ public class momTotal implements MessageOrderingModule {
 	public void queueMessage(Message m) {
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {
+			try {
 			sequencer.send(m); // Request serialNo for message
+			}
+			catch(Exception e) {
+				Debug.log(this, Debug.ERROR, "sequncer exception", e);
+			}
 			return; // Will be resent to us when stamped, so we discard
 		}
 		if(this.lastDelivered == null) {

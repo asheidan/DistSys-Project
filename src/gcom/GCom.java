@@ -79,7 +79,18 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		case NONORDERED:
 			mom = new gcom.momNonOrdered(processID);
 			break;
-
+		case TOTAL:
+			// FIXME: Check why we welcome ourselves
+			mom = new momTotal(processID);
+			try {
+				RemoteObject seq = rmi.getReference("sequencer");
+				((momTotal)mom).setSequencer(seq);
+			}
+			catch(Exception e) {
+				Debug.log(this, Debug.ERROR, "Could not get sequencer");
+				return null;
+			}
+			break;
 		default:
 			log.error("Unknown message-ordering type: " + definition.getMessageOrderingType());
 			return null;
@@ -94,7 +105,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		case BASIC_UNRELIABLE_MULTICAST :
 			com = new BasicCommunicationModule(mom, gmm, definition.getGroupName(), processID);
 			break;
-			
 		default:
 			log.error("Unknown communication type: " + definition.getCommunicationType());
 			return null;
