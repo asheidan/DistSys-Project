@@ -84,7 +84,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				Debug.log(this, Level.WARN, "Unimplemented ordering: CAUSALTOTAL");
 				return null;
 			case TOTAL:
-				// FIXME: Check why we welcome ourselves
 				mom = new momTotal(processID);
 				try {
 					RemoteObject seq = rmi.getReference("sequencer");
@@ -239,10 +238,11 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				gotMember(groupName, message.getSource());
 				List<Member> view = gmm.listGroupMembers(groupName);
 				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
-				//comModules.get(groupName).send(msg);
 				try {
 					// TODO: COM should be expanded with private messages
-					Debug.log(this, Level.DEBUG, "Welcoming " + message.getSource().toString() + " to " + groupName + " via " + message.getSource().getRemoteObject());
+					Debug.log(this, Level.DEBUG,
+						"Welcoming " + message.getSource().toString() +
+						" to " + groupName + " via " + message.getSource().getRemoteObject());
 					message.getSource().getRemoteObject().send(msg);
 				} catch (RemoteException ex) {
 					Debug.log(this,Debug.WARN, "Got remote exception", ex);

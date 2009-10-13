@@ -38,31 +38,26 @@ public class BasicCommunicationModuleTest {
 			
 			@Override
 			public TYPE_MESSAGE getMessageType() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public Serializable getMessage() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public String getGroupName() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 			
 			@Override
 			public HashVectorClock getClock() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
 			public Member getSource() {
-				// TODO Auto-generated method stub
 				return null;
 			}
 
