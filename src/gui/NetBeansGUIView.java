@@ -778,6 +778,34 @@ public class NetBeansGUIView extends FrameView {
 		createGroupDialog.setVisible(true);
 	}
 
+	private GCom.TYPE_MESSAGEORDERING getOrderingType() {
+		return GCom.TYPE_MESSAGEORDERING.valueOf(
+				orderType.getSelectedItem().toString()
+			);
+	}
+
+	private GCom.TYPE_COMMUNICATION getCommunicationType() {
+		String cast = castType.getSelectedItem().toString();
+		if(cast.equals("Basic")) {
+			return GCom.TYPE_COMMUNICATION.BASIC_UNRELIABLE_MULTICAST;
+		}
+		if(cast.equals("Reliable")) {
+			return GCom.TYPE_COMMUNICATION.BASIC_RELIABLE_MULTICAST;
+		}
+		return null;
+	}
+
+	private GCom.TYPE_GROUP getGroupType() {
+		String type = groupType.getSelectedItem().toString();
+		if(type.equals("Dynamic")) {
+			return GCom.TYPE_GROUP.DYNAMIC;
+		}
+		if(type.equals("Static")) {
+			return GCom.TYPE_GROUP.STATIC;
+		}
+		return null;
+	}
+
 	@Action
 	public void createGroup() {
 		String nickName = createNickField.getText();
@@ -794,9 +822,9 @@ public class NetBeansGUIView extends FrameView {
 		else{
 			appendLog(String.format("Creating group: %s", groupName));
 			try {
-				Debug.log(this,Debug.DEBUG, orderType.getSelectedItem().toString());
-				gcom.createGroup(new gcom.GroupDefinition(groupName), nickName);
-				Debug.log(NetBeansGUIView.class.getName(),Debug.DEBUG,"Group Created");
+				GroupDefinition def = new gcom.GroupDefinition(groupName,getCommunicationType(),getGroupType(), getOrderingType());
+				gcom.createGroup(def, nickName);
+				Debug.log(NetBeansGUIView.class.getName(),Debug.DEBUG,"Created " + def);
 				createGroupDialog.setVisible(false);
 				addGroup(groupName);
 			}

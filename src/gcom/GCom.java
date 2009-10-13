@@ -71,24 +71,33 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	private MessageOrderingModule setupMOM(GroupDefinition definition) {
 		MessageOrderingModule mom;
 		switch (definition.getMessageOrderingType()) {
-		case NONORDERED:
-			mom = new gcom.momNonOrdered(processID);
-			break;
-		case TOTAL:
-			// FIXME: Check why we welcome ourselves
-			mom = new momTotal(processID);
-			try {
-				RemoteObject seq = rmi.getReference("sequencer");
-				((momTotal)mom).setSequencer(seq);
-			}
-			catch(Exception e) {
-				Debug.log(this, Debug.ERROR, "Could not get sequencer");
+			case NONORDERED:
+				mom = new gcom.momNonOrdered(processID);
+				break;
+			case FIFO:
+				mom = new gcom.momFIFO(processID);
+				break;
+			case CAUSAL:
+				mom = new gcom.momCausal(processID);
+				break;
+			case CAUSALTOTAL:
+				Debug.log(this, Level.WARN, "Unimplemented ordering: CAUSALTOTAL");
 				return null;
-			}
-			break;
-		default:
-			Debug.log(this, Debug.ERROR, "Unknown message-ordering type: " + definition.getMessageOrderingType());
-			return null;
+			case TOTAL:
+				// FIXME: Check why we welcome ourselves
+				mom = new momTotal(processID);
+				try {
+					RemoteObject seq = rmi.getReference("sequencer");
+					((momTotal)mom).setSequencer(seq);
+				}
+				catch(Exception e) {
+					Debug.log(this, Debug.ERROR, "Could not get sequencer");
+					return null;
+				}
+				break;
+			default:
+				Debug.log(this, Debug.ERROR, "Unknown message-ordering type: " + definition.getMessageOrderingType());
+				return null;
 		}
 		mom.addMessageListener(this);
 		return mom;
@@ -100,6 +109,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		case BASIC_UNRELIABLE_MULTICAST :
 			com = new BasicCommunicationModule(mom, gmm, definition.getGroupName(), processID);
 			break;
+		case BASIC_RELIABLE_MULTICAST:
 		default:
 			Debug.log(this, Debug.ERROR, "Unknown communication type: " + definition.getCommunicationType());
 			return null;

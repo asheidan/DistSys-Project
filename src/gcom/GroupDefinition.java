@@ -48,4 +48,8 @@ public class GroupDefinition implements gcom.interfaces.GroupDefinition {
 		return messageOrderingType;
 	}
 
+	public String toString() {
+		return String.format("Group{%s,%s,%s,%s}", groupName, messageOrderingType, groupType, communicationType);
+	}
+
 }
