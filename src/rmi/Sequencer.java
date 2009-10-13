@@ -51,16 +51,16 @@ public class Sequencer extends RMIServer {
 
 	private class SequencerCommunicationModule implements gcom.interfaces.CommunicationModule {
 
-		private Hashtable<String, groupSequencer> sequencers;
+		private Hashtable<String, GroupSequencer> sequencers;
 
 		public SequencerCommunicationModule() {
-			sequencers = new Hashtable<String, groupSequencer>();
+			sequencers = new Hashtable<String, GroupSequencer>();
 		}
 
 		public void receive(Message m) {
-			groupSequencer seq = sequencers.get(m.getGroupName());
+			GroupSequencer seq = sequencers.get(m.getGroupName());
 			if(seq == null) {
-				seq = new groupSequencer();
+				seq = new GroupSequencer();
 				sequencers.put(m.getGroupName(), seq);
 			}
 			send(seq.sequence(m));
@@ -77,11 +77,11 @@ public class Sequencer extends RMIServer {
 		public void addGComViewChangeListener(GComViewChangeListener listener) {}
 	}
 
-	private class groupSequencer {
+	private class GroupSequencer {
 		private Hashtable<Integer, Integer> messages;
 		private int latest;
 
-		public groupSequencer() {
+		public GroupSequencer() {
 			messages = new Hashtable<Integer, Integer>();
 			latest = 0;
 		}
