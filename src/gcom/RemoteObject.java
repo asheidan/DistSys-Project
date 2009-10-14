@@ -11,7 +11,7 @@ import gcom.interfaces.Message;
 public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	//private Logger logger = Logger.getLogger("gcom.RemoteObject");
 	private static final long serialVersionUID = 1740402897021175632L;
-	private final double uuid = Math.random();
+	private final double unique = Math.random();
 	private GroupDefinition definition;
 	private transient CommunicationModule com;
 	private BlockingQueue<Message> localQueue = new LinkedBlockingQueue<Message>();
@@ -81,9 +81,14 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 			return false;
 		}
 		*/
-		final RemoteObject other = (RemoteObject) obj;
-		if (this.uuid != other.uuid) {
-			Debug.log(this, Debug.DEBUG, "Compared to other uuid");
+		gcom.interfaces.RemoteObject other = (gcom.interfaces.RemoteObject) obj;
+		try {
+			if (this.unique != other.getUnique()) {
+				Debug.log(this, Debug.DEBUG, "Compared to other unique");
+				return false;
+			}
+		}
+		catch(Exception e) {
 			return false;
 		}
 		/*
@@ -97,11 +102,14 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.uuid) ^ (Double.doubleToLongBits(this.uuid) >>> 32));
+		hash = 19 * hash + (int) (Double.doubleToLongBits(this.unique) ^ (Double.doubleToLongBits(this.unique) >>> 32));
 		hash = 19 * hash + (this.definition != null ? this.definition.hashCode() : 0);
 		return hash;
 	}
 
-	
+	@Override
+	public double getUnique() {
+		return unique;
+	}
 }
 

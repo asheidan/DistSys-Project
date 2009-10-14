@@ -11,4 +11,5 @@ import java.rmi.RemoteException;
 public interface RemoteObject extends Remote,Serializable{
 	public void send(Message m) throws RemoteException;
 	public GroupDefinition getDefinition() throws RemoteException;
+	public double getUnique() throws RemoteException;
 }

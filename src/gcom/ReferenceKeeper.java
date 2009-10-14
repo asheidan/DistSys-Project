@@ -1,6 +1,8 @@
 package gcom;
 
 import java.rmi.AlreadyBoundException;
+import java.rmi.ConnectException;
+import java.rmi.NotBoundException;
 
 import gcom.interfaces.RemoteObject;
 import gcom.interfaces.RMIModule;
@@ -28,31 +30,37 @@ public class ReferenceKeeper implements Runnable {
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		// TODO: We should see if mainthread is alive before rebinding reference
 		while(run) {
 			try {
 				RemoteObject r = rmi.getReference(name);
 				if( !reference.equals(r) ) {
-					Debug.log(this, Debug.DEBUG, "Something else than our reference was in registry");
-					rmi.bind(name, reference);
+					Debug.log(this, Debug.DEBUG, "Another reference already bound rebinding");
+					rmi.rebind(name, reference);
+				}
+				else {
+					Debug.log(this, Debug.DEBUG, "Our reference is in registry");
 				}
 			}
-			catch(AlreadyBoundException e) {
-				Debug.log(this, Debug.DEBUG, "Another reference already bound rebinding");
+			catch(NotBoundException e) {
+				Debug.log(this, Debug.DEBUG, "Nothing bound, binding our reference");
 				try {
-					rmi.rebind(name,reference);
+					rmi.bind(name,reference);
 				}
 				catch(Exception ex) {
 					Debug.log(this, Debug.DEBUG, "Got exception eventhough registry is online", ex);
 				}
+			}
+			catch(ConnectException e) {
+				Debug.log(this, Debug.DEBUG, "Registry not online, waiting for it to com online.");
 			}
 			catch(Exception e) {
 				Debug.log(this, Debug.DEBUG, "Caught Exception", e);
 			}
 
 			try {
-				t.wait(300 * 1000);
+				this.wait(60 * 1000);
 			}
 			catch (InterruptedException ex) {
 				Debug.log(this,Debug.WARN, "Wait was interrupted, stopping thread.");

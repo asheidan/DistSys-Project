@@ -64,5 +64,6 @@ public class RMIModuleTest {
 		public GroupDefinition getDefinition() {
 			return null;
 		}
+		public double getUnique() { return 0.0; }
 	}
 }
