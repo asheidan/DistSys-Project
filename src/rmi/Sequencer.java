@@ -78,6 +78,10 @@ public class Sequencer extends RMIServer {
 			Debug.log(this, Debug.WARN, "Using unimplemented method send()");
 		}
 		
+		public void send(Member member, Message message) {
+			Debug.log(this, Debug.WARN, "Using unimplemented method send()");
+		}
+		
 		public void sendBack(Member member, Message message) {
 			//Member member = message.getSource();
 			try {

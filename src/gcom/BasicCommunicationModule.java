@@ -37,6 +37,8 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	@Override
 	public void send(Message message) {
 		Vector<Member> lostMembers = new Vector<Member>();
+		Debug.log(this, Debug.DEBUG, "Sending message to group: " + gmm.listGroupMembers(group));
+		Debug.log(this, Debug.DEBUG, "Sending: " + message.toString());
 		for(Member m : gmm.listGroupMembers(group)) {
 			if(!processID.equals(m.getID())) {
 				Debug.log(this, Debug.DEBUG, "Sending message to: " + m.toString());
@@ -55,6 +57,21 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 		}
 		for(Member m : lostMembers) {
 			looseMember(m);
+		}
+	}
+	
+	@Override
+	public void send(Member member, Message msg) {
+		try {
+			member.getRemoteObject().send(msg);
+		}
+		catch(ConnectException e) {
+			Debug.log(this, Debug.DEBUG, "Connection refused to " + member);
+			// CHANGED: Removes user from group and tell other members
+			looseMember(member);
+		}
+		catch(RemoteException e) {
+			e.printStackTrace();
 		}
 	}
 

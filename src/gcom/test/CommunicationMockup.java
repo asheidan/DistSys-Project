@@ -3,6 +3,7 @@ package gcom.test;
 import gcom.interfaces.CommunicationModule;
 import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.Message;
+import gcom.interfaces.Member;
 
 public class CommunicationMockup implements CommunicationModule {
 	public Message lastMessage = null;
@@ -18,5 +19,9 @@ public class CommunicationMockup implements CommunicationModule {
 		throw new java.lang.RuntimeException("You're using a mockup!");
 	}
 	
+	@Override
+	public void send(Member member, Message msg) {
+		throw new java.lang.RuntimeException("You're using a mockup!");
+	}
 }
 
