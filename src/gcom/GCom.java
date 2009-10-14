@@ -280,6 +280,12 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			case APPLICATION:
 				sendToMessageListeners(groupName,message);
 				break;
+			case SEQUENCE:
+				Debug.log(this, Debug.WARN, "Someone is sending sequence-requests to me: " + message.getSource());
+				break;
+			case ELECTION:
+				election(message);
+				break;
 		}
 	}
 
@@ -294,17 +300,101 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		return processID;
 	}
 
+	private Hashtable<String,Vector<Member>> electionResults = new Hashtable<String,Vector<Member>>();
+	private Hashtable<String,String> highestElectionValues = new Hashtable<String,String>();
+	private Vector<Member> setupElection(String groupName) {
+		Vector<Member> results;
+		results = electionResults.get(groupName);
+		if(results == null || results.size() == 0) {
+			results = new Vector<Member>(gmm.listGroupMembers(groupName));
+			results.removeElement(identities.get(groupName));
+			electionResults.put(groupName,results);
+			highestElectionValues.put(groupName,processID);
+			gmm.setLeader(groupName,identities.get(groupName));
+		}
+		return results;
+	}
+	private void election(Message message) {
+		String groupName = message.getGroupName();
+		Vector<Member> results = setupElection(groupName);
+		if(!results.contains(message.getSource())) {
+			return;
+		}
+		switch(highestElectionValues.get(groupName).compareTo((String)message.getMessage())) {
+			case 0:
+				Debug.log(this, Debug.DEBUG, "Same leader chosen by: " + message.getSource());
+				break;
+			case -1:
+				Debug.log(this, Debug.DEBUG, "Got electionmessage with lower value from: " + message.getSource());
+				// Send my value, not highest
+				comModules.get(groupName).send(
+					message.getSource(),
+					new gcom.Message(
+						clocks.get(groupName),
+						groupName,
+						identities.get(groupName),
+						processID,
+						Message.TYPE_MESSAGE.ELECTION));
+				break;
+			case 1:
+				Debug.log(this, Debug.DEBUG, "Got electionmessage with higher value from: " + message.getSource());
+				// Send his value
+				comModules.get(groupName).send(
+					message.getSource(),
+					new gcom.Message(
+						clocks.get(groupName),
+						groupName,
+						identities.get(groupName),
+						message.getMessage(),
+						Message.TYPE_MESSAGE.ELECTION));
+				highestElectionValues.put(groupName,(String)message.getMessage());
+				gmm.setLeader(groupName,message.getSource());
+				break;
+		}
+		results.removeElement(message.getSource());
+		if(results.size() == 0) {
+			Debug.log(this, Debug.DEBUG, "Election is over");
+			if(highestElectionValues.get(groupName).equals(processID)) {
+				Debug.log(this, Debug.DEBUG, "I'm elected as leader");
+				// TODO: Should keepers be saved incase we want to kill them when we leave a group?
+				new ReferenceKeeper(rmi, groupName, identities.get(groupName).getRemoteObject());
+			}
+			else {
+				Debug.log(this, Debug.DEBUG, "Someone else is leader: " + gmm.getLeader(groupName));
+			}
+		}
+		else {
+			Debug.log(this, Debug.DEBUG, "Waiting for results from: " + results.toString());
+		}
+	}
+
 	@Override
 	public void lostMember(String groupName, Member member) {
-		// TODO: send out lostmember-message
 		if(gmm.memberIsInGroup(groupName, member)) {
 			gmm.removeMember(groupName, member);
 
 			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
 			comModules.get(groupName).send(msg);
-			if(member == gmm.getLeader(groupName)) {
+			if(member.equals(gmm.getLeader(groupName))) {
 				// TODO: Commence election
 				Debug.log(this, Debug.WARN, "We lost our leader: " + member.toString());
+				setupElection(groupName);
+				if(electionResults.get(groupName).size() == 0) {
+					Debug.log(this, Debug.DEBUG, "I'm leader in an empty group...");
+					// TOOD: create referencekeeper
+					new ReferenceKeeper(rmi, groupName, identities.get(groupName).getRemoteObject());
+				}
+				else {
+					comModules.get(groupName).send(
+						new gcom.Message(
+							clocks.get(groupName),
+							groupName,
+							identities.get(groupName),
+							highestElectionValues.get(groupName),
+							Message.TYPE_MESSAGE.ELECTION
+						)
+					);
+				}
 			}
 		}
 		else {

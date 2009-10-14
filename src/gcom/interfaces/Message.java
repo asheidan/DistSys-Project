@@ -5,7 +5,11 @@ import gcom.HashVectorClock;
 import java.io.Serializable;
 
 public interface Message extends Serializable {
-	public static enum TYPE_MESSAGE { APPLICATION, JOINREQUEST, PARTREQUEST, REJECT, WELCOME, GOTMEMBER, LOSTMEMBER, SEQUENCE};
+	public static enum TYPE_MESSAGE {
+		APPLICATION, JOINREQUEST, PARTREQUEST,
+		REJECT, WELCOME, GOTMEMBER, LOSTMEMBER,
+		SEQUENCE, ELECTION
+	};
 
 	public Serializable getMessage();
 
