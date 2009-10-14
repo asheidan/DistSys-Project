@@ -222,6 +222,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			throws IOException {
 		CommunicationModule com = comModules.get(groupName);
 		if(com != null) {
+			//moModules.get(groupName).tick();
 			com.send(
 					new gcom.Message(clocks.get(groupName), groupName,
 					identities.get(groupName), message, Message.TYPE_MESSAGE.APPLICATION));
