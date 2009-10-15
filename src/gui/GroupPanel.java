@@ -124,12 +124,14 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		Debug.log("netbeansgui.GroupPanel",Debug.DEBUG,"Tab for " + groupName + " got member " + member);
 		((DefaultListModel)nodeList.getModel()).addElement(member);
 		//nodeList.repaint();
+		append(String.format(">>> %s joined group (%s)",member.getName(),member.getID()));
 	}
 
 	@Override
 	public void lostMember(Member member) {
 		Debug.log("netbeansgui.GroupPanel",Debug.DEBUG,"Tab for " + groupName + " lost member " + member);
 		((DefaultListModel)nodeList.getModel()).removeElement(member);
+		append(String.format("<<< %s left group (%s)",member.getName(),member.getID()));
 	}
 
 	@Override

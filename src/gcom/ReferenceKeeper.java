@@ -46,7 +46,7 @@ public class ReferenceKeeper implements Runnable {
 					}
 				}
 				catch(ConnectException e) {
-					Debug.log(this, Debug.DEBUG, "Another reference is dead, rebinding");
+					Debug.log(this, Debug.DEBUG, "Other reference is dead, rebinding");
 					try {
 						rmi.rebind(name, reference);
 					}
