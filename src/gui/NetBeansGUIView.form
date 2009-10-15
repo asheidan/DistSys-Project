@@ -535,22 +535,22 @@
             <BindingProperty name="enabled" source="statusConnectedLabel" sourcePath="${enabled}" target="createGroupButton" targetPath="enabled" updateStrategy="0" immediately="false"/>
           </BindingProperties>
         </Component>
-        <Component class="javax.swing.JButton" name="joinGroupButton">
+        <Component class="javax.swing.JButton" name="showJoinDialogToolbarButton">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="gui.NetBeansGUIView" id="showJoinDialog" methodName="showJoinDialog"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" resourceKey="join.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="joinGroupButton.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="joinGroupButton.toolTipText"/>
+            <Property name="text" type="java.lang.String" resourceKey="showJoinDialogToolbarButton.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="showJoinDialogToolbarButton.toolTipText"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="joinGroupButton" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="showJoinDialogToolbarButton" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <BindingProperties>
-            <BindingProperty name="enabled" source="statusConnectedLabel" sourcePath="${enabled}" target="joinGroupButton" targetPath="enabled" updateStrategy="0" immediately="false"/>
+            <BindingProperty name="enabled" source="statusConnectedLabel" sourcePath="${enabled}" target="showJoinDialogToolbarButton" targetPath="enabled" updateStrategy="0" immediately="false"/>
           </BindingProperties>
         </Component>
       </SubComponents>
