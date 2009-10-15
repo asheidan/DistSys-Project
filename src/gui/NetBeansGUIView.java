@@ -159,7 +159,7 @@ public class NetBeansGUIView extends FrameView {
         jButton6 = new javax.swing.JButton();
         toolBar = new javax.swing.JToolBar();
         showRMIDialogButton = new javax.swing.JButton();
-        createGroupButton = new javax.swing.JButton();
+        showCreateGroupDialogToolbarButton = new javax.swing.JButton();
         showJoinDialogToolbarButton = new javax.swing.JButton();
         createGroupDialog = new javax.swing.JDialog();
         jLabel5 = new javax.swing.JLabel();
@@ -485,20 +485,20 @@ public class NetBeansGUIView extends FrameView {
         showRMIDialogButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(showRMIDialogButton);
 
-        createGroupButton.setAction(actionMap.get("showCreateGroupDialog")); // NOI18N
-        createGroupButton.setIcon(resourceMap.getIcon("create.icon")); // NOI18N
-        createGroupButton.setText(resourceMap.getString("createGroupButton.text")); // NOI18N
-        createGroupButton.setToolTipText(resourceMap.getString("createGroupButton.toolTipText")); // NOI18N
-        createGroupButton.setBorderPainted(false);
-        createGroupButton.setFocusable(false);
-        createGroupButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        createGroupButton.setName("createGroupButton"); // NOI18N
-        createGroupButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        showCreateGroupDialogToolbarButton.setAction(actionMap.get("showCreateGroupDialog")); // NOI18N
+        showCreateGroupDialogToolbarButton.setIcon(resourceMap.getIcon("create.icon")); // NOI18N
+        showCreateGroupDialogToolbarButton.setText(resourceMap.getString("showCreateGroupDialogToolbarButton.text")); // NOI18N
+        showCreateGroupDialogToolbarButton.setToolTipText(resourceMap.getString("showCreateGroupDialogToolbarButton.toolTipText")); // NOI18N
+        showCreateGroupDialogToolbarButton.setBorderPainted(false);
+        showCreateGroupDialogToolbarButton.setFocusable(false);
+        showCreateGroupDialogToolbarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        showCreateGroupDialogToolbarButton.setName("showCreateGroupDialogToolbarButton"); // NOI18N
+        showCreateGroupDialogToolbarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, statusConnectedLabel, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), createGroupButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, statusConnectedLabel, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), showCreateGroupDialogToolbarButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        toolBar.add(createGroupButton);
+        toolBar.add(showCreateGroupDialogToolbarButton);
 
         showJoinDialogToolbarButton.setAction(actionMap.get("showJoinDialog")); // NOI18N
         showJoinDialogToolbarButton.setIcon(resourceMap.getIcon("join.icon")); // NOI18N
@@ -854,7 +854,7 @@ public class NetBeansGUIView extends FrameView {
     private javax.swing.JButton showRMIDialogButton;
     private javax.swing.JDialog connectRMIDialog;
     private javax.swing.JMenuItem connectRMIMenuItem;
-    private javax.swing.JButton createGroupButton;
+    private javax.swing.JButton showCreateGroupDialogToolbarButton;
     private javax.swing.JDialog createGroupDialog;
     private javax.swing.JMenuItem createGroupMenuItem;
     private javax.swing.JTextField createNickField;
