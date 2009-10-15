@@ -166,7 +166,7 @@ public class NetBeansGUIView extends FrameView {
         groupNameField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         createNickField = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        createGroupButton = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         groupType = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
@@ -534,10 +534,10 @@ public class NetBeansGUIView extends FrameView {
         createNickField.setText(resourceMap.getString("createNickField.text")); // NOI18N
         createNickField.setName("createNickField"); // NOI18N
 
-        jButton3.setAction(actionMap.get("createGroup")); // NOI18N
-        jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
-        jButton3.setName("jButton3"); // NOI18N
-        jButton3.setSelected(true);
+        createGroupButton.setAction(actionMap.get("createGroup")); // NOI18N
+        createGroupButton.setText(resourceMap.getString("createGroupButton.text")); // NOI18N
+        createGroupButton.setName("createGroupButton"); // NOI18N
+        createGroupButton.setSelected(true);
 
         jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
         jButton4.setName("jButton4"); // NOI18N
@@ -576,7 +576,7 @@ public class NetBeansGUIView extends FrameView {
                     .add(createGroupDialogLayout.createSequentialGroup()
                         .add(jButton4)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton3))
+                        .add(createGroupButton))
                     .add(org.jdesktop.layout.GroupLayout.LEADING, createGroupDialogLayout.createSequentialGroup()
                         .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
@@ -622,7 +622,7 @@ public class NetBeansGUIView extends FrameView {
                     .add(jLabel9))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 7, Short.MAX_VALUE)
                 .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButton3)
+                    .add(createGroupButton)
                     .add(jButton4))
                 .addContainerGap())
         );
@@ -863,7 +863,7 @@ public class NetBeansGUIView extends FrameView {
     private javax.swing.JComboBox groupType;
     private javax.swing.JButton joinGroupButton;
     private javax.swing.JButton connectToRMIButton;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton createGroupButton;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;

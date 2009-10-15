@@ -571,7 +571,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jButton4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                          <Component id="createGroupButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -631,7 +631,7 @@
                   </Group>
                   <EmptySpace pref="7" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="createGroupButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -672,13 +672,13 @@
             <Property name="name" type="java.lang.String" value="createNickField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="createGroupButton">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="gui.NetBeansGUIView" id="createGroup" methodName="createGroup"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButton3.text"/>
-            <Property name="name" type="java.lang.String" value="jButton3" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="createGroupButton.text"/>
+            <Property name="name" type="java.lang.String" value="createGroupButton" noResource="true"/>
             <Property name="selected" type="boolean" value="true"/>
           </Properties>
         </Component>
