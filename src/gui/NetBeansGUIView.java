@@ -143,7 +143,7 @@ public class NetBeansGUIView extends FrameView {
         statusAnimationLabel = new javax.swing.JLabel();
         statusConnectedLabel = new javax.swing.JLabel();
         connectRMIDialog = new javax.swing.JDialog();
-        jButton1 = new javax.swing.JButton();
+        connectToRMIButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         rmiAddressField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -158,7 +158,7 @@ public class NetBeansGUIView extends FrameView {
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         toolBar = new javax.swing.JToolBar();
-        connectRMIButton = new javax.swing.JButton();
+        showRMIDialogButton = new javax.swing.JButton();
         createGroupButton = new javax.swing.JButton();
         joinGroupButton = new javax.swing.JButton();
         createGroupDialog = new javax.swing.JDialog();
@@ -329,10 +329,10 @@ public class NetBeansGUIView extends FrameView {
         connectRMIDialog.setName("connectRMIDialog"); // NOI18N
         connectRMIDialog.setResizable(false);
 
-        jButton1.setAction(actionMap.get("connectRMIRegistry")); // NOI18N
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.setSelected(true);
+        connectToRMIButton.setAction(actionMap.get("connectRMIRegistry")); // NOI18N
+        connectToRMIButton.setText(resourceMap.getString("connectToRMIButton.text")); // NOI18N
+        connectToRMIButton.setName("connectToRMIButton"); // NOI18N
+        connectToRMIButton.setSelected(true);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel1.setLabelFor(rmiAddressField);
@@ -365,7 +365,7 @@ public class NetBeansGUIView extends FrameView {
                     .add(connectRMIDialogLayout.createSequentialGroup()
                         .add(jButton5)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton1))
+                        .add(connectToRMIButton))
                     .add(connectRMIDialogLayout.createSequentialGroup()
                         .add(connectRMIDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -389,7 +389,7 @@ public class NetBeansGUIView extends FrameView {
                     .add(rmiPortField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(connectRMIDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jButton1)
+                    .add(connectToRMIButton)
                     .add(jButton5))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -474,16 +474,16 @@ public class NetBeansGUIView extends FrameView {
         toolBar.setBorderPainted(false);
         toolBar.setName("toolBar"); // NOI18N
 
-        connectRMIButton.setAction(actionMap.get("showRMIConnectDialog")); // NOI18N
-        connectRMIButton.setIcon(resourceMap.getIcon("connect.icon")); // NOI18N
-        connectRMIButton.setText(resourceMap.getString("connectRMIButton.text")); // NOI18N
-        connectRMIButton.setToolTipText(resourceMap.getString("connectRMIButton.toolTipText")); // NOI18N
-        connectRMIButton.setBorderPainted(false);
-        connectRMIButton.setFocusable(false);
-        connectRMIButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        connectRMIButton.setName("connectRMIButton"); // NOI18N
-        connectRMIButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolBar.add(connectRMIButton);
+        showRMIDialogButton.setAction(actionMap.get("showRMIConnectDialog")); // NOI18N
+        showRMIDialogButton.setIcon(resourceMap.getIcon("connect.icon")); // NOI18N
+        showRMIDialogButton.setText(resourceMap.getString("showRMIDialogButton.text")); // NOI18N
+        showRMIDialogButton.setToolTipText(resourceMap.getString("showRMIDialogButton.toolTipText")); // NOI18N
+        showRMIDialogButton.setBorderPainted(false);
+        showRMIDialogButton.setFocusable(false);
+        showRMIDialogButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        showRMIDialogButton.setName("showRMIDialogButton"); // NOI18N
+        showRMIDialogButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolBar.add(showRMIDialogButton);
 
         createGroupButton.setAction(actionMap.get("showCreateGroupDialog")); // NOI18N
         createGroupButton.setIcon(resourceMap.getIcon("create.icon")); // NOI18N
@@ -851,7 +851,7 @@ public class NetBeansGUIView extends FrameView {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox castType;
-    private javax.swing.JButton connectRMIButton;
+    private javax.swing.JButton showRMIDialogButton;
     private javax.swing.JDialog connectRMIDialog;
     private javax.swing.JMenuItem connectRMIMenuItem;
     private javax.swing.JButton createGroupButton;
@@ -861,8 +861,8 @@ public class NetBeansGUIView extends FrameView {
     private javax.swing.JList groupList;
     private javax.swing.JTextField groupNameField;
     private javax.swing.JComboBox groupType;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton connectToRMIButton;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

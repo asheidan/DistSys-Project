@@ -268,7 +268,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <Component id="jButton5" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                          <Component id="connectToRMIButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -301,7 +301,7 @@
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="connectToRMIButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -310,13 +310,13 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="connectToRMIButton">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="gui.NetBeansGUIView" id="connectRMIRegistry" methodName="connectRMIRegistry"/>
             </Property>
-            <Property name="text" type="java.lang.String" resourceKey="jButton1.text"/>
-            <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="connectToRMIButton.text"/>
+            <Property name="name" type="java.lang.String" value="connectToRMIButton" noResource="true"/>
             <Property name="selected" type="boolean" value="true"/>
           </Properties>
         </Component>
@@ -502,18 +502,18 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="connectRMIButton">
+        <Component class="javax.swing.JButton" name="showRMIDialogButton">
           <Properties>
             <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
               <action class="gui.NetBeansGUIView" id="showRMIConnectDialog" methodName="showRMIConnectDialog"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" resourceKey="connect.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="connectRMIButton.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="connectRMIButton.toolTipText"/>
+            <Property name="text" type="java.lang.String" resourceKey="showRMIDialogButton.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="showRMIDialogButton.toolTipText"/>
             <Property name="borderPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
-            <Property name="name" type="java.lang.String" value="connectRMIButton" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="showRMIDialogButton" noResource="true"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
         </Component>
