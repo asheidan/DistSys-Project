@@ -148,6 +148,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			new ReferenceKeeper(rmi, groupName, remote);
 		}
 		catch (AlreadyBoundException e) {
+			// TODO: make sure gui doesn't create new tab but show errormsg instead
 			Debug.log(this, Debug.DEBUG, "Trying to bind object for new group while name already exists: " + groupName);
 		}
 	}
@@ -306,6 +307,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		Vector<Member> results;
 		results = electionResults.get(groupName);
 		if(results == null || results.size() == 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Setting up group: " + groupName);
 			results = new Vector<Member>(gmm.listGroupMembers(groupName));
 			results.removeElement(identities.get(groupName));
 			electionResults.put(groupName,results);
@@ -317,54 +319,60 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	private void election(Message message) {
 		String groupName = message.getGroupName();
 		Vector<Member> results = setupElection(groupName);
+		Debug.log(this, Debug.DEBUG, "Election: Got result from:" + message.getSource());
 		if(!results.contains(message.getSource())) {
 			return;
 		}
-		switch(highestElectionValues.get(groupName).compareTo((String)message.getMessage())) {
-			case 0:
-				Debug.log(this, Debug.DEBUG, "Same leader chosen by: " + message.getSource());
-				break;
-			case -1:
-				Debug.log(this, Debug.DEBUG, "Got electionmessage with lower value from: " + message.getSource());
-				// Send my value, not highest
-				comModules.get(groupName).send(
-					message.getSource(),
-					new gcom.Message(
-						clocks.get(groupName),
-						groupName,
-						identities.get(groupName),
-						processID,
-						Message.TYPE_MESSAGE.ELECTION));
-				break;
-			case 1:
-				Debug.log(this, Debug.DEBUG, "Got electionmessage with higher value from: " + message.getSource());
-				// Send his value
-				comModules.get(groupName).send(
-					message.getSource(),
-					new gcom.Message(
-						clocks.get(groupName),
-						groupName,
-						identities.get(groupName),
-						message.getMessage(),
-						Message.TYPE_MESSAGE.ELECTION));
-				highestElectionValues.put(groupName,(String)message.getMessage());
-				gmm.setLeader(groupName,message.getSource());
-				break;
+		int compare = highestElectionValues.get(groupName).compareTo((String)message.getMessage());
+		if(compare == 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Same id chosen by: " + message.getSource());
+		}
+		else if(compare < 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Got message with lower value from: " + message.getSource());
+			// Send my value, not highest
+			comModules.get(groupName).send(
+				message.getSource(),
+				new gcom.Message(
+					clocks.get(groupName),
+					groupName,
+					identities.get(groupName),
+					processID,
+					Message.TYPE_MESSAGE.ELECTION));
+		}
+		else if(compare > 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Got message with higher value from: " + message.getSource());
+			// Send his value
+			comModules.get(groupName).send(
+				message.getSource(),
+				new gcom.Message(
+					clocks.get(groupName),
+					groupName,
+					identities.get(groupName),
+					message.getMessage(),
+					Message.TYPE_MESSAGE.ELECTION));
+			highestElectionValues.put(groupName,(String)message.getMessage());
+			gmm.setLeader(groupName,message.getSource());
+		}
+		else {
+			// This remains from the switch
+			Debug.log(this, Debug.ERROR, "Election: Got strange comparisonvalue: " + String.valueOf(compare));
 		}
 		results.removeElement(message.getSource());
 		if(results.size() == 0) {
-			Debug.log(this, Debug.DEBUG, "Election is over");
+			Debug.log(this, Debug.DEBUG, "Election: is over");
 			if(highestElectionValues.get(groupName).equals(processID)) {
-				Debug.log(this, Debug.DEBUG, "I'm elected as leader");
+				Debug.log(this, Debug.DEBUG, "Election: I'm elected as leader");
 				// TODO: Should keepers be saved incase we want to kill them when we leave a group?
 				new ReferenceKeeper(rmi, groupName, identities.get(groupName).getRemoteObject());
 			}
 			else {
-				Debug.log(this, Debug.DEBUG, "Someone else is leader: " + gmm.getLeader(groupName));
+				Debug.log(this, Debug.DEBUG, "Election: Someone else is leader: " + gmm.getLeader(groupName));
 			}
+			highestElectionValues.remove(groupName);
+			electionResults.remove(groupName);
 		}
 		else {
-			Debug.log(this, Debug.DEBUG, "Waiting for results from: " + results.toString());
+			Debug.log(this, Debug.DEBUG, "Election: Waiting for results from: " + results.toString());
 		}
 	}
 
@@ -376,13 +384,13 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
 			comModules.get(groupName).send(msg);
 			if(member.equals(gmm.getLeader(groupName))) {
-				// TODO: Commence election
 				Debug.log(this, Debug.WARN, "We lost our leader: " + member.toString());
 				setupElection(groupName);
 				if(electionResults.get(groupName).size() == 0) {
 					Debug.log(this, Debug.DEBUG, "I'm leader in an empty group...");
-					// TOOD: create referencekeeper
 					new ReferenceKeeper(rmi, groupName, identities.get(groupName).getRemoteObject());
+					highestElectionValues.remove(groupName);
+					electionResults.remove(groupName);
 				}
 				else {
 					comModules.get(groupName).send(

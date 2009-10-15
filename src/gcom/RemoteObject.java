@@ -71,6 +71,8 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	@Override
 	public boolean equals(Object obj) {
 		// TODO: This doesn't work since we get a proxyobject from registry and not a proper remote
+		// TODO: Seems like this isn't even used when calling equals on proxy
+		Debug.log(this, Debug.DEBUG, String.format("Compared to %s", obj));
 		if (obj == null) {
 			Debug.log(this, Debug.DEBUG, "Compared to null");
 			return false;

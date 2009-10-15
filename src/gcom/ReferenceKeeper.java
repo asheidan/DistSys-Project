@@ -32,15 +32,27 @@ public class ReferenceKeeper implements Runnable {
 	@Override
 	public synchronized void run() {
 		// TODO: We should see if mainthread is alive before rebinding reference
+		// TODO: This is rediculous
 		while(run) {
 			try {
 				RemoteObject r = rmi.getReference(name);
-				if( !reference.equals(r) ) {
-					Debug.log(this, Debug.DEBUG, "Another reference already bound rebinding");
-					rmi.rebind(name, reference);
+				try {
+					if( reference.getUnique() != r.getUnique() ) {
+						Debug.log(this, Debug.DEBUG, "Another reference already bound");
+						rmi.rebind(name, reference);
+					}
+					else {
+						Debug.log(this, Debug.DEBUG, "Our reference is in registry");
+					}
 				}
-				else {
-					Debug.log(this, Debug.DEBUG, "Our reference is in registry");
+				catch(ConnectException e) {
+					Debug.log(this, Debug.DEBUG, "Another reference is dead, rebinding");
+					try {
+						rmi.rebind(name, reference);
+					}
+					catch(Exception ex) {
+						Debug.log(this, Debug.DEBUG, "Got exception when trying to rebind", ex);
+					}
 				}
 			}
 			catch(NotBoundException e) {
@@ -53,11 +65,12 @@ public class ReferenceKeeper implements Runnable {
 				}
 			}
 			catch(ConnectException e) {
-				Debug.log(this, Debug.DEBUG, "Registry not online, waiting for it to com online.");
+				Debug.log(this, Debug.DEBUG, "Registry not online, waiting for it to come online.",e);
 			}
 			catch(Exception e) {
 				Debug.log(this, Debug.DEBUG, "Caught Exception", e);
 			}
+
 
 			try {
 				this.wait(60 * 1000);
