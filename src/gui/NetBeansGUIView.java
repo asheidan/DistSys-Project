@@ -148,7 +148,7 @@ public class NetBeansGUIView extends FrameView {
         rmiAddressField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         rmiPortField = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        cancelConnectRMIDialogButton = new javax.swing.JButton();
         joinGroupDialog = new javax.swing.JDialog();
         jLabel3 = new javax.swing.JLabel();
         joinNickField = new javax.swing.JTextField();
@@ -156,7 +156,7 @@ public class NetBeansGUIView extends FrameView {
         jScrollPane4 = new javax.swing.JScrollPane();
         groupList = new javax.swing.JList();
         joinGroupButton = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        cancelJoinGroupDialogButton = new javax.swing.JButton();
         toolBar = new javax.swing.JToolBar();
         showRMIDialogButton = new javax.swing.JButton();
         showCreateGroupDialogToolbarButton = new javax.swing.JButton();
@@ -167,7 +167,7 @@ public class NetBeansGUIView extends FrameView {
         jLabel6 = new javax.swing.JLabel();
         createNickField = new javax.swing.JTextField();
         createGroupButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        cancelCreateGroupDialogButton = new javax.swing.JButton();
         groupType = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
         castType = new javax.swing.JComboBox();
@@ -352,8 +352,8 @@ public class NetBeansGUIView extends FrameView {
         rmiPortField.setToolTipText("The port which the registry is listening on. The standard is 1099."); // NOI18N
         rmiPortField.setName("rmiPortField"); // NOI18N
 
-        jButton5.setLabel(resourceMap.getString("jButton5.label")); // NOI18N
-        jButton5.setName("jButton5"); // NOI18N
+        cancelConnectRMIDialogButton.setLabel(resourceMap.getString("cancelConnectRMIDialogButton.label")); // NOI18N
+        cancelConnectRMIDialogButton.setName("cancelConnectRMIDialogButton"); // NOI18N
 
         org.jdesktop.layout.GroupLayout connectRMIDialogLayout = new org.jdesktop.layout.GroupLayout(connectRMIDialog.getContentPane());
         connectRMIDialog.getContentPane().setLayout(connectRMIDialogLayout);
@@ -363,7 +363,7 @@ public class NetBeansGUIView extends FrameView {
                 .addContainerGap()
                 .add(connectRMIDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(connectRMIDialogLayout.createSequentialGroup()
-                        .add(jButton5)
+                        .add(cancelConnectRMIDialogButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(connectToRMIButton))
                     .add(connectRMIDialogLayout.createSequentialGroup()
@@ -390,7 +390,7 @@ public class NetBeansGUIView extends FrameView {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(connectRMIDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(connectToRMIButton)
-                    .add(jButton5))
+                    .add(cancelConnectRMIDialogButton))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -427,8 +427,8 @@ public class NetBeansGUIView extends FrameView {
         joinGroupButton.setName("joinGroupButton"); // NOI18N
         joinGroupButton.setSelected(true);
 
-        jButton6.setLabel(resourceMap.getString("jButton6.label")); // NOI18N
-        jButton6.setName("jButton6"); // NOI18N
+        cancelJoinGroupDialogButton.setLabel(resourceMap.getString("cancelJoinGroupDialogButton.label")); // NOI18N
+        cancelJoinGroupDialogButton.setName("cancelJoinGroupDialogButton"); // NOI18N
 
         org.jdesktop.layout.GroupLayout joinGroupDialogLayout = new org.jdesktop.layout.GroupLayout(joinGroupDialog.getContentPane());
         joinGroupDialog.getContentPane().setLayout(joinGroupDialogLayout);
@@ -446,7 +446,7 @@ public class NetBeansGUIView extends FrameView {
                             .add(jScrollPane4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                             .add(joinNickField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, joinGroupDialogLayout.createSequentialGroup()
-                        .add(jButton6)
+                        .add(cancelJoinGroupDialogButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(joinGroupButton)))
                 .addContainerGap())
@@ -465,7 +465,7 @@ public class NetBeansGUIView extends FrameView {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(joinGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(joinGroupButton)
-                            .add(jButton6)))
+                            .add(cancelJoinGroupDialogButton)))
                     .add(jLabel4))
                 .addContainerGap())
         );
@@ -539,8 +539,8 @@ public class NetBeansGUIView extends FrameView {
         createGroupButton.setName("createGroupButton"); // NOI18N
         createGroupButton.setSelected(true);
 
-        jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
-        jButton4.setName("jButton4"); // NOI18N
+        cancelCreateGroupDialogButton.setText(resourceMap.getString("cancelCreateGroupDialogButton.text")); // NOI18N
+        cancelCreateGroupDialogButton.setName("cancelCreateGroupDialogButton"); // NOI18N
 
         groupType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dynamic", "Static" }));
         groupType.setName("groupType"); // NOI18N
@@ -574,7 +574,7 @@ public class NetBeansGUIView extends FrameView {
                 .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(jSeparator2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
                     .add(createGroupDialogLayout.createSequentialGroup()
-                        .add(jButton4)
+                        .add(cancelCreateGroupDialogButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(createGroupButton))
                     .add(org.jdesktop.layout.GroupLayout.LEADING, createGroupDialogLayout.createSequentialGroup()
@@ -623,7 +623,7 @@ public class NetBeansGUIView extends FrameView {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 7, Short.MAX_VALUE)
                 .add(createGroupDialogLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(createGroupButton)
-                    .add(jButton4))
+                    .add(cancelCreateGroupDialogButton))
                 .addContainerGap())
         );
 
@@ -864,9 +864,9 @@ public class NetBeansGUIView extends FrameView {
     private javax.swing.JButton joinGroupButton;
     private javax.swing.JButton connectToRMIButton;
     private javax.swing.JButton createGroupButton;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton cancelCreateGroupDialogButton;
+    private javax.swing.JButton cancelConnectRMIDialogButton;
+    private javax.swing.JButton cancelJoinGroupDialogButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

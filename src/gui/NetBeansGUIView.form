@@ -266,7 +266,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jButton5" min="-2" max="-2" attributes="0"/>
+                          <Component id="cancelConnectRMIDialogButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="connectToRMIButton" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -302,7 +302,7 @@
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="connectToRMIButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cancelConnectRMIDialogButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -354,10 +354,10 @@
             <Property name="name" type="java.lang.String" value="rmiPortField" noResource="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton5">
+        <Component class="javax.swing.JButton" name="cancelConnectRMIDialogButton">
           <Properties>
-            <Property name="label" type="java.lang.String" resourceKey="jButton5.label"/>
-            <Property name="name" type="java.lang.String" value="jButton5" noResource="true"/>
+            <Property name="label" type="java.lang.String" resourceKey="cancelConnectRMIDialogButton.label"/>
+            <Property name="name" type="java.lang.String" value="cancelConnectRMIDialogButton" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -387,7 +387,7 @@
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                          <Component id="cancelJoinGroupDialogButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="joinGroupButton" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -411,7 +411,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="joinGroupButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cancelJoinGroupDialogButton" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -485,10 +485,10 @@
             <Property name="selected" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton6">
+        <Component class="javax.swing.JButton" name="cancelJoinGroupDialogButton">
           <Properties>
-            <Property name="label" type="java.lang.String" resourceKey="jButton6.label"/>
-            <Property name="name" type="java.lang.String" value="jButton6" noResource="true"/>
+            <Property name="label" type="java.lang.String" resourceKey="cancelJoinGroupDialogButton.label"/>
+            <Property name="name" type="java.lang.String" value="cancelJoinGroupDialogButton" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -569,7 +569,7 @@
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="jSeparator2" alignment="1" pref="283" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                          <Component id="cancelCreateGroupDialogButton" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="createGroupButton" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -632,7 +632,7 @@
                   <EmptySpace pref="7" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="createGroupButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton4" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cancelCreateGroupDialogButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -682,10 +682,10 @@
             <Property name="selected" type="boolean" value="true"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton4">
+        <Component class="javax.swing.JButton" name="cancelCreateGroupDialogButton">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jButton4.text"/>
-            <Property name="name" type="java.lang.String" value="jButton4" noResource="true"/>
+            <Property name="text" type="java.lang.String" resourceKey="cancelCreateGroupDialogButton.text"/>
+            <Property name="name" type="java.lang.String" value="cancelCreateGroupDialogButton" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="groupType">
