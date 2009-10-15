@@ -64,7 +64,6 @@ public class momTotal implements MessageOrderingModule {
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {
 			try {
-				// FIXME: This is where the problem is. The message is never altered with correct source so the message is returned to the original sender instead of the one requesting serialNo.
 				sequencer.send(new gcom.Message(null, null, identity, m, Message.TYPE_MESSAGE.SEQUENCE)); // Request serialNo for message
 			}
 			catch(Exception e) {
