@@ -352,8 +352,10 @@ public class NetBeansGUIView extends FrameView {
         rmiPortField.setToolTipText("The port which the registry is listening on. The standard is 1099."); // NOI18N
         rmiPortField.setName("rmiPortField"); // NOI18N
 
-        cancelConnectRMIDialogButton.setLabel(resourceMap.getString("cancelConnectRMIDialogButton.label")); // NOI18N
+        cancelConnectRMIDialogButton.setAction(actionMap.get("hideRMIConnectDialog")); // NOI18N
+        cancelConnectRMIDialogButton.setText(resourceMap.getString("cancelConnectRMIDialogButton.text")); // NOI18N
         cancelConnectRMIDialogButton.setName("cancelConnectRMIDialogButton"); // NOI18N
+        
 
         org.jdesktop.layout.GroupLayout connectRMIDialogLayout = new org.jdesktop.layout.GroupLayout(connectRMIDialog.getContentPane());
         connectRMIDialog.getContentPane().setLayout(connectRMIDialogLayout);
@@ -427,8 +429,10 @@ public class NetBeansGUIView extends FrameView {
         joinGroupButton.setName("joinGroupButton"); // NOI18N
         joinGroupButton.setSelected(true);
 
-        cancelJoinGroupDialogButton.setLabel(resourceMap.getString("cancelJoinGroupDialogButton.label")); // NOI18N
+        cancelJoinGroupDialogButton.setAction(actionMap.get("hideJoinDialog")); // NOI18N
+        cancelJoinGroupDialogButton.setText(resourceMap.getString("cancelJoinGroupDialogButton.text")); // NOI18N
         cancelJoinGroupDialogButton.setName("cancelJoinGroupDialogButton"); // NOI18N
+
 
         org.jdesktop.layout.GroupLayout joinGroupDialogLayout = new org.jdesktop.layout.GroupLayout(joinGroupDialog.getContentPane());
         joinGroupDialog.getContentPane().setLayout(joinGroupDialogLayout);
@@ -539,6 +543,7 @@ public class NetBeansGUIView extends FrameView {
         createGroupButton.setName("createGroupButton"); // NOI18N
         createGroupButton.setSelected(true);
 
+        cancelCreateGroupDialogButton.setAction(actionMap.get("hideCreateGroupDialog")); // NOI18N
         cancelCreateGroupDialogButton.setText(resourceMap.getString("cancelCreateGroupDialogButton.text")); // NOI18N
         cancelCreateGroupDialogButton.setName("cancelCreateGroupDialogButton"); // NOI18N
 
@@ -714,8 +719,13 @@ public class NetBeansGUIView extends FrameView {
 	@Action
 	public void showRMIConnectDialog() {
 		connectRMIDialog.setSize(316, 137);
+		//connectRMIDialog.pack();
 		rmiAddressField.requestFocusInWindow();
 		connectRMIDialog.setVisible(true);
+	}
+	@Action
+	public void hideRMIConnectDialog() {
+		connectRMIDialog.setVisible(false);
 	}
 
 	@Action
@@ -729,6 +739,10 @@ public class NetBeansGUIView extends FrameView {
 			showErrorDialog(joinGroupDialog, "Couldn't list references in registry.");
 			Debug.log(NetBeansGUIView.class.getName(),Debug.ERROR, null, e);
 		}
+	}
+	@Action
+	public void hideJoinDialog() {
+		joinGroupDialog.setVisible(false);
 	}
 
 	@Action
@@ -776,6 +790,10 @@ public class NetBeansGUIView extends FrameView {
 		//createGroupDialog.setSize(323,143);
 		createGroupDialog.pack();
 		createGroupDialog.setVisible(true);
+	}
+	@Action
+	public void hideCreateGroupDialog() {
+		createGroupDialog.setVisible(false);
 	}
 
 	private GCom.TYPE_MESSAGEORDERING getOrderingType() {
