@@ -7,20 +7,12 @@ import gcom.HashVectorClock;
 import java.io.Serializable;
 import java.util.Vector;
 
-public class momCausal implements MessageOrderingModule {
-	private Vector<GComMessageListener> listeners;
+public class momCausal extends momNonOrdered {
 	private Vector<Message> messages;
-	private HashVectorClock clock;
 
 	public momCausal (String id) {
-		listeners = new Vector<GComMessageListener>();
+		super(id);
 		messages = new Vector<Message>();
-		this.clock = new HashVectorClock(id);
-	}
-
-	@Override
-	public HashVectorClock getClock() {
-		return this.clock;	
 	}
 
 	@Override
@@ -28,18 +20,11 @@ public class momCausal implements MessageOrderingModule {
 		this.clock.tick();
 	}
 
-	@Override
-	public void addMessageListener(GComMessageListener listener) {
-		listeners.add(listener);
+	private void sendMessage(Message message) {
+		this.clock.tickKey(message.getSource().getID());
+		sendToListeners(message);
 	}
 
-	private void sendToListeners(Message message) {
-		this.clock.tickKey(message.getSource().getID());
-		for(GComMessageListener l : listeners) {
-			l.messageReceived(message);
-		}
-	}
-	
 	@Override
 	public void queueMessage(Message m) {
 		if(this.clock.getValue(m.getSource().getID()) == null) {
@@ -58,7 +43,7 @@ public class momCausal implements MessageOrderingModule {
 			String id = m.getSource().getID();
 			HashVectorClock m_clock = m.getClock();
 			if(m_clock.getValue(id) == this.clock.getValue(id)+1 && this.clock.excludedCompareTo(m_clock, id) >= 0) {
-				sendToListeners(m);
+				sendMessage(m);
 				remove.add(m);
 			}
 		}

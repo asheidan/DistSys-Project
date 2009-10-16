@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momNonOrdered implements MessageOrderingModule {
-	private Vector<GComMessageListener> listeners;
-	private HashVectorClock clock;
+	protected Vector<GComMessageListener> listeners;
+	protected HashVectorClock clock;
 
 	public momNonOrdered(String id) {
 		listeners = new Vector<GComMessageListener>();
@@ -33,7 +33,7 @@ public class momNonOrdered implements MessageOrderingModule {
 		listeners.add(listener);
 	}
 
-	private void sendToListeners(Message message) {
+	protected void sendToListeners(Message message) {
 		for(GComMessageListener l : listeners) {
 			Debug.log("gcom.momNonOrdered", Debug.DEBUG, "Sent message to: " + l.toString());
 			l.messageReceived(message);

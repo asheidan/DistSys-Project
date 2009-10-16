@@ -12,29 +12,21 @@ import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Vector;
 
-public class momTotal implements MessageOrderingModule {
-	private Vector<GComMessageListener> listeners;
+public class momTotal extends momNonOrdered {
 	private Vector<Message> messages;
 	private Integer lastDelivered;
-	private HashVectorClock clock;
 	private RemoteObject sequencer;
 	private Member identity;
 
 	public momTotal(String id) {
-		listeners = new Vector<GComMessageListener>();
+		super(id);
 		messages = new Vector<Message>();
-		this.clock = new HashVectorClock(id);
 	}
 	
 	public void setIdentity(Member me) {
 		this.identity = me;
 	}
 
-	@Override
-	public HashVectorClock getClock() {
-		return this.clock;	
-	}
-	
 	public void setSequencer(RemoteObject sequencer) {
 		this.sequencer = sequencer;
 	}
@@ -43,21 +35,13 @@ public class momTotal implements MessageOrderingModule {
 	public void tick() {
 		// Do nothing
 	}
-	
-	@Override
-	public void addMessageListener(GComMessageListener listener) {
-		listeners.add(listener);
-	}
 
-	private void sendToListeners(Message message) {
+	private void sendMessage(Message message) {
 		Integer value = message.getClock().getValue("serialNo");
 		this.lastDelivered++;
-
-		for(GComMessageListener l : listeners) {
-			l.messageReceived(message);
-		}
+		sendToListeners(message);	
 	}
-	
+
 	@Override
 	public void queueMessage(Message m) {
 		Debug.log(this, Debug.DEBUG, String.format("Got message from %s with %s", m.getSource(), m.getClock()));
@@ -73,7 +57,7 @@ public class momTotal implements MessageOrderingModule {
 		}
 		if(this.lastDelivered == null) {
 			this.lastDelivered = value-1;
-			sendToListeners(m);
+			sendMessage(m);
 			return;
 		}
 		if(value < this.lastDelivered) { return; }
@@ -87,7 +71,7 @@ public class momTotal implements MessageOrderingModule {
 		for(Message m : messages) {
 			Integer value = m.getClock().getValue("serialNo");
 			if(value == this.lastDelivered+1) {
-				sendToListeners(m);
+				sendMessage(m);
 				remove.add(m);
 			}
 		}
