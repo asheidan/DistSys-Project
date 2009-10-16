@@ -8,52 +8,34 @@ import java.util.Hashtable;
 import java.io.Serializable;
 import java.util.Vector;
 
-public class momFIFO implements MessageOrderingModule {
-	private Vector<GComMessageListener> listeners;
+public class momFIFO extends momNonOrdered {
 	private Vector<Message> messages;
-	//private Hashtable<Object, Integer> lastDelivered;
-	private HashVectorClock clock;
 
 	public momFIFO(String id) {
-		listeners = new Vector<GComMessageListener>();
+		super(id);
 		messages = new Vector<Message>();
-		//lastDelivered = new Hashtable<Object, Integer>();
-		this.clock = new HashVectorClock(id);
 	}
 
-	@Override
-	public HashVectorClock getClock() {
-		return this.clock;	
-	}
-	
 	@Override
 	public void tick() {
 		this.clock.tick();
 	}
-	
-	@Override
-	public void addMessageListener(GComMessageListener listener) {
-		listeners.add(listener);
-	}
 
-	private void sendToListeners(Message message) {
+	private void sendMessage(Message message) {
 		String key = message.getSource().getID();
 		Integer value = message.getClock().getValue(key);
-		//lastDelivered.put(key, value);
 		clock.put(key, value);
-
-		for(GComMessageListener l : listeners) {
-			l.messageReceived(message);
-		}
+		sendToListeners(message);
 	}
 	
 	@Override
 	public void queueMessage(Message m) {
+		if(checkBypass(m)) sendToListeners(m);
 		String key = m.getSource().getID();
 		Integer value = m.getClock().getValue(key);
 		Integer last = clock.getValue(key);
 		if(last == null) {
-			sendToListeners(m);
+			sendMessage(m);
 			return;
 		}
 		if(value < last) { return; }
@@ -69,7 +51,7 @@ public class momFIFO implements MessageOrderingModule {
 			Integer value = m.getClock().getValue(key);
 			Integer last = clock.getValue(key);
 			if(value == last+1) {
-				sendToListeners(m);
+				sendMessage(m);
 				remove.add(m);
 			}
 		}
