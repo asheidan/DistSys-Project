@@ -34,7 +34,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	private RMIModule rmi;
 	private Hashtable<String, CommunicationModule> comModules = new Hashtable<String, CommunicationModule>();
 	private Hashtable<String, MessageOrderingModule> moModules = new Hashtable<String, MessageOrderingModule>();
-	private Hashtable<String, HashVectorClock> clocks = new Hashtable<String, HashVectorClock>();
 	private Hashtable<String, Member> identities = new Hashtable<String, Member>();
 	private Hashtable<String, Vector<GComMessageListener>> messageListeners = new Hashtable<String, Vector<GComMessageListener>>();
 	private Hashtable<String, Vector<ViewChangeListener>> viewChangeListeners = new Hashtable<String, Vector<ViewChangeListener>>();
@@ -122,6 +121,14 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		return com;
 	}
 
+	private void tick(String groupName) {
+		moModules.get(groupName).tick();
+	}
+
+	private HashVectorClock getClock(String groupName) {
+		return moModules.get(groupName).getClock();
+	}
+	
 	@Override
 	public void createGroup(GroupDefinition description,
 			String localMemberName) throws IOException {
@@ -141,7 +148,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			
 			setIdentityInMOM(mom,description);
 
-			clocks.put(groupName, new HashVectorClock(processID));
 			moModules.put(groupName, mom);
 			comModules.put(groupName, com);
 			// ReferenceKeeper isn't broken
@@ -159,7 +165,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		if( com != null ) {
 			com.send(
 					new gcom.Message(
-							clocks.get(groupName),
+							getClock(groupName),
 							groupName,
 							identities.get(groupName),
 							"",
@@ -167,7 +173,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			gmm.removeGroup(groupName);
 			comModules.remove(groupName);
 			moModules.remove(groupName);
-			clocks.remove(groupName);
 			identities.remove(groupName);
 		}
 	}
@@ -195,7 +200,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		Member me = new gcom.Member(processID, localMemberName, localRemote);
 		HashVectorClock clock = new HashVectorClock(processID);
 		remoteRemote.send(new gcom.Message(clock, groupName, me, null, Message.TYPE_MESSAGE.JOINREQUEST));
-		clocks.put(groupName, clock);
 		comModules.put(groupName, com);
 		moModules.put(groupName, mom);
 		identities.put(groupName, me);
@@ -223,9 +227,9 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			throws IOException {
 		CommunicationModule com = comModules.get(groupName);
 		if(com != null) {
-			//moModules.get(groupName).tick();
+			tick(groupName);
 			com.send(
-					new gcom.Message(clocks.get(groupName), groupName,
+					new gcom.Message(getClock(groupName), groupName,
 					identities.get(groupName), message, Message.TYPE_MESSAGE.APPLICATION));
 		}
 	}
@@ -247,11 +251,10 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			return;
 		}
 		switch(message.getMessageType()) {
-			// TODO: should information about parting/joining be sent to "gui"?
 			case JOINREQUEST:
 				gotMember(groupName, message.getSource());
 				List<Member> view = gmm.listGroupMembers(groupName);
-				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
+				Message msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
 				try {
 					// TODO: COM should be expanded with private messages
 					Debug.log(this, Level.DEBUG,
@@ -334,7 +337,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			comModules.get(groupName).send(
 				message.getSource(),
 				new gcom.Message(
-					clocks.get(groupName),
+					getClock(groupName),
 					groupName,
 					identities.get(groupName),
 					processID,
@@ -346,7 +349,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			comModules.get(groupName).send(
 				message.getSource(),
 				new gcom.Message(
-					clocks.get(groupName),
+					getClock(groupName),
 					groupName,
 					identities.get(groupName),
 					message.getMessage(),
@@ -382,7 +385,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		if(gmm.memberIsInGroup(groupName, member)) {
 			gmm.removeMember(groupName, member);
 
-			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
+			tick(groupName);
+			Message msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
 			comModules.get(groupName).send(msg);
 			if(member.equals(gmm.getLeader(groupName))) {
 				Debug.log(this, Debug.WARN, "We lost our leader: " + member.toString());
@@ -396,7 +400,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				else {
 					comModules.get(groupName).send(
 						new gcom.Message(
-							clocks.get(groupName),
+							getClock(groupName),
 							groupName,
 							identities.get(groupName),
 							highestElectionValues.get(groupName),
@@ -414,7 +418,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	@Override
 	public void gotMember(String groupName, Member member) {
 		if(!gmm.memberIsInGroup(groupName, member)) {
-			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.GOTMEMBER);
+			tick(groupName);
+			Message msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.GOTMEMBER);
 			comModules.get(groupName).send(msg);
 			
 			gmm.addMember(groupName, member);
