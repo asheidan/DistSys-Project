@@ -6,25 +6,26 @@ package gui;
 
 import gcom.interfaces.*;
 import gcom.Debug;
-import java.io.IOException;
-import java.rmi.NotBoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
-import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.ConnectException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import org.jdesktop.application.Action;
+import org.jdesktop.application.FrameView;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.TaskMonitor;
 
 /**
  * The application's main frame.
@@ -846,13 +847,17 @@ public class NetBeansGUIView extends FrameView {
 				createGroupDialog.setVisible(false);
 				addGroup(groupName);
 			}
+			catch (AlreadyBoundException ex) {
+				Debug.log(this, Debug.WARN, "Trying to create already existing group.");
+				showErrorDialog(createGroupDialog, "That group already exists");
+			}
 			catch (RemoteException ex) {
 				// TODO: Make a proper error message
-				Debug.log(NetBeansGUIView.class.getName(),Debug.ERROR, null, ex);
+				Debug.log(this,Debug.ERROR, null, ex);
 				showErrorDialog(createGroupDialog,"Got a remote exception");
 			}
 			catch (IOException ex) {
-				Debug.log(NetBeansGUIView.class.getName(),Debug.ERROR, null, ex);
+				Debug.log(this,Debug.ERROR, null, ex);
 				showErrorDialog(createGroupDialog, "Error!");
 			}
 		}

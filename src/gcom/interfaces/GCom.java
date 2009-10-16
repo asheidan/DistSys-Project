@@ -3,6 +3,7 @@ package gcom.interfaces;
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.AccessException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -115,7 +116,7 @@ public interface GCom {
 	 * 
 	 */
 	public void createGroup(GroupDefinition description,
-			String localMemberName) throws IOException;
+			String localMemberName) throws AlreadyBoundException,IOException;
 
 	/**
 	 * Removes a group from the RMI registry. This should only be allowed for

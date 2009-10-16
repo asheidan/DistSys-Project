@@ -131,15 +131,15 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	
 	@Override
 	public void createGroup(GroupDefinition description,
-			String localMemberName) throws IOException {
+			String localMemberName) throws AlreadyBoundException,IOException {
 		String groupName = description.getGroupName();
 		
 		MessageOrderingModule mom = setupMOM(description);
 		CommunicationModule com = setupCom(description,mom);
 
+		RemoteObject remote = new gcom.RemoteObject(com,description);
 		try {
 			// TODO: Should this throw an exception if we aren't connected to RMI?
-			RemoteObject remote = new gcom.RemoteObject(com,description);
 			rmi.bind(groupName, remote);
 			Member me = new gcom.Member(processID,localMemberName, remote);
 			gmm.addGroup(description);
@@ -152,10 +152,13 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			comModules.put(groupName, com);
 			// ReferenceKeeper isn't broken
 			new ReferenceKeeper(rmi, groupName, remote);
+		
 		}
 		catch (AlreadyBoundException e) {
 			// TODO: make sure gui doesn't create new tab but show errormsg instead
 			Debug.log(this, Debug.DEBUG, "Trying to bind object for new group while name already exists: " + groupName);
+			((gcom.RemoteObject)remote).stop();
+			throw(e);
 		}
 	}
 

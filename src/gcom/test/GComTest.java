@@ -3,6 +3,7 @@ package gcom.test;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -75,6 +76,9 @@ public class GComTest {
 			gcom.createGroup(def, "Tomten");
 			RemoteObject ro = (RemoteObject) registry.lookup(groupName);
 			assertNotNull(ro);
+		}
+		catch (AlreadyBoundException e) {
+			fail("Another with the same reference already exists");
 		}
 		catch (IOException e) {
 			// TODO Auto-generated catch block
