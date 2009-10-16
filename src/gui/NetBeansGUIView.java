@@ -8,6 +8,7 @@ import gcom.interfaces.*;
 import gcom.Debug;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.ConnectException;
@@ -343,6 +344,11 @@ public class NetBeansGUIView extends FrameView {
         rmiAddressField.setText(resourceMap.getString("rmiAddressField.text")); // NOI18N
         rmiAddressField.setToolTipText("The address for a public accessable RMI-registry"); // NOI18N
         rmiAddressField.setName("rmiAddressField"); // NOI18N
+        rmiAddressField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                connectRMIDialogKeyPressed(evt);
+            }
+        });
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setLabelFor(rmiPortField);
@@ -352,6 +358,11 @@ public class NetBeansGUIView extends FrameView {
         rmiPortField.setText(resourceMap.getString("rmiPortField.text")); // NOI18N
         rmiPortField.setToolTipText("The port which the registry is listening on. The standard is 1099."); // NOI18N
         rmiPortField.setName("rmiPortField"); // NOI18N
+        rmiPortField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                connectRMIDialogKeyPressed(evt);
+            }
+        });
 
         cancelConnectRMIDialogButton.setAction(actionMap.get("hideRMIConnectDialog")); // NOI18N
         cancelConnectRMIDialogButton.setText(resourceMap.getString("cancelConnectRMIDialogButton.text")); // NOI18N
@@ -408,6 +419,11 @@ public class NetBeansGUIView extends FrameView {
 
         joinNickField.setText(resourceMap.getString("joinNickField.text")); // NOI18N
         joinNickField.setName("joinNickField"); // NOI18N
+        joinNickField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                joinGroupDialogKeyPressed(evt);
+            }
+        });
 
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setLabelFor(groupList);
@@ -424,6 +440,11 @@ public class NetBeansGUIView extends FrameView {
         groupList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         groupList.setName("groupList"); // NOI18N
         jScrollPane4.setViewportView(groupList);
+        groupList.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                joinGroupDialogKeyPressed(evt);
+            }
+        });
 
         joinGroupButton.setAction(actionMap.get("joinGroup")); // NOI18N
         joinGroupButton.setText(resourceMap.getString("joinGroupButton.text")); // NOI18N
@@ -530,6 +551,11 @@ public class NetBeansGUIView extends FrameView {
 
         groupNameField.setText(resourceMap.getString("groupNameField.text")); // NOI18N
         groupNameField.setName("groupNameField"); // NOI18N
+        groupNameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                createGroupDialogKeyPressed(evt);
+            }
+        });
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel6.setLabelFor(createNickField);
@@ -538,6 +564,11 @@ public class NetBeansGUIView extends FrameView {
 
         createNickField.setText(resourceMap.getString("createNickField.text")); // NOI18N
         createNickField.setName("createNickField"); // NOI18N
+        createNickField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                createGroupDialogKeyPressed(evt);
+            }
+        });
 
         createGroupButton.setAction(actionMap.get("createGroup")); // NOI18N
         createGroupButton.setText(resourceMap.getString("createGroupButton.text")); // NOI18N
@@ -684,6 +715,33 @@ public class NetBeansGUIView extends FrameView {
 
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
+
+	private void connectRMIDialogKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_connectRMIDialogKeyPressed
+		if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+			connectRMIRegistry();
+		}
+		else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			hideRMIConnectDialog();
+		}
+	}//GEN-LAST:event_connectRMIDialogKeyPressed
+
+	private void joinGroupDialogKeyPressed(java.awt.event.KeyEvent evt) {
+		if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+			joinGroup();
+		}
+		else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			hideJoinDialog();
+		}
+	}
+	
+	private void createGroupDialogKeyPressed(java.awt.event.KeyEvent evt) {
+		if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+			createGroup();
+		}
+		else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			hideCreateGroupDialog();
+		}
+	}
 
 	public void showErrorDialog(java.awt.Component parent, String msg) {
 		JOptionPane.showMessageDialog(parent, msg,

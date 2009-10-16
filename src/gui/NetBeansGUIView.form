@@ -258,6 +258,9 @@
         <Property name="name" type="java.lang.String" value="connectRMIDialog" noResource="true"/>
         <Property name="resizable" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="connectRMIDialogKeyPressed"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -368,7 +371,10 @@
         <Property name="alwaysOnTop" type="boolean" value="true"/>
         <Property name="name" type="java.lang.String" value="joinGroupDialog" noResource="true"/>
       </Properties>
-
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="joinGroupDialogKeyPressed"/>
+      </Events>
+      
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
@@ -560,6 +566,9 @@
         <Property name="name" type="java.lang.String" value="createGroupDialog" noResource="true"/>
         <Property name="resizable" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="createGroupDialogKeyPressed"/>
+      </Events>
 
       <Layout>
         <DimensionLayout dim="0">
