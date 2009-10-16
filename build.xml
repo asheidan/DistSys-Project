@@ -37,7 +37,6 @@
 	<target name="compile" depends="compile.gcom.src,compile.gui.src,compile.rmi.src" />
 
 	<target name="compile.gcom.src" depends="init" description="Compiling source-files">
-
 		<javac srcdir="${src.gcom}" destdir="${build}" debug="${javac.debug}" debuglevel="lines,vars,source">
 			<compilerarg value="-Xlint" />
 			<classpath>
@@ -50,7 +49,6 @@
 	</target>
 
 	<target name="compile.rmi.src" depends="init,compile.gcom.src">
-
 		<javac srcdir="${src.rmi}" destdir="${build}" debug="${javac.debug}" debuglevel="lines,vars,source">
 			<compilerarg value="-Xlint" />
 			<classpath>
