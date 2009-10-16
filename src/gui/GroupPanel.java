@@ -67,6 +67,8 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
         jScrollPane2.setMinimumSize(new java.awt.Dimension(0, 23));
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(GroupPanel.class);
+        nodeList.setFont(resourceMap.getFont("nodeList.font")); // NOI18N
         nodeList.setModel(new javax.swing.DefaultListModel());
         nodeList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         nodeList.setName("nodeList"); // NOI18N
@@ -78,8 +80,7 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 
         textArea.setColumns(20);
         textArea.setEditable(false);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(gui.NetBeansGUIApp.class).getContext().getResourceMap(GroupPanel.class);
-        textArea.setFont(resourceMap.getFont("textArea.font")); // NOI18N
+        textArea.setFont(nodeList.getFont());
         textArea.setRows(5);
         textArea.setName("textArea"); // NOI18N
         jScrollPane3.setViewportView(textArea);

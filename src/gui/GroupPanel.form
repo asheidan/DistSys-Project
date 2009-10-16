@@ -94,6 +94,7 @@
               <SubComponents>
                 <Component class="javax.swing.JList" name="nodeList">
                   <Properties>
+                    <Property name="font" type="java.awt.Font" resourceKey="nodeList.font"/>
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new javax.swing.DefaultListModel()" type="code"/>
                     </Property>
@@ -122,7 +123,9 @@
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="editable" type="boolean" value="false"/>
-                    <Property name="font" type="java.awt.Font" resourceKey="textArea.font"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection component="nodeList" name="font" type="property"/>
+                    </Property>
                     <Property name="rows" type="int" value="5"/>
                     <Property name="name" type="java.lang.String" value="textArea" noResource="true"/>
                   </Properties>
