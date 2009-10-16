@@ -30,7 +30,10 @@ public class momFIFO extends momNonOrdered {
 	
 	@Override
 	public void queueMessage(Message m) {
-		if(checkBypass(m)) sendToListeners(m);
+		if(checkBypass(m)) { 
+			sendToListeners(m);
+			return;
+		}
 		String key = m.getSource().getID();
 		Integer value = m.getClock().getValue(key);
 		Integer last = clock.getValue(key);

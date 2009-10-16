@@ -27,7 +27,10 @@ public class momCausal extends momNonOrdered {
 
 	@Override
 	public void queueMessage(Message m) {
-		if(checkBypass(m)) sendToListeners(m);
+		if(checkBypass(m)) { 
+			sendToListeners(m);
+			return;
+		}
 		if(this.clock.getValue(m.getSource().getID()) == null) {
 			String id = m.getSource().getID();
 			Integer val = m.getClock().getValue(id);
