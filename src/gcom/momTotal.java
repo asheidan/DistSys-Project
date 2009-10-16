@@ -44,6 +44,7 @@ public class momTotal extends momNonOrdered {
 
 	@Override
 	public void queueMessage(Message m) {
+		if(checkBypass(m)) sendToListeners(m);
 		Debug.log(this, Debug.DEBUG, String.format("Got message from %s with %s", m.getSource(), m.getClock()));
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {

@@ -3,6 +3,7 @@ package gcom;
 import gcom.interfaces.Message;
 import gcom.interfaces.*;
 import gcom.HashVectorClock;
+import gcom.interfaces.Message.*; 
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -44,6 +45,17 @@ public class momNonOrdered implements MessageOrderingModule {
 	public void queueMessage(Message m) {
 		Debug.log("gcom.momNonOrdered", Debug.DEBUG, "Queued message: " + m.toString());
 		sendToListeners(m);
+	}
+
+
+	protected boolean checkBypass(Message m) {
+		TYPE_MESSAGE type = m.getMessageType();
+		if(type == TYPE_MESSAGE.JOINREQUEST) return true; 
+		if(type == TYPE_MESSAGE.PARTREQUEST) return true; 
+		if(type == TYPE_MESSAGE.REJECT) return true; 
+		if(type == TYPE_MESSAGE.WELCOME) return true; 
+		if(type == TYPE_MESSAGE.SEQUENCE) return true; 
+		return false;
 	}
 
 }

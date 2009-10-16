@@ -9,12 +9,10 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momFIFO extends momNonOrdered {
-	private Vector<GComMessageListener> listeners;
 	private Vector<Message> messages;
 
 	public momFIFO(String id) {
 		super(id);
-		listeners = new Vector<GComMessageListener>();
 		messages = new Vector<Message>();
 	}
 
@@ -32,6 +30,7 @@ public class momFIFO extends momNonOrdered {
 	
 	@Override
 	public void queueMessage(Message m) {
+		if(checkBypass(m)) sendToListeners(m);
 		String key = m.getSource().getID();
 		Integer value = m.getClock().getValue(key);
 		Integer last = clock.getValue(key);
