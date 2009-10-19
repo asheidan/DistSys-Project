@@ -3,7 +3,7 @@ package gcom;
 import java.io.Serializable;
 import gcom.interfaces.Member;
 
-public class Message implements gcom.interfaces.Message {
+public class Message implements gcom.interfaces.Message,Comparable<Message> {
 
 	/**
 	 * 
@@ -59,4 +59,8 @@ public class Message implements gcom.interfaces.Message {
 		return toString().hashCode();
 	}
 
+	@Override
+	public int compareTo(Message m) {
+		return this.clock.compareTo(m.clock);
+	}
 }

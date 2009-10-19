@@ -9,6 +9,8 @@ import java.util.PriorityQueue;
 
 class ReliableCommunicationModule extends BasicCommunicationModule {
 	
+	// TODO: Broken since messagehashing is broken (or something else)
+	
 	private static final int QUEUE_LENGTH = 100;
 	
 	private Hashtable<Message, Boolean> receivedMessages = new Hashtable<Message, Boolean>(QUEUE_LENGTH);
@@ -27,17 +29,23 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 		
 		if(!receivedMessages.containsKey(m)) {
 			// New message!!!
-			
+			Debug.log(this, Debug.DEBUG, "Got new Message: " + m.getClock().toString());
 			// Clean out history
 			if(lastMessages.size() == QUEUE_LENGTH) {
+				Debug.log(this, Debug.DEBUG, "Shortening queue.");
 				Message oldest = lastMessages.poll();
 				receivedMessages.remove(oldest);
 			}
+			
+			super.send(m);
 			
 			lastMessages.add(m);
 			receivedMessages.put(m,true);
 			
 			super.receive(m);
+		}
+		else {
+			Debug.log(this, Debug.DEBUG, "Got old Message: " + m.getClock().toString());
 		}
 	}
 	
