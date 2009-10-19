@@ -114,8 +114,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				mom = new gcom.momCausal(processID);
 				break;
 			case CAUSALTOTAL:
-				Debug.log(this, Level.WARN, "Unimplemented ordering: CAUSALTOTAL");
-				return null;
+				// We just use total and let the sequencer deal with ordering.
 			case TOTAL:
 				mom = new momTotal(processID);
 				try {
@@ -397,10 +396,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 					Message.TYPE_MESSAGE.ELECTION));
 			highestElectionValues.put(groupName,(String)message.getMessage());
 			gmm.setLeader(groupName,message.getSource());
-		}
-		else {
-			// This remains from the switch
-			Debug.log(this, Debug.ERROR, "Election: Got strange comparisonvalue: " + String.valueOf(compare));
 		}
 		results.removeElement(message.getSource());
 		if(results.size() == 0) {

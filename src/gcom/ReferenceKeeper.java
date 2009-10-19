@@ -38,6 +38,7 @@ public class ReferenceKeeper implements Runnable {
 				RemoteObject r = rmi.getReference(name);
 				try {
 					if( reference.getUnique() != r.getUnique() ) {
+						// TODO: This indicates a netsplit, right now we compete for reference
 						Debug.log(this, Debug.DEBUG, "Another reference already bound");
 						rmi.rebind(name, reference);
 					}
@@ -81,7 +82,7 @@ public class ReferenceKeeper implements Runnable {
 			}
 			catch(IllegalMonitorStateException ex) {
 				Debug.log(this, Debug.ERROR, "We got illegalstate", ex);
-				this.stop(); // ??
+				this.stop();
 			}
 		}
 	}
