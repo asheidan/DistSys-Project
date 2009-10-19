@@ -142,6 +142,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			com = new BasicCommunicationModule(mom, gmm, definition.getGroupName(), processID);
 			break;
 		case BASIC_RELIABLE_MULTICAST:
+			com = new ReliableCommunicationModule(mom, gmm, definition.getGroupName(), processID);
+			break;
 		default:
 			Debug.log(this, Debug.ERROR, "Unknown communication type: " + definition.getCommunicationType());
 			return null;
