@@ -156,11 +156,11 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		String line = event.getActionCommand();
 		textField.setText("");
 		Debug.log(this, Debug.TRACE, "Got event in panel "+line);
-		append(String.format("> %s",line));
 		for(MessageSender sender : senders) {
 			// TODO: handling of unresponsive nodes should be done in gcom.*
 			try {sender.sendMessage(groupName, line);} catch(IOException e) {}
 		}
+		append(String.format("> %s",line));
 	}
 
 	public void addMessageSender(MessageSender sender) {
