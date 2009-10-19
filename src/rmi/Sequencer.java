@@ -40,7 +40,7 @@ public class Sequencer extends RMIServer {
 		super(port);
 		Debug.log(this,Debug.DEBUG,"Returned from superconstructor");
 
-		SequencerCommunicationModule com = new SequencerCommunicationModule();
+		SequencerCommunicationModule com = new SequencerCommunicationModule(this.registry);
 		GroupDefinition group = new gcom.GroupDefinition("sequencer");
 		RemoteObject ro = new RemoteObject(com, group);
 		try {
@@ -50,74 +50,4 @@ public class Sequencer extends RMIServer {
 		}
 	}
 
-	private class SequencerCommunicationModule implements gcom.interfaces.CommunicationModule {
-
-		private Hashtable<String, GroupSequencer> sequencers;
-
-		public SequencerCommunicationModule() {
-			sequencers = new Hashtable<String, GroupSequencer>();
-		}
-
-		public void receive(Message m) {
-			if(m.getMessageType() == TYPE_MESSAGE.SEQUENCE) {
-				Debug.log(this, Debug.DEBUG, "Got: " + m.toString());
-				Message msg = (Message)m.getMessage();
-				GroupSequencer seq = sequencers.get(msg.getGroupName());
-				if(seq == null) {
-					seq = new GroupSequencer();
-					sequencers.put(msg.getGroupName(), seq);
-				}
-				sendBack(m.getSource(),seq.sequence(msg));
-			}
-			else {
-				Debug.log(this, Debug.WARN, "Got unwanted messagetype: " + m.getMessageType().toString());
-			}
-		}
-
-		public void send(Message message) {
-			Debug.log(this, Debug.WARN, "Using unimplemented method send()");
-		}
-		
-		public void send(Member member, Message message) {
-			Debug.log(this, Debug.WARN, "Using unimplemented method send()");
-		}
-		
-		public void sendBack(Member member, Message message) {
-			//Member member = message.getSource();
-			try {
-				member.getRemoteObject().send(message);
-			} catch(Exception e) {
-				Debug.log("Sequencer",Debug.ERROR, "Got other exception", e);
-			}
-		}
-		public void addGComViewChangeListener(GComViewChangeListener listener) {}
-	}
-
-	private class GroupSequencer {
-		private Hashtable<Integer, Integer> messages;
-		private int latest;
-
-		public GroupSequencer() {
-			messages = new Hashtable<Integer, Integer>();
-			latest = 0;
-		}
-
-		public Message sequence(Message m) {
-			Integer hash = m.hashCode();
-			Integer number = messages.get(hash);
-			if(number == null) {
-				latest++;
-				number = latest;
-				messages.put(hash, number);
-			}
-			return stamp(m, number);
-		}
-
-		private Message stamp(Message m, Integer number) {
-			HashVectorClock clock = m.getClock();
-			clock.put("serialNo", number);
-			return m;
-		}
-
-	}
 }
