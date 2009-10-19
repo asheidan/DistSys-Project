@@ -55,6 +55,7 @@ public class Message implements gcom.interfaces.Message {
 
 	@Override
 	public int hashCode() {
+		// TODO: This should probably only be based only on our vectorclock
 		return toString().hashCode();
 	}
 
