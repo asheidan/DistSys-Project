@@ -157,7 +157,6 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		textField.setText("");
 		Debug.log(this, Debug.TRACE, "Got event in panel "+line);
 		for(MessageSender sender : senders) {
-			// TODO: handling of unresponsive nodes should be done in gcom.*
 			try {sender.sendMessage(groupName, line);} catch(IOException e) {}
 		}
 		append(String.format("> %s",line));
