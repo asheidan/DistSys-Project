@@ -31,11 +31,6 @@ public class momTotal extends momNonOrdered {
 		this.sequencer = sequencer;
 	}
 
-	@Override
-	public void tick() {
-		// Do nothing
-	}
-
 	private void sendMessage(Message message) {
 		Integer value = message.getClock().getValue("serialNo");
 		this.lastDelivered++;

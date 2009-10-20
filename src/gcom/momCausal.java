@@ -15,11 +15,6 @@ public class momCausal extends momNonOrdered {
 		messages = new Vector<Message>();
 	}
 
-	@Override
-	public void tick() {
-		this.clock.tick();
-	}
-
 	private void sendMessage(Message message) {
 		this.clock.tickKey(message.getSource().getID());
 		sendToListeners(message);
