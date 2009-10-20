@@ -13,7 +13,7 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 	
 	private static final int QUEUE_LENGTH = 100;
 	
-	private Hashtable<Message, Boolean> receivedMessages = new Hashtable<Message, Boolean>(QUEUE_LENGTH);
+	private Hashtable<Integer, Message> receivedMessages = new Hashtable<Integer, Message>(QUEUE_LENGTH);
 
 	// Perhaps we can use with a simple fifo instead?
 	private PriorityQueue<Message> lastMessages = new PriorityQueue<Message>(QUEUE_LENGTH);
@@ -27,20 +27,20 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 		
 		// TODO: local delivery
 		
-		if(!receivedMessages.containsKey(m)) {
+		if(!receivedMessages.containsKey(m.hashCode())) {
 			// New message!!!
 			Debug.log(this, Debug.DEBUG, "Got new Message: " + m.getClock().toString());
 			// Clean out history
 			if(lastMessages.size() == QUEUE_LENGTH) {
 				Debug.log(this, Debug.DEBUG, "Shortening queue.");
 				Message oldest = lastMessages.poll();
-				receivedMessages.remove(oldest);
+				receivedMessages.remove(Integer.valueOf(oldest.hashCode()));
 			}
 			
-			super.send(m);
+			if(!m.bypass()) super.send(m);
 			
 			lastMessages.add(m);
-			receivedMessages.put(m,true);
+			receivedMessages.put(Integer.valueOf(m.hashCode()),m);
 			
 			super.receive(m);
 		}

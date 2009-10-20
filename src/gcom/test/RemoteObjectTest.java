@@ -100,6 +100,9 @@ public class RemoteObjectTest {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		@Override
+		public boolean bypass() { return false; }
 		
 	}
 	

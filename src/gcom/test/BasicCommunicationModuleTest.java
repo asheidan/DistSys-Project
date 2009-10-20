@@ -61,6 +61,9 @@ public class BasicCommunicationModuleTest {
 				return null;
 			}
 
+			@Override
+			public boolean bypass() { return false; }
+
 		};
 		com.receive(m);
 		assertEquals(m, mom.lastMessage);

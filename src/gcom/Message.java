@@ -49,6 +49,15 @@ public class Message implements gcom.interfaces.Message,Comparable<Message> {
 	}
 
 	@Override
+	public boolean bypass() {
+		if(type == TYPE_MESSAGE.JOINREQUEST) return true; 
+		if(type == TYPE_MESSAGE.PARTREQUEST) return true; 
+		if(type == TYPE_MESSAGE.REJECT) return true; 
+		if(type == TYPE_MESSAGE.WELCOME) return true; 
+		if(type == TYPE_MESSAGE.SEQUENCE) return true; 
+		return false;
+	}
+	@Override
 	public String toString() {
 		return String.format("Message %s:%s:%s",this.type,this.clock,this.data);
 	}
