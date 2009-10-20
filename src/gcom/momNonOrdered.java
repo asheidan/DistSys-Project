@@ -24,9 +24,7 @@ public class momNonOrdered implements MessageOrderingModule {
 	
 	@Override
 	public void tick() {
-		// WE DO NOT CARE ABOUT TICKS AND CLOCKS
-		// WE ARE UNORDERED
-		// ORDER IS FOR THE WEAK
+		this.clock.tick();
 	}
 
 	@Override

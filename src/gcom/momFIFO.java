@@ -16,11 +16,6 @@ public class momFIFO extends momNonOrdered {
 		messages = new Vector<Message>();
 	}
 
-	@Override
-	public void tick() {
-		this.clock.tick();
-	}
-
 	private void sendMessage(Message message) {
 		String key = message.getSource().getID();
 		Integer value = message.getClock().getValue(key);
