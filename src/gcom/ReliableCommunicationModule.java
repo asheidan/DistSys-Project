@@ -29,24 +29,33 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 		
 		if(!receivedMessages.containsKey(m.hashCode())) {
 			// New message!!!
-			Debug.log(this, Debug.DEBUG, "Got new Message: " + m.getClock().toString());
-			// Clean out history
-			if(lastMessages.size() == QUEUE_LENGTH) {
-				Debug.log(this, Debug.DEBUG, "Shortening queue.");
-				Message oldest = lastMessages.poll();
-				receivedMessages.remove(Integer.valueOf(oldest.hashCode()));
-			}
+			rememberMessage(m);
 			
-			if(!m.bypass()) super.send(m);
-			
-			lastMessages.add(m);
-			receivedMessages.put(Integer.valueOf(m.hashCode()),m);
+			if( !m.bypass() ) super.send(m);
 			
 			super.receive(m);
 		}
 		else {
 			Debug.log(this, Debug.DEBUG, "Got old Message: " + m.getClock().toString());
 		}
+	}
+	
+	@Override
+	public void send(Message m) {
+		rememberMessage(m);
+		super.send(m);
+	}
+	
+	private void rememberMessage(Message m) {
+		// Clean out history
+		if(lastMessages.size() == QUEUE_LENGTH) {
+			Debug.log(this, Debug.DEBUG, "Shortening queue.");
+			Message oldest = lastMessages.poll();
+			receivedMessages.remove(Integer.valueOf(oldest.hashCode()));
+		}
+		lastMessages.add(m);
+		receivedMessages.put(Integer.valueOf(m.hashCode()),m);
+		
 	}
 	
 }
