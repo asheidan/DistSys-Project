@@ -15,10 +15,12 @@ import org.junit.Test;
 public class momCausalTest {
 
 	private momCausal mom;
+	private Member me;
 	
 	@Before
 	public void setUp() {
-		mom = new momCausal("0");
+		me = new Member("0x5F345C", "me");
+		mom = new momCausal(me.getID());
 	}
 	
 	@Test
@@ -66,6 +68,30 @@ public class momCausalTest {
 		assertEquals(m0_2_0, listener.recieved.get(1));
 		assertEquals(m1_2_0, listener.recieved.get(2));
 		assertEquals(m1_3_0, listener.recieved.get(3));
+	}
+
+	@Test
+	public void testNothingTricky() {
+		Member source1 = new Member("0x63B78B", "test1");
+		Member source2 = me;
+		Member source3 = new Member("0x8F762A", "test3");
+		
+		testMessageListener listener = new testMessageListener();
+		mom.addMessageListener(listener);
+
+		Message m1 = getMessageArray(source1, new Member[] {source1}, new int[] {2});
+		Message m2 = getMessageArray(source1, new Member[] {source1}, new int[] {3});
+		Message m3 = getMessageArray(source1, new Member[] {source1}, new int[] {4});
+
+		mom.queueMessage(m1);
+		mom.queueMessage(m2);
+		mom.queueMessage(m3);
+
+		assertEquals("All messages recieved", 3, listener.recieved.size());
+		assertEquals(m1, listener.recieved.get(0));
+		assertEquals(m2, listener.recieved.get(1));
+		assertEquals(m3, listener.recieved.get(2));
+	
 	}
 
 	private Message getMessage(Member source, int ticks) {
