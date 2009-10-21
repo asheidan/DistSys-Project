@@ -77,11 +77,14 @@ public class HashVectorClock implements VectorClock, Serializable {
 	}
 
 	public int excludedCompareTo(HashVectorClock o, Object excluded) {
+		Debug.log(this, Debug.DEBUG, String.format("Comparing %s with %s", toString(), o.toString()));
 		int later = 0;
 		int earlier = 0;
 		for(Object k : clocks.keySet()){
 			Integer otherClockValue = o.clocks.get(k);
-			if(otherClockValue != null && k != excluded) {
+			Debug.log(this, Debug.DEBUG, "otherclockval: " + otherClockValue + " key: " + k);
+			if(otherClockValue != null && !String.valueOf(k).equals(String.valueOf(excluded))) {
+				Debug.log(this, Debug.DEBUG, "clockval: " + clocks.get(k) + " cmp: " + clocks.get(k).compareTo(otherClockValue));
 				switch(clocks.get(k).compareTo(otherClockValue)) {
 					case -1: earlier = -1; break;
 					case 1: later = 1; break;

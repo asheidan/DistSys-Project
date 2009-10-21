@@ -287,7 +287,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	@Override
 	@SuppressWarnings("unchecked")
 	public void messageReceived(Message message) {
-		Debug.log("gcom.GCom.messageReceived", Debug.DEBUG, "Got a " + message.getMessageType());
+		Debug.log("gcom.GCom.messageReceived", Debug.DEBUG, "Got a " + message.getMessageType() + " (" + message.toString() + ")");
 		String groupName = message.getGroupName();
 		GroupDefinition definition = gmm.getGroupDefinition(groupName);
 		if(definition == null) {
