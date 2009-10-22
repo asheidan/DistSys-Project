@@ -60,7 +60,7 @@
 	</target>
 	
 	<target name="rmi" depends="compile.rmi.src">
-		<java classname="rmi.RMIServer" fork="true" spawn="true">
+		<java classname="rmi.RMIServer" fork="true"><!-- spawn="true"-->
 			<arg value="${rmi.port}" />
 			<classpath>
 				<pathelement location="${build}" />
