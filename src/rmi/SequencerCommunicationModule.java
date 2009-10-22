@@ -43,8 +43,7 @@ public class SequencerCommunicationModule implements gcom.interfaces.Communicati
 				seq = new GroupSequencer(getMom(msg.getGroupName()), this);
 				sequencers.put(msg.getGroupName(), seq);
 			}
-			sendBack(m.getSource(), seq.sequence(msg));
-
+			seq.sequence(m);
 		}
 		else {
 			Debug.log(this, Debug.WARN, "Got unwanted messagetype: " + m.getMessageType().toString());
@@ -78,6 +77,7 @@ public class SequencerCommunicationModule implements gcom.interfaces.Communicati
 
 	public void sendBack(Member member, Message message) {
 		try {
+			Debug.log("Sequencer",Debug.ERROR, "Member: " + member + " Message: " + message);
 			member.getRemoteObject().send(message);
 		} catch(Exception e) {
 			Debug.log("Sequencer",Debug.ERROR, "Got other exception", e);

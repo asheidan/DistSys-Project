@@ -15,7 +15,6 @@ public class GroupSequencer implements GComMessageListener {
 	private int latest;
 	private MessageOrderingModule mom;
 	private SequencerCommunicationModule com;
-	private Message recievedMessage;
 
 	public GroupSequencer(MessageOrderingModule mom, SequencerCommunicationModule com) {
 		this.com = com;
@@ -25,9 +24,8 @@ public class GroupSequencer implements GComMessageListener {
 		latest = 0;
 	}
 
-	public Message sequence(Message m) {
+	public void sequence(Message m) {
 		mom.queueMessage(m);
-		return recievedMessage;
 	}
 
 	@Override
@@ -39,13 +37,13 @@ public class GroupSequencer implements GComMessageListener {
 				number = latest;
 				messages.put(hash, number);
 			}
-			recievedMessage = stamp(m, number);
+			stamp(m, number);
 		}
 
-	private Message stamp(Message m, Integer number) {
+	private void stamp(Message m, Integer number) {
 		HashVectorClock clock = m.getClock();
 		clock.put("serialNo", number);
-		return m;
+		com.sendBack(m.getSource(), (Message)m.getMessage());
 	}
 
 }

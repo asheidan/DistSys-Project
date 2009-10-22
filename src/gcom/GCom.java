@@ -90,7 +90,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	}
 
 	private void setIdentityInMOM(MessageOrderingModule mom, GroupDefinition def) {
-		if(def.getMessageOrderingType() == GCom.TYPE_MESSAGEORDERING.TOTAL) {
+		if(def.getMessageOrderingType() == GCom.TYPE_MESSAGEORDERING.TOTAL || 
+			def.getMessageOrderingType() == GCom.TYPE_MESSAGEORDERING.CAUSALTOTAL) {
 			((momTotal)mom).setIdentity(identities.get(def.getGroupName()));
 		}
 	}

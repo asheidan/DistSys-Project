@@ -24,6 +24,7 @@ public class momTotal extends momNonOrdered {
 	}
 	
 	public void setIdentity(Member me) {
+		Debug.log(this, Debug.DEBUG, "Setting identity: " + me);
 		this.identity = me;
 	}
 
@@ -47,7 +48,7 @@ public class momTotal extends momNonOrdered {
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {
 			try {
-				sequencer.send(new gcom.Message(null, null, identity, m, Message.TYPE_MESSAGE.SEQUENCE)); // Request serialNo for message
+				sequencer.send(new gcom.Message(m.getClock(), null, identity, m, Message.TYPE_MESSAGE.SEQUENCE)); // Request serialNo for message
 			}
 			catch(Exception e) {
 				Debug.log(this, Debug.ERROR, "sequncer exception", e);
