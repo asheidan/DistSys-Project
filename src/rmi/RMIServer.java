@@ -1,6 +1,7 @@
 package rmi;
 
 import gcom.Debug;
+import gcom.interfaces.Backdoor;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
 import java.rmi.server.UnicastRemoteObject;
