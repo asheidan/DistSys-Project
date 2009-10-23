@@ -20,10 +20,14 @@ public class Group implements gcom.interfaces.Group {
 
 	@Override
 	public synchronized void addMember(Member member) {
-		Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding member: " + member);
-		members.add(member);
-		for(ViewChangeListener l : viewChangeListeners) {
-			l.gotMember(member);
+		if(!isMember(member)) {
+			Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding member: " + member);
+			members.add(member);
+			for(ViewChangeListener l : viewChangeListeners) {
+				l.gotMember(member);
+			}
+		} else {
+			Debug.log("gcom.Group", Debug.DEBUG, "Addmember: Member " + member + " is already part of group.");
 		}
 	}
 
@@ -45,7 +49,6 @@ public class Group implements gcom.interfaces.Group {
 			l.lostMember(member);
 		}
 	}
-
 
 	@Override
 	public GroupDefinition getDefinition() {
