@@ -23,7 +23,7 @@ public class momCausal extends momNonOrdered {
 	@Override
 	public void queueMessage(Message m) {
 		Debug.log(this, Debug.DEBUG, "Queued message: " + m.toString() + " Clocks: " + clock.toString());
-		if(checkBypass(m)) { 
+		if(m.bypass()) { 
 			sendToListeners(m);
 			return;
 		}

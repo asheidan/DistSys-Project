@@ -45,15 +45,4 @@ public class momNonOrdered implements MessageOrderingModule {
 		sendToListeners(m);
 	}
 
-
-	protected boolean checkBypass(Message m) {
-		TYPE_MESSAGE type = m.getMessageType();
-		if(type == TYPE_MESSAGE.JOINREQUEST) return true; 
-		if(type == TYPE_MESSAGE.PARTREQUEST) return true; 
-		if(type == TYPE_MESSAGE.REJECT) return true; 
-		if(type == TYPE_MESSAGE.WELCOME) return true; 
-		if(type == TYPE_MESSAGE.SEQUENCE) return true; 
-		return false;
-	}
-
 }

@@ -333,9 +333,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				Debug.log(this,Debug.DEBUG, "Rejected from: " + groupName);
 				clearGroupData(groupName);
 				break;
-			case SEQUENCE:
-				Debug.log(this, Debug.WARN, "Someone is sending sequence-requests to me: " + message.getSource());
-				break;
 		}
 	}
 

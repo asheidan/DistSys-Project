@@ -62,7 +62,6 @@ public class Message implements gcom.interfaces.Message,Comparable<Message> {
 		if(type == TYPE_MESSAGE.PARTREQUEST) return true; 
 		if(type == TYPE_MESSAGE.REJECT) return true; 
 		if(type == TYPE_MESSAGE.WELCOME) return true; 
-		if(type == TYPE_MESSAGE.SEQUENCE) return true; 
 		return false;
 	}
 	@Override

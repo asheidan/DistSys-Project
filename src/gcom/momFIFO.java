@@ -25,7 +25,7 @@ public class momFIFO extends momNonOrdered {
 	
 	@Override
 	public void queueMessage(Message m) {
-		if(checkBypass(m)) { 
+		if(m.bypass()) { 
 			sendToListeners(m);
 			return;
 		}
