@@ -32,6 +32,7 @@ public class momCausal extends momNonOrdered {
 			Integer val = m.getClock().getValue(id);
 			this.clock.put(id, val-1);
 		}
+		Debug.log(this, Debug.DEBUG, "After Clocks: " + clock.toString());
 		messages.add(m);
 		checkMessages();
 	}

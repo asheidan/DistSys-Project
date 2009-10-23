@@ -71,6 +71,39 @@ public class momCausalTest {
 	}
 
 	@Test
+	public void testMessagesOutOfOrder() {
+		Member source1 = new Member("1", "test1");
+		Member source2 = new Member("2", "test2");
+		Member source3 = new Member("3", "test3");
+		
+		testMessageListener listener = new testMessageListener();
+		mom.addMessageListener(listener);
+
+		Member[] s = {source1, source2, source3};
+		Message m0 = getMessageArray(source2, s, new int[] {0,1,0});
+		Message m1 = getMessageArray(source1, s, new int[] {1,1,0});
+		Message m2 = getMessageArray(source3, s, new int[] {0,0,1});
+		Message m3 = getMessageArray(source2, s, new int[] {1,2,1});
+		Message m4 = getMessageArray(source3, s, new int[] {1,2,2});
+		Message m5 = getMessageArray(source1, s, new int[] {2,2,2});
+
+		mom.queueMessage(m0);
+		mom.queueMessage(m1);
+		mom.queueMessage(m2);
+		mom.queueMessage(m5);
+		mom.queueMessage(m3);
+		mom.queueMessage(m4);
+
+		assertEquals("All messages recieved", 6, listener.recieved.size());
+		assertEquals(m0, listener.recieved.get(0));
+		assertEquals(m1, listener.recieved.get(1));
+		assertEquals(m2, listener.recieved.get(2));
+		assertEquals(m3, listener.recieved.get(3));
+		assertEquals(m4, listener.recieved.get(4));
+		assertEquals(m5, listener.recieved.get(5));
+	}
+
+	@Test
 	public void testNothingTricky() {
 		Member source1 = new Member("0x63B78B", "test1");
 		Member source2 = me;

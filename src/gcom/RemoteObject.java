@@ -35,7 +35,7 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	
 	@Override
 	public void send(Message m) {
-		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queueing message in " + this);
+		//Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queueing message in " + this);
 		localQueue.add(m);
 	}
 

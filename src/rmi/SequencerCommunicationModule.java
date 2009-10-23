@@ -35,19 +35,13 @@ public class SequencerCommunicationModule implements gcom.interfaces.Communicati
 	}
 
 	public void receive(Message m) {
-		if(m.getMessageType() == TYPE_MESSAGE.SEQUENCE) {
-			Debug.log(this, Debug.DEBUG, "Got: " + m.toString());
-			Message msg = (Message)m.getMessage();
-			GroupSequencer seq = sequencers.get(msg.getGroupName());
-			if(seq == null) {
-				seq = new GroupSequencer(getMom(msg.getGroupName()), this);
-				sequencers.put(msg.getGroupName(), seq);
-			}
-			seq.sequence(m);
+		Debug.log(this, Debug.DEBUG, "Got: " + m.toString());
+		GroupSequencer seq = sequencers.get(m.getGroupName());
+		if(seq == null) {
+			seq = new GroupSequencer(getMom(m.getGroupName()), this);
+			sequencers.put(m.getGroupName(), seq);
 		}
-		else {
-			Debug.log(this, Debug.WARN, "Got unwanted messagetype: " + m.getMessageType().toString());
-		}
+		seq.sequence(m);
 	}
 
 	private MessageOrderingModule getMom(String groupName) {

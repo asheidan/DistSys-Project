@@ -5,15 +5,13 @@ import gcom.interfaces.Member;
 
 public class Message implements gcom.interfaces.Message,Comparable<Message> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5507203760294899480L;
 	private HashVectorClock clock;
 	private String groupName;
 	private Member source;
 	private Serializable data;
 	private TYPE_MESSAGE type;
+	private Member returnMember;
 	
 	public Message(HashVectorClock clock, String group_name, Member source, Serializable message, TYPE_MESSAGE type) {
 		this.clock = clock;
@@ -46,6 +44,16 @@ public class Message implements gcom.interfaces.Message,Comparable<Message> {
 	@Override
 	public Member getSource() {
 		return source;
+	}
+	
+	@Override
+	public Member getReturnMember() {
+		return returnMember;
+	}
+	
+	@Override
+	public void setReturnMember(Member returnMember) {
+		this.returnMember = returnMember;
 	}
 
 	@Override

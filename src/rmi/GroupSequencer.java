@@ -43,7 +43,7 @@ public class GroupSequencer implements GComMessageListener {
 	private void stamp(Message m, Integer number) {
 		HashVectorClock clock = m.getClock();
 		clock.put("serialNo", number);
-		com.sendBack(m.getSource(), (Message)m.getMessage());
+		com.sendBack(m.getReturnMember(), m);
 	}
 
 }

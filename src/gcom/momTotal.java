@@ -48,7 +48,8 @@ public class momTotal extends momNonOrdered {
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {
 			try {
-				sequencer.send(new gcom.Message(m.getClock(), null, identity, m, Message.TYPE_MESSAGE.SEQUENCE)); // Request serialNo for message
+				m.setReturnMember(identity);
+				sequencer.send(m); // Request serialNo for message
 			}
 			catch(Exception e) {
 				Debug.log(this, Debug.ERROR, "sequncer exception", e);

@@ -100,6 +100,14 @@ public class RemoteObjectTest {
 			// TODO Auto-generated method stub
 			return null;
 		}
+		@Override
+		public Member getReturnMember() {
+			return null;
+		}
+
+		@Override
+		public void setReturnMember(Member m) {
+		}
 
 		@Override
 		public boolean bypass() { return false; }
