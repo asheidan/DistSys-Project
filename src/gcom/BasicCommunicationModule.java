@@ -40,7 +40,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 		Debug.log(this, Debug.DEBUG, "Sending message to group: " + gmm.listGroupMembers(group));
 		Debug.log(this, Debug.DEBUG, "Sending: " + message.toString());
 		for(Member m : gmm.listGroupMembers(group)) {
-			if(!processID.equals(m.getID())) {
+			//if(!processID.equals(m.getID())) {
 				Debug.log(this, Debug.DEBUG, "Sending message to: " + m.toString());
 				try {
 					m.getRemoteObject().send(message);
@@ -53,7 +53,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 				catch(RemoteException e) {
 					e.printStackTrace();
 				}
-			}
+			//}
 		}
 		for(Member m : lostMembers) {
 			looseMember(m);

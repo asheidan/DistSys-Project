@@ -159,7 +159,7 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		for(MessageSender sender : senders) {
 			try {sender.sendMessage(groupName, line);} catch(IOException e) {}
 		}
-		append(String.format("> %s",line));
+		//append(String.format("> %s",line));
 	}
 
 	public void addMessageSender(MessageSender sender) {
