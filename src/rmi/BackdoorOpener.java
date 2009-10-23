@@ -2,6 +2,8 @@ package rmi;
 
 import gcom.Debug;
 
+import gcom.interfaces.Backdoor;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.AccessException;

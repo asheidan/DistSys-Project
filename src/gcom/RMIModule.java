@@ -10,7 +10,7 @@ import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
 import gcom.interfaces.RemoteObject;
-import rmi.Backdoor;
+import gcom.interfaces.Backdoor;
 
 public class RMIModule implements gcom.interfaces.RMIModule {
 	private Registry registry;
