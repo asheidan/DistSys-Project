@@ -23,6 +23,7 @@ public class momCausal extends momNonOrdered {
 	@Override
 	public void queueMessage(Message m) {
 		if(m.bypass() || m.getSource().getID().equals(myID)) { 
+			Debug.log(this, Debug.DEBUG, "Bypasses message " + m);
 			sendToListeners(m);
 			return;
 		}

@@ -24,9 +24,7 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 	
 	@Override
 	public void receive(Message m) {
-		
-		// TODO: local delivery
-		
+		Debug.log(this, Debug.DEBUG, "################### Got Message: " + m.hashCode());
 		if(!receivedMessages.containsKey(m.hashCode())) {
 			// New message!!!
 			rememberMessage(m);
@@ -42,13 +40,15 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 	
 	@Override
 	public void send(Message m) {
+		Debug.log(this, Debug.DEBUG, "@@@@@@ @@@@@@@@ @@@@@@@ Sent Message: " + m.hashCode());
 		rememberMessage(m);
 		super.send(m);
+		super.receive(m);
 	}
 	
 	private void rememberMessage(Message m) {
 		// Clean out history
-		if(lastMessages.size() == QUEUE_LENGTH) {
+		if(lastMessages.size() >= QUEUE_LENGTH) {
 			Debug.log(this, Debug.DEBUG, "Shortening queue.");
 			Message oldest = lastMessages.poll();
 			receivedMessages.remove(Integer.valueOf(oldest.hashCode()));

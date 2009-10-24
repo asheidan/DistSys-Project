@@ -73,11 +73,12 @@ public class HashVectorClock implements VectorClock, Serializable {
 				}
 			}
 		}
+		Debug.log(this, Debug.DEBUG, "Result: " + earlier + " " + later);
 		return earlier + later;
 	}
 
 	public int excludedCompareTo(HashVectorClock o, Object excluded) {
-		Debug.log(this, Debug.DEBUG, String.format("Comparing %s with %s", toString(), o.toString()));
+		Debug.log(this, Debug.DEBUG, String.format("Comparing e %s with %s", toString(), o.toString()));
 		int later = 0;
 		int earlier = 0;
 		for(Object k : clocks.keySet()){
@@ -89,6 +90,7 @@ public class HashVectorClock implements VectorClock, Serializable {
 				}
 			}
 		}
+		Debug.log(this, Debug.DEBUG, "Result: " + earlier + " " + later);
 		return earlier + later;
 	}
 
@@ -102,6 +104,10 @@ public class HashVectorClock implements VectorClock, Serializable {
 		return "VectorClock(" +this.key.toString() + ")"+ clocks.toString(); 
 	}
 
+	@Override
+	public int hashCode() {
+		return clocks.hashCode();
+	}
 
 	public Integer getValue(Object key) {
 		return clocks.get(key);
