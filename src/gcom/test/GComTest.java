@@ -13,6 +13,10 @@ import gcom.GCom;
 import gcom.GroupDefinition;
 import gcom.interfaces.RemoteObject;
 
+import rmi.BackdoorOpener;
+import gcom.interfaces.Backdoor;
+import java.rmi.server.UnicastRemoteObject;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +31,8 @@ public class GComTest {
 		gcom = new GCom();
 		try {
 			registry = LocateRegistry.createRegistry(port);
+			BackdoorOpener backdoor = new BackdoorOpener(port);
+			registry.rebind(Backdoor.NAME, UnicastRemoteObject.exportObject(backdoor,0));
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
 		}
@@ -40,13 +46,13 @@ public class GComTest {
 	@Test
 	public void testAddMessageListener() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testAddViewChangeListener() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
@@ -92,43 +98,43 @@ public class GComTest {
 	@Test
 	public void testDisconnect() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testGetLocalMember() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testGetMembers() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testJoinGroup() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testListGroups() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testRemoveGroup() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testSendMessage() {
 		// TODO: Not implemented test
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 }

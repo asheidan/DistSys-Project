@@ -38,8 +38,6 @@ public class Sequencer extends RMIServer {
 
 	public Sequencer(int port) throws RemoteException {
 		super(port);
-		Debug.log(this,Debug.DEBUG,"Returned from superconstructor");
-
 		SequencerCommunicationModule com = new SequencerCommunicationModule(this.registry);
 		GroupDefinition group = new gcom.GroupDefinition("sequencer");
 		RemoteObject ro = new RemoteObject(com, group);

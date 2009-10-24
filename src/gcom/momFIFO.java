@@ -54,9 +54,7 @@ public class momFIFO extends momNonOrdered {
 			}
 		}
 
-		for(Message m : remove) {
-			messages.remove(m);
-		}
+		for(Message m : remove) { messages.remove(m); }
 		if(remove.size() > 0) { checkMessages(); }
 	}
 

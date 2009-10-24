@@ -7,6 +7,10 @@ import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Message;
 import gcom.interfaces.RemoteObject;
 
+import rmi.BackdoorOpener;
+import gcom.interfaces.Backdoor;
+import java.rmi.server.UnicastRemoteObject;
+
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -27,6 +31,8 @@ public class RMIModuleTest {
 		port = (int) (Math.floor(Math.random() * 400) + 10240);
 		// -Djava.rmi.server.codebase=file://${workspace_loc}/"RMI%20Test/bin/"
 		registry = LocateRegistry.createRegistry(port);
+		BackdoorOpener backdoor = new BackdoorOpener(port);
+		registry.rebind(Backdoor.NAME, UnicastRemoteObject.exportObject(backdoor,0));
 		rmi = new RMIModule("localhost", port);
 	}
 

@@ -24,7 +24,6 @@ public class momTotal extends momNonOrdered {
 	}
 	
 	public void setIdentity(Member me) {
-		Debug.log(this, Debug.DEBUG, "Setting identity: " + me);
 		this.identity = me;
 	}
 
@@ -44,7 +43,6 @@ public class momTotal extends momNonOrdered {
 			sendToListeners(m);
 			return;
 		}
-		Debug.log(this, Debug.DEBUG, String.format("Got message from %s with %s", m.getSource(), m.getClock()));
 		Integer value = m.getClock().getValue("serialNo");
 		if(value == null) {
 			try {
@@ -77,9 +75,7 @@ public class momTotal extends momNonOrdered {
 			}
 		}
 
-		for(Message m : remove) {
-			messages.remove(m);
-		}
+		for(Message m : remove) { messages.remove(m); }
 		if(remove.size() > 0) { checkMessages(); }
 	}
 

@@ -71,7 +71,6 @@ public class SequencerCommunicationModule implements gcom.interfaces.Communicati
 
 	public void sendBack(Member member, Message message) {
 		try {
-			Debug.log("Sequencer",Debug.ERROR, "Member: " + member + " Message: " + message);
 			member.getRemoteObject().send(message);
 		} catch(Exception e) {
 			Debug.log("Sequencer",Debug.ERROR, "Got other exception", e);

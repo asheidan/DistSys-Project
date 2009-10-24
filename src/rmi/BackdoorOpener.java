@@ -12,7 +12,7 @@ import java.rmi.NotBoundException;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 
-class BackdoorOpener implements Backdoor {
+public class BackdoorOpener implements Backdoor {
 	private Registry registry;
 	
 	public BackdoorOpener(int registryPort) throws RemoteException {
@@ -22,7 +22,7 @@ class BackdoorOpener implements Backdoor {
 	
 	@Override
 	public void bind(String name, Remote obj) throws RemoteException, AlreadyBoundException, AccessException {
-		Debug.log(this, Debug.DEBUG, "Proxy binding: " + name);
+		//Debug.log(this, Debug.DEBUG, "Proxy binding: " + name);
 		registry.bind(name,obj);
 	}
 

@@ -34,14 +34,12 @@ public class momNonOrdered implements MessageOrderingModule {
 
 	protected void sendToListeners(Message message) {
 		for(GComMessageListener l : listeners) {
-			Debug.log("gcom.momNonOrdered", Debug.DEBUG, "Sent message to: " + l.toString());
 			l.messageReceived(message);
 		}
 	}
 	
 	@Override
 	public void queueMessage(Message m) {
-		Debug.log("gcom.momNonOrdered", Debug.DEBUG, "Queued message: " + m.toString());
 		sendToListeners(m);
 	}
 
