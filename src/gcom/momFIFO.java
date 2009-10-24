@@ -22,10 +22,10 @@ public class momFIFO extends momNonOrdered {
 		clock.put(key, value);
 		sendToListeners(message);
 	}
-	
+
 	@Override
 	public void queueMessage(Message m) {
-		if(m.bypass()) { 
+		if(m.bypass() || m.getSource().getID().equals(myID)) { 
 			sendToListeners(m);
 			return;
 		}
