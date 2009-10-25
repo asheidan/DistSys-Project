@@ -15,7 +15,7 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 	
 	private Hashtable<Integer, Message> receivedMessages = new Hashtable<Integer, Message>(QUEUE_LENGTH);
 
-	// Perhaps we can use with a simple fifo instead?
+	// Perhaps we can use a simple fifo instead?
 	private PriorityQueue<Message> lastMessages = new PriorityQueue<Message>(QUEUE_LENGTH);
 	
 	public ReliableCommunicationModule(MessageOrderingModule mom, GroupManagementModule gmm, String groupName, String processID) {

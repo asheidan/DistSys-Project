@@ -31,7 +31,6 @@ public class ReferenceKeeper implements Runnable {
 	
 	@Override
 	public synchronized void run() {
-		// TODO: We should see if mainthread is alive before rebinding reference
 		// TODO: This is rediculous
 		while(run) {
 			try {
