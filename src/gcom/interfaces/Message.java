@@ -9,7 +9,7 @@ public interface Message extends Serializable {
 	public static enum TYPE_MESSAGE {
 		APPLICATION, JOINREQUEST, PARTREQUEST,
 		REJECT, WELCOME, GOTMEMBER, LOSTMEMBER,
-		ELECTION
+		ELECTION, CLOSE
 	};
 
 	public Serializable getMessage();

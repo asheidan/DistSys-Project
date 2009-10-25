@@ -63,6 +63,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	}
 	
 	public GCom() {
+		Debug.setLevel(Debug.TRACE);
 		//processID = String.valueOf(String.valueOf(Math.random()).hashCode());
 		processID = "0x" + String.format("%06x",(int)Math.floor(Math.random() * Math.pow(2, 24))).toUpperCase();
 		Debug.log(this, Level.DEBUG, "gcom-object created");
@@ -284,6 +285,36 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public String[] listReferences() throws AccessException, RemoteException {
 		return rmi.list();
 	}
+	
+	private boolean ignoreMessage(Message m) {
+		String groupName = m.getGroupName();
+		boolean open = gmm.isGroupOpen(groupName);
+		switch(m.getMessageType()) {
+			case JOINREQUEST:
+			case GOTMEMBER:
+			case WELCOME:
+			case CLOSE:
+			if(open) {
+				return false;
+			}
+			else {
+				return true;
+			}
+			case APPLICATION:
+				if(open) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			case LOSTMEMBER:
+			case PARTREQUEST:
+			case ELECTION:
+			case REJECT:
+			default:
+				return false;
+		}
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -296,6 +327,10 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 					"Got message from a group I'm not a member of." + message.toString());
 			return;
 		}
+		
+		// Handling of static groups
+		if(definition.getGroupType() == TYPE_GROUP.STATIC && ignoreMessage(message)) { return; }
+		
 		switch(message.getMessageType()) {
 			case JOINREQUEST:
 				gotMember(groupName, message.getSource());
@@ -333,6 +368,9 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				Debug.log(this,Debug.DEBUG, "Rejected from: " + groupName);
 				clearGroupData(groupName);
 				break;
+			case CLOSE:
+				// TODO: Should we trust anyone to close the group?
+				gmm.closeGroup(groupName);
 		}
 	}
 

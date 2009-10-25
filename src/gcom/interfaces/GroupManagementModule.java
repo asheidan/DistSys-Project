@@ -14,6 +14,8 @@ public interface GroupManagementModule {
 	public Member getLeader(String groupName);
 
 	public GroupDefinition getGroupDefinition(String groupName);
+	public void closeGroup(String groupName);
+	public boolean isGroupOpen(String groupName);
 
 	public void addMember(String groupName, Member member);
 	public void removeMember(String groupName, Member member);

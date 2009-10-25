@@ -4,6 +4,7 @@ import gcom.interfaces.Member;
 import gcom.interfaces.GroupDefinition;
 
 import gcom.interfaces.ViewChangeListener;
+import gcom.interfaces.GCom.TYPE_GROUP;
 import java.util.List;
 import java.util.Vector;
 
@@ -13,6 +14,7 @@ public class Group implements gcom.interfaces.Group {
 	private Vector<Member> members = new Vector<Member>();
 	private GroupDefinition groupDefinition;
 	private Member leader;
+	private boolean isOpen = true;
 
 	public Group(GroupDefinition group_definition) {
 		this.groupDefinition = group_definition;
@@ -43,11 +45,12 @@ public class Group implements gcom.interfaces.Group {
 
 	@Override
 	public synchronized void removeMember(Member member) {
-		int index = members.indexOf(member);
-		members.remove(index);
-		for(ViewChangeListener l : viewChangeListeners) {
-			l.lostMember(member);
-		}
+		if(!members.remove(member))
+			Debug.log(this,Debug.DEBUG, "Trying to remove member not part of group: " + member);
+		else
+			for(ViewChangeListener l : viewChangeListeners) {
+				l.lostMember(member);
+			}
 	}
 
 	@Override
@@ -55,6 +58,17 @@ public class Group implements gcom.interfaces.Group {
 		return groupDefinition;
 	}
 
+	@Override
+	public void close() {
+		if(groupDefinition.getGroupType() == TYPE_GROUP.STATIC) {
+			isOpen = false;
+		}
+	}
+	
+	@Override
+	public boolean isOpen() {
+		return isOpen;
+	}
 
 	@Override
 	public void setLeader(Member leader) {

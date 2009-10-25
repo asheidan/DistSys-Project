@@ -85,6 +85,19 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 	}
 
 	@Override
+	public void closeGroup(String groupName) {
+		Group g = groups.get(groupName);
+		if(g != null) g.close();
+	}
+	
+	@Override
+	public boolean isGroupOpen(String groupName) {
+		Group g = groups.get(groupName);
+		if(g != null) return g.isOpen();
+		return false;
+	}
+
+	@Override
 	public void addViewChangeListener(String groupName, ViewChangeListener listener) {
 		Group g = groups.get(groupName);
 		if(g != null) {
