@@ -149,6 +149,20 @@
                 <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="freezeGroupMenuItem">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Freeze group"/>
+                <Property name="name" type="java.lang.String" value="freezeGroupMenuItem" noResource="true"/>
+              </Properties>
+              <BindingProperties>
+                <BindingProperty name="enabled" source="groupFocused" sourcePath="${enabled}" target="freezeGroupMenuItem" targetPath="enabled" updateStrategy="0" immediately="false"/>
+              </BindingProperties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JSeparator" name="jSeparator3">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator3" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="leaveGroupMenuItem">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
@@ -157,6 +171,9 @@
                 <Property name="text" type="java.lang.String" value="Leave Group"/>
                 <Property name="name" type="java.lang.String" value="leaveGroupMenuItem" noResource="true"/>
               </Properties>
+              <BindingProperties>
+                <BindingProperty name="enabled" source="groupFocused" sourcePath="${enabled}" target="leaveGroupMenuItem" targetPath="enabled" updateStrategy="0" immediately="false"/>
+              </BindingProperties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="leaveGroupMenuItemActionPerformed"/>
               </Events>
@@ -640,16 +657,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JSeparator" name="jSeparator3">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="jSeparator3" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JSeparator" name="jSeparator4">
-      <Properties>
-        <Property name="name" type="java.lang.String" value="jSeparator4" noResource="true"/>
-      </Properties>
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -704,6 +711,9 @@
       <Properties>
         <Property name="name" type="java.lang.String" value="tabbedPane" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="tabbedPaneStateChanged"/>
+      </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -756,7 +766,9 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="1" attributes="0">
-                  <EmptySpace pref="558" max="32767" attributes="0"/>
+                  <EmptySpace pref="534" max="32767" attributes="0"/>
+                  <Component id="groupFocused" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="statusConnectedLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               </Group>
@@ -772,7 +784,10 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="statusConnectedLabel" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="statusConnectedLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="groupFocused" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
               <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
@@ -801,6 +816,15 @@
             </Property>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="statusConnectedLabel" noResource="true"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="groupFocused">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/gui/resources/icons/emblem-ohno.png"/>
+            </Property>
+            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="name" type="java.lang.String" value="groupFocused" noResource="true"/>
           </Properties>
         </Component>
       </SubComponents>

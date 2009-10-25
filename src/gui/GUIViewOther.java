@@ -22,8 +22,6 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 
@@ -34,7 +32,10 @@ import org.jdesktop.application.Action;
 public class GUIViewOther extends javax.swing.JFrame {
 	private DateFormat timeStampFormatter = new SimpleDateFormat("[HH:mm:ss] ");
 	private GCom gcom = new gcom.GCom();
+
 	//private boolean connectedToRegistry = false;
+	private int selectedPane = 0;
+
     /** Creates new form GUIView */
     public GUIViewOther() {
         initComponents();
@@ -281,6 +282,8 @@ public class GUIViewOther extends javax.swing.JFrame {
         joinGroupMenuItem = new javax.swing.JMenuItem();
         createGroupMenuItem = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JSeparator();
+        freezeGroupMenuItem = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JSeparator();
         leaveGroupMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
         viewToolBarMenuItem = new javax.swing.JCheckBoxMenuItem();
@@ -313,14 +316,13 @@ public class GUIViewOther extends javax.swing.JFrame {
         orderType = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        jSeparator3 = new javax.swing.JSeparator();
-        jSeparator4 = new javax.swing.JSeparator();
         tabbedPane = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         statusPanel = new javax.swing.JPanel();
         statusMessageLabel = new javax.swing.JLabel();
         statusConnectedLabel = new javax.swing.JLabel();
+        groupFocused = new javax.swing.JLabel();
 
         toolBar.setBorderPainted(false);
         toolBar.setName("toolBar"); // NOI18N
@@ -419,9 +421,24 @@ public class GUIViewOther extends javax.swing.JFrame {
         jSeparator5.setName("jSeparator5"); // NOI18N
         groupMenu.add(jSeparator5);
 
+        freezeGroupMenuItem.setText("Freeze group");
+        freezeGroupMenuItem.setName("freezeGroupMenuItem"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupFocused, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), freezeGroupMenuItem, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        groupMenu.add(freezeGroupMenuItem);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        groupMenu.add(jSeparator3);
+
         leaveGroupMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
         leaveGroupMenuItem.setText("Leave Group");
         leaveGroupMenuItem.setName("leaveGroupMenuItem"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupFocused, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), leaveGroupMenuItem, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
         leaveGroupMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 leaveGroupMenuItemActionPerformed(evt);
@@ -774,13 +791,14 @@ public class GUIViewOther extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jSeparator3.setName("jSeparator3"); // NOI18N
-
-        jSeparator4.setName("jSeparator4"); // NOI18N
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tabbedPane.setName("tabbedPane"); // NOI18N
+        tabbedPane.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabbedPaneStateChanged(evt);
+            }
+        });
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -805,12 +823,18 @@ public class GUIViewOther extends javax.swing.JFrame {
         statusConnectedLabel.setEnabled(false);
         statusConnectedLabel.setName("statusConnectedLabel"); // NOI18N
 
+        groupFocused.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/resources/icons/emblem-ohno.png"))); // NOI18N
+        groupFocused.setEnabled(false);
+        groupFocused.setName("groupFocused"); // NOI18N
+
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
-                .addContainerGap(558, Short.MAX_VALUE)
+                .addContainerGap(534, Short.MAX_VALUE)
+                .addComponent(groupFocused)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusConnectedLabel)
                 .addGap(14, 14, 14))
             .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -822,7 +846,9 @@ public class GUIViewOther extends javax.swing.JFrame {
         statusPanelLayout.setVerticalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusConnectedLabel)
+                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(statusConnectedLabel)
+                    .addComponent(groupFocused))
                 .addContainerGap())
             .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(statusPanelLayout.createSequentialGroup()
@@ -898,6 +924,11 @@ public class GUIViewOther extends javax.swing.JFrame {
 	}//GEN-LAST:event_createGroupMenuItemActionPerformed
 
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+		for(int i = 1; i < tabbedPane.getTabCount(); i++) {
+			String groupName = tabbedPane.getTitleAt(i);
+			try { gcom.disconnect(groupName); }
+			catch(Exception e) {}
+		}
 		System.exit(0);
 	}//GEN-LAST:event_exitMenuItemActionPerformed
 
@@ -963,19 +994,25 @@ public class GUIViewOther extends javax.swing.JFrame {
 
 	private void leaveGroupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_leaveGroupMenuItemActionPerformed
 		// TODO Move this to separate method
-		int selected = tabbedPane.getSelectedIndex();
-		String groupName = tabbedPane.getTitleAt(selected);
+		selectedPane = tabbedPane.getSelectedIndex();
+		String groupName = tabbedPane.getTitleAt(selectedPane);
 		try {
 			gcom.disconnect(groupName);
 		} catch (IOException ex) {
 			Debug.log(this,Debug.WARN, null, ex);
 		}
-		if(selected > 0) {
-			tabbedPane.remove(selected);
+		if(selectedPane > 0) {
+			tabbedPane.remove(selectedPane);
 		}
 	}//GEN-LAST:event_leaveGroupMenuItemActionPerformed
 
-    /**
+	private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
+		Debug.log(this, Debug.TRACE,"State changed");
+		selectedPane = tabbedPane.getSelectedIndex();
+		groupFocused.setEnabled(selectedPane > 0);
+	}//GEN-LAST:event_tabbedPaneStateChanged
+
+   /**
     * @param args the command line arguments
     */
     public static void main(String args[]) {
@@ -1011,6 +1048,8 @@ public class GUIViewOther extends javax.swing.JFrame {
     private javax.swing.JDialog createGroupDialog;
     private javax.swing.JMenuItem createGroupMenuItem;
     private javax.swing.JTextField createNickField;
+    private javax.swing.JMenuItem freezeGroupMenuItem;
+    private javax.swing.JLabel groupFocused;
     private javax.swing.JList groupList;
     private javax.swing.JMenu groupMenu;
     private javax.swing.JTextField groupNameField;
@@ -1029,7 +1068,6 @@ public class GUIViewOther extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton joinGroupButton;

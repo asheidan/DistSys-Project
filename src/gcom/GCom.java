@@ -57,7 +57,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		viewChangeListeners.remove(groupName);
 		electionResults.remove(groupName);
 		highestElectionValues.remove(groupName);
-		if(gmm.getLeader(groupName).equals(identities.get(groupName))) {
+		if(identities.get(groupName).equals(gmm.getLeader(groupName))) {
 			Debug.log(this, Debug.DEBUG, "I'm leader, removing my reference");
 			try {
 				rmi.unbind(groupName);
@@ -188,7 +188,9 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			gmm.addGroup(description);
 			gmm.addMember(groupName, me);
 			identities.put(groupName,me);
-			
+
+			gmm.setLeader(groupName, me);
+
 			setIdentityInMOM(mom,description);
 
 			moModules.put(groupName, mom);
@@ -208,11 +210,13 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public void disconnect(String groupName) throws IOException {
 		CommunicationModule com = comModules.get(groupName);
 		if( com != null ) {
+			Member me = identities.get(groupName);
+			gmm.removeMember(groupName, me);
 			com.send(
 					new gcom.Message(
 							getClock(groupName),
 							groupName,
-							identities.get(groupName),
+							me,
 							"",
 							Message.TYPE_MESSAGE.PARTREQUEST));
 			clearGroupData(groupName);
