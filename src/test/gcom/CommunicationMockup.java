@@ -1,4 +1,4 @@
-package gcom.test;
+package test.gcom;
 
 import gcom.interfaces.CommunicationModule;
 import gcom.interfaces.GComViewChangeListener;

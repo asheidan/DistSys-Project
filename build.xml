@@ -6,6 +6,7 @@
 	<property name="src.gcom" location="src/gcom" />
 	<property name="src.gui" location="src/gui" />
 	<property name="src.rmi" location="src/rmi" />
+	<property name="src.test" location="src/test" />
 	<property name="build" location="bin" />
 	<property name="reports" location="reports" />
 	<property name="ant.build.javac.source" value="1.6" />
@@ -34,14 +35,13 @@
 		<mkdir dir="${reports}" />
 	</target>
 
-	<target name="compile" depends="compile.gcom.src,compile.gui.src,compile.rmi.src" />
+	<target name="compile" depends="compile.gcom.src,compile.gui.src,compile.rmi.src,compile.test.src" />
 
 	<target name="compile.gcom.src" depends="init" description="Compiling source-files">
 		<javac srcdir="${src.gcom}" destdir="${build}" debug="${javac.debug}" debuglevel="lines,vars,source">
 			<compilerarg value="-Xlint" />
 			<classpath>
 				<pathelement location="${build}" />
-				<pathelement location="${junit.jar}" />
 				<pathelement location="${log4j.jar}" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
@@ -59,6 +59,19 @@
 			</classpath>
 		</javac>
 	</target>
+
+	<target name="compile.test.src" depends="init,compile.gcom.src" description="Compiling test-source-files">
+		<javac srcdir="${src.test}" destdir="${build}" debug="${javac.debug}" debuglevel="lines,vars,source">
+			<compilerarg value="-Xlint" />
+			<classpath>
+				<pathelement location="${build}" />
+				<pathelement location="${junit.jar}" />
+				<pathelement location="${log4j.jar}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</javac>
+	</target>
+
 	
 	<target name="rmi" depends="compile.rmi.src">
 		<java classname="rmi.RMIServer" fork="true"><!-- spawn="true"-->
@@ -127,7 +140,7 @@
 		<delete dir="build/" />
 	</target>
 
-	<target name="test" depends="compile.gcom.src,compile.rmi.src">
+	<target name="test" depends="compile.gcom.src,compile.rmi.src,compile.test.src">
 		<junit printsummary="true" haltonfailure="true">
 			<classpath>
 				<pathelement location="${build}" />
