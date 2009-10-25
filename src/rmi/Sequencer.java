@@ -28,17 +28,17 @@ public class Sequencer extends RMIServer {
 			JOptionPane.showMessageDialog(null,"RMIRegistry is launched\nListening on port " + args[0],"RMI:" + args[0],JOptionPane.INFORMATION_MESSAGE);
 		}
 		catch(ArrayIndexOutOfBoundsException e) {
-			Debug.log("RMIServer",Debug.ERROR, "You must supply a portnumber");
+			Debug.log(this,Debug.ERROR, "You must supply a portnumber");
 		}
 		catch(RemoteException e) {
-			Debug.log("RMIServer",Debug.ERROR, "Got remote exception", e);
+			Debug.log(this,Debug.ERROR, "Got remote exception", e);
 		}
 		System.exit(0);
 	}
 
 	public Sequencer(int port) throws RemoteException {
 		super(port);
-		Debug.log(this,Debug.DEBUG,"Returned from superconstructor");
+		Debug.log(this,Debug.TRACE,"Returned from superconstructor");
 
 		SequencerCommunicationModule com = new SequencerCommunicationModule(this.registry);
 		GroupDefinition group = new gcom.GroupDefinition("sequencer");

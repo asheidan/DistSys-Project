@@ -14,6 +14,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import rmi.BackdoorOpener;
+import gcom.interfaces.Backdoor;
+import java.rmi.server.UnicastRemoteObject;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,6 +31,8 @@ public class RMIModuleTest {
 		port = (int) (Math.floor(Math.random() * 400) + 10240);
 		// -Djava.rmi.server.codebase=file://${workspace_loc}/"RMI%20Test/bin/"
 		registry = LocateRegistry.createRegistry(port);
+		BackdoorOpener backdoor = new BackdoorOpener(port);
+		registry.rebind(Backdoor.NAME, UnicastRemoteObject.exportObject(backdoor,0));
 		rmi = new RMIModule("localhost", port);
 	}
 

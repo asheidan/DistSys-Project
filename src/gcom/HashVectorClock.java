@@ -82,9 +82,9 @@ public class HashVectorClock implements VectorClock, Serializable {
 		int earlier = 0;
 		for(Object k : clocks.keySet()){
 			Integer otherClockValue = o.clocks.get(k);
-			Debug.log(this, Debug.DEBUG, "otherclockval: " + otherClockValue + " key: " + k);
+			Debug.log(this, Debug.TRACE, "otherclockval: " + otherClockValue + " key: " + k);
 			if(otherClockValue != null && !String.valueOf(k).equals(String.valueOf(excluded))) {
-				Debug.log(this, Debug.DEBUG, "clockval: " + clocks.get(k) + " cmp: " + clocks.get(k).compareTo(otherClockValue));
+				Debug.log(this, Debug.TRACE, "clockval: " + clocks.get(k) + " cmp: " + clocks.get(k).compareTo(otherClockValue));
 				switch(clocks.get(k).compareTo(otherClockValue)) {
 					case -1: earlier = -1; break;
 					case 1: later = 1; break;

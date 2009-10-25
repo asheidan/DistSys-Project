@@ -22,19 +22,19 @@ class BackdoorOpener implements Backdoor {
 	
 	@Override
 	public void bind(String name, Remote obj) throws RemoteException, AlreadyBoundException, AccessException {
-		Debug.log(this, Debug.DEBUG, "Proxy binding: " + name);
+		Debug.log(this, Debug.TRACE, "Proxy binding: " + name);
 		registry.bind(name,obj);
 	}
 
 	@Override
 	public void rebind(String name, Remote obj) throws RemoteException, AccessException {
-		Debug.log(this, Debug.DEBUG, "Proxy rebinding: " + name);
+		Debug.log(this, Debug.TRACE, "Proxy rebinding: " + name);
 		registry.rebind(name,obj);
 	}
 	
 	@Override
 	public void unbind(String name) throws RemoteException, NotBoundException, AccessException {
-		Debug.log(this, Debug.DEBUG, "Proxy unbinding: " + name);
+		Debug.log(this, Debug.TRACE, "Proxy unbinding: " + name);
 		registry.unbind(name);
 	}
 }
