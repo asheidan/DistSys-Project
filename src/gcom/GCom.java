@@ -40,7 +40,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	private Hashtable<String, ReferenceKeeper> keepers = new Hashtable<String, ReferenceKeeper>();
 
 	private Hashtable<String, Vector<GComMessageListener>> messageListeners = new Hashtable<String, Vector<GComMessageListener>>();
-	private Hashtable<String, Vector<ViewChangeListener>> viewChangeListeners = new Hashtable<String, Vector<ViewChangeListener>>();
 
 	private Hashtable<String,Vector<Member>> electionResults = new Hashtable<String,Vector<Member>>();
 	private Hashtable<String,String> highestElectionValues = new Hashtable<String,String>();
@@ -51,12 +50,11 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			k.stop();
 			keepers.remove(groupName);
 		}
+		electionResults.remove(groupName);
+		highestElectionValues.remove(groupName);
 		comModules.remove(groupName);
 		moModules.remove(groupName);
 		messageListeners.remove(groupName);
-		viewChangeListeners.remove(groupName);
-		electionResults.remove(groupName);
-		highestElectionValues.remove(groupName);
 		if(identities.get(groupName).equals(gmm.getLeader(groupName))) {
 			Debug.log(this, Debug.DEBUG, "I'm leader, removing my reference");
 			try {
@@ -303,6 +301,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	
 	private boolean ignoreMessage(Message m) {
 		String groupName = m.getGroupName();
+		GroupDefinition def =  gmm.getGroupDefinition(groupName);
+		if(def != null && def.getGroupType() == TYPE_GROUP.DYNAMIC) return false;
 		boolean open = gmm.isGroupOpen(groupName);
 		switch(m.getMessageType()) {
 			case JOINREQUEST:
@@ -344,26 +344,36 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		}
 		
 		// Handling of static groups
-		if(definition.getGroupType() == TYPE_GROUP.STATIC && ignoreMessage(message)) { return; }
+		//if(definition.getGroupType() == TYPE_GROUP.STATIC && ignoreMessage(message)) { return; }
 		
 		switch(message.getMessageType()) {
 			case JOINREQUEST:
-				gotMember(groupName, message.getSource());
-				List<Member> view = gmm.listGroupMembers(groupName);
-				Message msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
-				Debug.log(this, Debug.DEBUG,
-					"Welcoming " + message.getSource().toString() +
-					" to " + groupName + " via " + message.getSource().getRemoteObject());
+				Message msg;
+				if(!ignoreMessage(message)) {
+					gotMember(groupName, message.getSource());
+					List<Member> view = gmm.listGroupMembers(groupName);
+					msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
+					Debug.log(this, Debug.DEBUG,
+						"Welcoming " + message.getSource().toString() +
+						" to " + groupName + " via " + message.getSource().getRemoteObject());
+				}
+				else {
+					msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), message, Message.TYPE_MESSAGE.REJECT);
+				}
 				comModules.get(groupName).send(message.getSource(),msg);
 				break;
 			case WELCOME:
-				for(Member m : (List<Member>)message.getMessage()) {
-					gmm.addMember(groupName, m);
+				if(!ignoreMessage(message)) {
+					for(Member m : (List<Member>)message.getMessage()) {
+						gmm.addMember(groupName, m);
+					}
+					gmm.setLeader(groupName,message.getSource());
 				}
-				gmm.setLeader(groupName,message.getSource());
 				break;
 			case GOTMEMBER:
-				gmm.addMember(groupName, (Member)message.getMessage());
+				if(!ignoreMessage(message)) {
+					gmm.addMember(groupName, (Member)message.getMessage());
+				}
 				break;
 			case PARTREQUEST:
 				lostMember(groupName, message.getSource());
@@ -374,7 +384,9 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				gmm.removeMember(groupName, (Member)message.getMessage());
 				break;
 			case APPLICATION:
-				sendToMessageListeners(groupName,message);
+				if(!ignoreMessage(message)) {
+					sendToMessageListeners(groupName,message);
+				}
 				break;
 			case ELECTION:
 				election(message);
@@ -384,8 +396,10 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				clearGroupData(groupName);
 				break;
 			case CLOSE:
-				// TODO: Should we trust anyone to close the group?
-				gmm.closeGroup(groupName);
+				if(!ignoreMessage(message)) {
+					// TODO: Should we trust anyone to close the group?
+					gmm.closeGroup(groupName);
+				}
 		}
 	}
 
@@ -517,4 +531,19 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		}
 	}
 
+	@Override
+	public void freezeGroup(String groupName) {
+		Member me = identities.get(groupName);
+		if(me != null && me.equals(gmm.getLeader(groupName))) {
+			gmm.closeGroup(groupName);
+			comModules.get(groupName).send(
+					new gcom.Message(getClock(groupName), groupName, me, null, Message.TYPE_MESSAGE.CLOSE)
+				);
+		}
+	}
+
+	@Override
+	public boolean isGroupOpen(String groupName) {
+		return gmm.isGroupOpen(groupName);
+	}
 }

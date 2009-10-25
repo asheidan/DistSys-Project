@@ -15,6 +15,7 @@ public interface Group {
 	
 	public void setLeader(Member leader);
 	public Member getLeader();
-	
+
+	public void lost();
 	public void addViewChangeListener(ViewChangeListener listener);
 }

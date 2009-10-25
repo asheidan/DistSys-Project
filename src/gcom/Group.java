@@ -15,13 +15,14 @@ public class Group implements gcom.interfaces.Group {
 	private GroupDefinition groupDefinition;
 	private Member leader;
 	private boolean isOpen = true;
+	private boolean isLost = false;
 
 	public Group(GroupDefinition group_definition) {
 		this.groupDefinition = group_definition;
 	}
 
 	@Override
-	public synchronized void addMember(Member member) {
+	public void addMember(Member member) {
 		if(!isMember(member)) {
 			Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding member: " + member);
 			members.add(member);
@@ -34,7 +35,7 @@ public class Group implements gcom.interfaces.Group {
 	}
 
 	@Override
-	public synchronized List<Member> listMembers() {
+	public List<Member> listMembers() {
 		return members;
 	}
 
@@ -44,7 +45,7 @@ public class Group implements gcom.interfaces.Group {
 	}
 
 	@Override
-	public synchronized void removeMember(Member member) {
+	public void removeMember(Member member) {
 		if(!members.remove(member))
 			Debug.log(this,Debug.DEBUG, "Trying to remove member not part of group: " + member);
 		else
@@ -81,12 +82,28 @@ public class Group implements gcom.interfaces.Group {
 	}
 
 	@Override
+	public void lost() {
+		isLost = true;
+		Debug.log(this,Debug.TRACE, "Group is lost" + viewChangeListeners.toString());
+		for(ViewChangeListener l : viewChangeListeners) {
+			Debug.log(this,Debug.TRACE, "GAAHADHADWÖLHK");
+			l.lostGroup(groupDefinition.getGroupName());
+		}
+	}
+
+	@Override
 	public void addViewChangeListener(ViewChangeListener listener) {
 		Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding listener: " + listener);
-		for(Member m : members) {
-			listener.gotMember(m);
+		if(!isLost) {
+			for(Member m : members) {
+				listener.gotMember(m);
+			}
+			viewChangeListeners.add(listener);
 		}
-		viewChangeListeners.add(listener);
+		else {
+			Debug.log(this,Debug.TRACE,"Adding listener to lost group");
+			listener.lostGroup(groupDefinition.getGroupName());
+		}
 	}
 
 }

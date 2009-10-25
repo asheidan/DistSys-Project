@@ -65,7 +65,7 @@ public class ReferenceKeeper implements Runnable {
 				}
 			}
 			catch(ConnectException e) {
-				Debug.log(this, Debug.DEBUG, "Registry not online, waiting for it to come online.",e);
+				Debug.log(this, Debug.DEBUG, "Registry not online, waiting for it to come online.");
 			}
 			catch(Exception e) {
 				Debug.log(this, Debug.DEBUG, "Caught Exception", e);

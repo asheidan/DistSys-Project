@@ -149,7 +149,7 @@
                 <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="freezeGroupMenuItem">
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="freezeGroupMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Freeze group"/>
                 <Property name="name" type="java.lang.String" value="freezeGroupMenuItem" noResource="true"/>
@@ -157,6 +157,9 @@
               <BindingProperties>
                 <BindingProperty name="enabled" source="groupFocused" sourcePath="${enabled}" target="freezeGroupMenuItem" targetPath="enabled" updateStrategy="0" immediately="false"/>
               </BindingProperties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="freezeGroupMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JSeparator" name="jSeparator3">
               <Properties>

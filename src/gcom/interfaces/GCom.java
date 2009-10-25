@@ -188,4 +188,7 @@ public interface GCom {
 	public String[] listReferences() throws AccessException, RemoteException;
 
 	public String getProcessID();
+
+	public void freezeGroup(String groupName);
+	public boolean isGroupOpen(String groupName);
 }

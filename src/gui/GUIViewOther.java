@@ -133,7 +133,7 @@ public class GUIViewOther extends javax.swing.JFrame {
 	}
 
 	@Action
-	public void joinGroup() {
+	public synchronized void joinGroup() {
 		String nickname = joinNickField.getText();
 		String groupName = (String)groupList.getSelectedValue();
 		if( nickname.equals("") ) {
@@ -213,7 +213,7 @@ public class GUIViewOther extends javax.swing.JFrame {
 	}
 
 	@Action
-	public void createGroup() {
+	public synchronized void createGroup() {
 		String nickName = createNickField.getText();
 		String groupName = groupNameField.getText();
 		if( nickName.equals("") ) {
@@ -251,12 +251,13 @@ public class GUIViewOther extends javax.swing.JFrame {
 	}
 
 	private void addGroup(String name) {
-		GroupPanel panel = new GroupPanel(this,name);
+		GroupPanel panel = new GroupPanel(this,name,tabbedPane);
+		tabbedPane.addTab(name,panel);
+		tabbedPane.setSelectedComponent(panel);
+
 		gcom.addViewChangeListener(name, panel);
 		gcom.addMessageListener(name, panel);
 		panel.addMessageSender((MessageSender)gcom);
-		tabbedPane.addTab(name,panel);
-		tabbedPane.setSelectedComponent(panel);
 	}
 
     /** This method is called from within the constructor to
@@ -282,7 +283,7 @@ public class GUIViewOther extends javax.swing.JFrame {
         joinGroupMenuItem = new javax.swing.JMenuItem();
         createGroupMenuItem = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JSeparator();
-        freezeGroupMenuItem = new javax.swing.JMenuItem();
+        freezeGroupMenuItem = new javax.swing.JCheckBoxMenuItem();
         jSeparator3 = new javax.swing.JSeparator();
         leaveGroupMenuItem = new javax.swing.JMenuItem();
         viewMenu = new javax.swing.JMenu();
@@ -427,6 +428,11 @@ public class GUIViewOther extends javax.swing.JFrame {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupFocused, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), freezeGroupMenuItem, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
+        freezeGroupMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                freezeGroupMenuItemActionPerformed(evt);
+            }
+        });
         groupMenu.add(freezeGroupMenuItem);
 
         jSeparator3.setName("jSeparator3"); // NOI18N
@@ -1001,16 +1007,21 @@ public class GUIViewOther extends javax.swing.JFrame {
 		} catch (IOException ex) {
 			Debug.log(this,Debug.WARN, null, ex);
 		}
-		if(selectedPane > 0) {
-			tabbedPane.remove(selectedPane);
-		}
 	}//GEN-LAST:event_leaveGroupMenuItemActionPerformed
 
 	private void tabbedPaneStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabbedPaneStateChanged
 		Debug.log(this, Debug.TRACE,"State changed");
 		selectedPane = tabbedPane.getSelectedIndex();
 		groupFocused.setEnabled(selectedPane > 0);
+		String groupName = tabbedPane.getTitleAt(selectedPane);
+		freezeGroupMenuItem.setSelected(!gcom.isGroupOpen(groupName));
 	}//GEN-LAST:event_tabbedPaneStateChanged
+
+	private void freezeGroupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_freezeGroupMenuItemActionPerformed
+		String groupName = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+		gcom.freezeGroup(groupName);
+		freezeGroupMenuItem.setSelected(!gcom.isGroupOpen(groupName));
+	}//GEN-LAST:event_freezeGroupMenuItemActionPerformed
 
    /**
     * @param args the command line arguments
@@ -1048,7 +1059,7 @@ public class GUIViewOther extends javax.swing.JFrame {
     private javax.swing.JDialog createGroupDialog;
     private javax.swing.JMenuItem createGroupMenuItem;
     private javax.swing.JTextField createNickField;
-    private javax.swing.JMenuItem freezeGroupMenuItem;
+    private javax.swing.JCheckBoxMenuItem freezeGroupMenuItem;
     private javax.swing.JLabel groupFocused;
     private javax.swing.JList groupList;
     private javax.swing.JMenu groupMenu;

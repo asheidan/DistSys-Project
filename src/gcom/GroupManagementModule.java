@@ -46,8 +46,8 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 
 	@Override
 	public void removeGroup(String groupName) {
-		// TODO This should only be done if we are the group leader? Or is that check performed somewhere else?
-		groups.remove(groupName);
+		Debug.log(this, Debug.DEBUG, "Removing: " + groupName);
+		groups.remove(groupName).lost();
 	}
 
 	@Override
@@ -102,6 +102,9 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 		Group g = groups.get(groupName);
 		if(g != null) {
 			g.addViewChangeListener(listener);
+		}
+		else {
+			listener.lostGroup(groupName);
 		}
 	}
 }

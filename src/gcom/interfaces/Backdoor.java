@@ -11,4 +11,5 @@ public interface Backdoor extends Remote {
 	public void bind(String name, Remote obj) throws RemoteException, AlreadyBoundException, AccessException;
 	public void rebind(String name, Remote obj) throws RemoteException, AccessException;
 	public void unbind(String name) throws RemoteException, NotBoundException, AccessException;
+	public boolean ping() throws RemoteException;
 }

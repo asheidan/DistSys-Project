@@ -2,6 +2,7 @@ package gcom;
 
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -15,20 +16,41 @@ import gcom.interfaces.Backdoor;
 public class RMIModule implements gcom.interfaces.RMIModule {
 	private Registry registry;
 	private Backdoor backdoor;
+	private String serverAddress;
+	private int serverPort;
 	
 	public RMIModule(String serverAddress, int serverPort) throws RemoteException {
+		this.serverAddress = serverAddress;
+		this.serverPort = serverPort;
 		registry = LocateRegistry.getRegistry(serverAddress, serverPort);
-		try {
-			backdoor = (Backdoor)registry.lookup(Backdoor.NAME);
-		}
-		catch(NotBoundException e) {
-			Debug.log(this,Debug.ERROR, "No backdoor present in registry");
-		}
+		connect();
 		//registry.list();
+	}
+	
+	private void connect() throws RemoteException {
+		if(backdoor == null) {
+			try {
+				backdoor = (Backdoor)registry.lookup(Backdoor.NAME);
+			}
+			catch(NotBoundException e) {
+				Debug.log(this,Debug.ERROR, "No backdoor present in registry");
+			}
+		}
+		else {
+			try {
+				backdoor.ping();
+			}
+			catch(ConnectException e) {
+				Debug.log(this, Debug.WARN, "Backdoor is dead trying to replace it");
+				backdoor = null;
+				connect();
+			}
+		}
 	}
 	
 	@Override
 	public void bind(String name, RemoteObject ro) throws AccessException, RemoteException, AlreadyBoundException {
+		connect();
 		try {
 			backdoor.bind(name, UnicastRemoteObject.exportObject(ro,0));
 		}
@@ -40,6 +62,7 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 	
 	@Override
 	public void rebind(String name, RemoteObject ro) throws AccessException, RemoteException {
+		connect();
 		try {
 			backdoor.rebind(name, UnicastRemoteObject.exportObject(ro,0));
 		}
@@ -51,6 +74,7 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 
 	@Override
 	public void unbind(String name) throws AccessException, RemoteException {
+		connect();
 		try {
 			backdoor.unbind(name);
 		}

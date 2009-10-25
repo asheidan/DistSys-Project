@@ -8,10 +8,11 @@ import gcom.interfaces.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
+import javax.swing.JTabbedPane;
+import org.apache.log4j.Level;
 
 /**
  *
@@ -21,10 +22,12 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 	private GUIViewOther mainPanel;
 	private Vector<MessageSender> senders = new Vector<MessageSender>();
 	private String groupName;
+	private JTabbedPane parent;
     /** Creates new form GroupPanel */
-    public GroupPanel(GUIViewOther mainPanel, String groupName) {
+    public GroupPanel(GUIViewOther mainPanel, String groupName, JTabbedPane parent) {
 		this.groupName = groupName;
 		this.mainPanel = mainPanel;
+		this.parent = parent;
         initComponents();
 		textField.addActionListener(this);
     }
@@ -164,6 +167,12 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 
 	public void addMessageSender(MessageSender sender) {
 		senders.add(sender);
+	}
+
+	@Override
+	public void lostGroup(String groupName) {
+		Debug.log(this, Debug.TRACE, "Lost group: " + groupName);
+		if(parent != null) parent.remove(this);
 	}
 
 }

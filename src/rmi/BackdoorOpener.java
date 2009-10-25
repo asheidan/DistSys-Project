@@ -37,4 +37,9 @@ public class BackdoorOpener implements Backdoor {
 		Debug.log(this, Debug.TRACE, "Proxy unbinding: " + name);
 		registry.unbind(name);
 	}
+	
+	@Override
+	public boolean ping() {
+		return true;
+	}
 }
