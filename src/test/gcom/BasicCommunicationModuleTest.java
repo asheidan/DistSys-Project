@@ -1,4 +1,4 @@
-package gcom.test;
+package test.gcom;
 
 import static org.junit.Assert.*;
 
