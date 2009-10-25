@@ -119,7 +119,8 @@
 	</target>
 
 	<target name="gui" depends="compile.gui.src">
-		<java classname="gui.NetBeansGUIApp" fork="true" failonerror="true">
+		<java classname="gui.GUIViewOther" fork="true" failonerror="true">
+			<arg value="${rmi.port}" />
 			<jvmarg value="-Djava.rmi.server.codebase=file://${build}/"/>
 			<classpath>
 				<pathelement location="${build}" />

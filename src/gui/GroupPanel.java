@@ -18,11 +18,11 @@ import javax.swing.DefaultListModel;
  * @author emil
  */
 public class GroupPanel extends javax.swing.JPanel implements ActionListener,gcom.interfaces.ViewChangeListener,gcom.interfaces.GComMessageListener {
-	private NetBeansGUIView mainPanel;
+	private GUIViewOther mainPanel;
 	private Vector<MessageSender> senders = new Vector<MessageSender>();
 	private String groupName;
     /** Creates new form GroupPanel */
-    public GroupPanel(NetBeansGUIView mainPanel, String groupName) {
+    public GroupPanel(GUIViewOther mainPanel, String groupName) {
 		this.groupName = groupName;
 		this.mainPanel = mainPanel;
         initComponents();

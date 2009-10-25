@@ -25,7 +25,6 @@ import java.rmi.RemoteException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import org.apache.log4j.Level;
 
 
 public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewChangeListener,MessageSender {
@@ -47,26 +46,38 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	private Hashtable<String,String> highestElectionValues = new Hashtable<String,String>();
 
 	private void clearGroupData(String groupName) {
-		gmm.removeGroup(groupName);
-		comModules.remove(groupName);
-		moModules.remove(groupName);
-		identities.remove(groupName);
-		messageListeners.remove(groupName);
-		viewChangeListeners.remove(groupName);
-		electionResults.remove(groupName);
-		highestElectionValues.remove(groupName);
 		ReferenceKeeper k = keepers.get(groupName);
 		if(k != null) {
 			k.stop();
 			keepers.remove(groupName);
 		}
+		comModules.remove(groupName);
+		moModules.remove(groupName);
+		messageListeners.remove(groupName);
+		viewChangeListeners.remove(groupName);
+		electionResults.remove(groupName);
+		highestElectionValues.remove(groupName);
+		if(gmm.getLeader(groupName).equals(identities.get(groupName))) {
+			Debug.log(this, Debug.DEBUG, "I'm leader, removing my reference");
+			try {
+				rmi.unbind(groupName);
+			}
+			catch(AccessException e) {
+				Debug.log(this, Debug.DEBUG, "Couldn't remove reference, no access");
+			}
+			catch(RemoteException e) {
+				Debug.log(this, Debug.DEBUG, "Couldn't remove reference, remote exception");
+			}
+		}
+		gmm.removeGroup(groupName);
+		identities.remove(groupName);
 	}
 	
 	public GCom() {
 		Debug.setLevel(Debug.TRACE);
 		//processID = String.valueOf(String.valueOf(Math.random()).hashCode());
 		processID = "0x" + String.format("%06x",(int)Math.floor(Math.random() * Math.pow(2, 24))).toUpperCase();
-		Debug.log(this, Level.DEBUG, "gcom-object created");
+		Debug.log(this, Debug.DEBUG, "gcom-object created");
 	}
 	
 	@Override
@@ -336,7 +347,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 				gotMember(groupName, message.getSource());
 				List<Member> view = gmm.listGroupMembers(groupName);
 				Message msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
-				Debug.log(this, Level.DEBUG,
+				Debug.log(this, Debug.DEBUG,
 					"Welcoming " + message.getSource().toString() +
 					" to " + groupName + " via " + message.getSource().getRemoteObject());
 				comModules.get(groupName).send(message.getSource(),msg);
