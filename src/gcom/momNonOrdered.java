@@ -11,8 +11,10 @@ import java.util.Vector;
 public class momNonOrdered implements MessageOrderingModule {
 	protected Vector<GComMessageListener> listeners;
 	protected HashVectorClock clock;
+	protected String myID;
 
 	public momNonOrdered(String id) {
+		myID = id;
 		listeners = new Vector<GComMessageListener>();
 		this.clock = new HashVectorClock(id);
 	}

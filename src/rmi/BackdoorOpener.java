@@ -12,7 +12,7 @@ import java.rmi.NotBoundException;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 
-class BackdoorOpener implements Backdoor {
+public class BackdoorOpener implements Backdoor {
 	private Registry registry;
 	
 	public BackdoorOpener(int registryPort) throws RemoteException {

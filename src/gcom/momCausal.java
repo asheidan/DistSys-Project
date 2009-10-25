@@ -23,7 +23,8 @@ public class momCausal extends momNonOrdered {
 	@Override
 	public void queueMessage(Message m) {
 		Debug.log(this, Debug.TRACE, "Queued message: " + m.toString() + " Clocks: " + clock.toString());
-		if(m.bypass()) { 
+		if(m.bypass() || m.getSource().getID().equals(myID)) { 
+			Debug.log(this, Debug.DEBUG, "Bypasses message " + m);
 			sendToListeners(m);
 			return;
 		}
@@ -39,7 +40,7 @@ public class momCausal extends momNonOrdered {
 	
 	private void checkMessages() {
 		Vector<Message> remove = new Vector<Message>();
-
+		
 		for(Message m : messages) {
 			String id = m.getSource().getID();
 			HashVectorClock m_clock = m.getClock();

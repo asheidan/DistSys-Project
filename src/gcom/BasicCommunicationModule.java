@@ -40,20 +40,17 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 		Debug.log(this, Debug.DEBUG, "Sending message to group: " + gmm.listGroupMembers(group));
 		Debug.log(this, Debug.DEBUG, "Sending: " + message.toString());
 		for(Member m : gmm.listGroupMembers(group)) {
-			//if(!processID.equals(m.getID())) {
-				Debug.log(this, Debug.DEBUG, "Sending message to: " + m.toString());
-				try {
-					m.getRemoteObject().send(message);
-				}
-				catch(ConnectException e) {
-					Debug.log(this, Debug.DEBUG, "Connection refused to " + m);
-					// CHANGED: Removes user from group and tell other members
-					lostMembers.add(m);
-				}
-				catch(RemoteException e) {
-					e.printStackTrace();
-				}
-			//}
+			Debug.log(this, Debug.DEBUG, "Sending message to: " + m.toString());
+			try {
+				m.getRemoteObject().send(message);
+			}
+			catch(ConnectException e) {
+				Debug.log(this, Debug.DEBUG, "Connection refused to " + m);
+				lostMembers.add(m);
+			}
+			catch(RemoteException e) {
+				e.printStackTrace();
+			}
 		}
 		for(Member m : lostMembers) {
 			looseMember(m);
@@ -67,7 +64,6 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 		}
 		catch(ConnectException e) {
 			Debug.log(this, Debug.DEBUG, "Connection refused to " + member);
-			// CHANGED: Removes user from group and tell other members
 			looseMember(member);
 		}
 		catch(RemoteException e) {

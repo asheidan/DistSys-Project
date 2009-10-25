@@ -7,6 +7,10 @@ import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Message;
 import gcom.interfaces.RemoteObject;
 
+import rmi.BackdoorOpener;
+import gcom.interfaces.Backdoor;
+import java.rmi.server.UnicastRemoteObject;
+
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
