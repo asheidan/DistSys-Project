@@ -72,7 +72,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	}
 	
 	public GCom() {
-		Debug.setLevel(Debug.TRACE);
+		Debug.setLevel(Debug.DEBUG);
 		//processID = String.valueOf(String.valueOf(Math.random()).hashCode());
 		processID = "0x" + String.format("%06x",(int)Math.floor(Math.random() * Math.pow(2, 24))).toUpperCase();
 		Debug.log(this, Debug.DEBUG, "gcom-object created");
