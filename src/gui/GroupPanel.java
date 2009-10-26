@@ -175,4 +175,8 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		if(parent != null) parent.remove(this);
 	}
 
+	@Override
+	public String toString() {
+		return String.format("GroupPanel: %s", groupName);
+	}
 }

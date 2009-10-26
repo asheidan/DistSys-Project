@@ -9,5 +9,6 @@ public interface MessageOrderingModule {
 	public HashVectorClock getClock();
 	public void tick();
 
-	public void attachDebug(DebugInterface debug);
+	//public void attachDebugger(DebugInterface debug);
+
 }

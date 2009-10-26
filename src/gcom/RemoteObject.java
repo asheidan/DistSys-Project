@@ -99,10 +99,5 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	public double getUnique() {
 		return unique;
 	}
-
-	public void attachDebugger(DebugInterface debug) {
-		debug.attachCom(com);
-		com = debug;
-	}
 }
 

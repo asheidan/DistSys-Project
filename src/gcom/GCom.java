@@ -245,11 +245,10 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 
 		RemoteObject localRemote = new gcom.RemoteObject(com, definition);
 		Member me = new gcom.Member(processID, localMemberName, localRemote);
-		HashVectorClock clock = new HashVectorClock(processID);
-		remoteRemote.send(new gcom.Message(clock, groupName, me, null, Message.TYPE_MESSAGE.JOINREQUEST));
 		comModules.put(groupName, com);
 		moModules.put(groupName, mom);
 		identities.put(groupName, me);
+		remoteRemote.send(new gcom.Message(getClock(groupName), groupName, me, null, Message.TYPE_MESSAGE.JOINREQUEST));
 		
 		setIdentityInMOM(mom,definition);
 	
@@ -554,6 +553,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	@Override
 	public void attachDebug(String groupName, DebugInterface debug) {
 		debugs.put(groupName, debug);
-		((gcom.RemoteObject)identities.get(groupName).getRemoteObject()).attachDebugger(debug);
+		comModules.get(groupName).attachDebugger(debug);
 	}
 }

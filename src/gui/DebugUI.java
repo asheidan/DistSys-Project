@@ -12,11 +12,11 @@
 package gui;
 
 import gcom.Debug;
-import gcom.interfaces.CommunicationModule;
+import gcom.HashVectorClock;
 import gcom.interfaces.DebugInterface;
-import gcom.interfaces.GComViewChangeListener;
-import gcom.interfaces.Member;
+import gcom.interfaces.GComMessageListener;
 import gcom.interfaces.Message;
+import gcom.interfaces.MessageOrderingModule;
 import java.util.Vector;
 import javax.swing.AbstractListModel;
 
@@ -24,87 +24,64 @@ import javax.swing.AbstractListModel;
  *
  * @author emil
  */
-public class DebugUI extends javax.swing.JFrame implements DebugInterface {
+public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnable {
 
-	private CommunicationModule com;
+	private MessageOrderingModule mom;
 	private String groupName;
 	private MockListModel<Message> holdBack = new MockListModel<Message>(new Vector<Message>());
+	private MockListModel<Message> queue;
+	private boolean run = true;
+	private Thread t;
 
 	@Override
-	public void attachCom(CommunicationModule com) {
-		Debug.log(this, Debug.DEBUG, groupName + ": Communication module attached");
-		this.com = com;
+	public void addMessageListener(GComMessageListener listener) {
+		mom.addMessageListener(listener);
 	}
 
 	@Override
-	public void receive(Message m) {
-		if(com != null) {
+	public HashVectorClock getClock() {
+		return mom.getClock();
+	}
+
+	@Override
+	public void tick() {
+		mom.tick();
+	}
+
+	@Override
+	public void attachDebugger(MessageOrderingModule mom) {
+		Debug.log(this, Debug.DEBUG, groupName + ": Ordering module attached");
+		this.mom = mom;
+	}
+
+	@Override
+	public void queueMessage(Message m) {
+		if(mom != null) {
 			Debug.log(this, Debug.TRACE, groupName + ": Message!!");
 			if(holdCheckBox.isSelected()) {
 				holdBack.add(m);
 			}
 			else {
-				com.receive(m);
+				mom.queueMessage(m);
 			}
 		}
 		else Debug.log(this, Debug.ERROR, groupName + ": using recieve without attached com");
 	}
 
 	@Override
-	public void send(Message m) {
-		throw new UnsupportedOperationException("Not supported yet.");
+	public void run() {
+		while(run) {
+			Debug.log(this,Debug.DEBUG,"Updating model");
+			if(queue != null) queue.update();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException ex) {
+				stop();
+			}
+		}
 	}
-
-	@Override
-	public void send(Member member, Message msg) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
-	public void addGComViewChangeListener(GComViewChangeListener listener) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-    private class MockListModel<T> extends AbstractListModel {
-		private Vector<T> model;
-		
-		public MockListModel(Vector<T> model) {
-			this.model = model;
-		}
-		
-		@Override
-		public int getSize() {
-			return model.size();
-		}
-
-		@Override
-		public T getElementAt(int arg0) {
-			return model.elementAt(arg0);
-		}
-
-		public void add(T obj) {
-			Debug.log(this, Debug.TRACE, "Added message to queue");
-			model.add(obj);
-			fireContentsChanged(this, 0, model.size()-1);
-		}
-
-		public void moveUp(int index) {
-			T tmp = model.remove(index);
-			model.insertElementAt(tmp, index-1);
-			fireContentsChanged(this, index, index-1);
-		}
-
-		public void moveDown(int index) {
-			T tmp = model.remove(index);
-			model.insertElementAt(tmp, index+1);
-			fireContentsChanged(this, index, index+1);
-		}
-
-		public T drop(int index) {
-			T tmp = model.remove(index);
-			fireContentsChanged(this, index, index);
-			return tmp;
-		}
+	public void stop() {
+		run = false;
 	}
 
 	/** Creates new form DebugUI */
@@ -114,12 +91,9 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface {
 		this.groupName = groupName;
 		setTitle("Debug: "+groupName);
 		setVisible(true);
+		t = new Thread(this);
+		t.start();
     }
-
-	@Override
-	public void setQueue(Vector queue) {
-		queueList.setModel(new MockListModel(queue));
-	}
 	
     /** This method is called from within the constructor to
      * initialize the form.
@@ -142,7 +116,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface {
         queueList = new javax.swing.JList();
         queueLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -192,7 +166,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        queueList.setFont(new java.awt.Font("Monospaced", 0, 12));
+        queueList.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         queueList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         queueList.setToolTipText("");
         queueList.setName("queueList"); // NOI18N
@@ -274,22 +248,10 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface {
 	}//GEN-LAST:event_dropButtonActionPerformed
 
 	private void releaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_releaseButtonActionPerformed
-		if(com != null == holdBack.getSize() > 0) {
-			com.receive(holdBack.drop(0));
+		if(mom != null == holdBack.getSize() > 0) {
+			mom.queueMessage(holdBack.drop(0));
 		}
 	}//GEN-LAST:event_releaseButtonActionPerformed
-
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-			@Override
-            public void run() {
-                new DebugUI("Console");
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton dropButton;

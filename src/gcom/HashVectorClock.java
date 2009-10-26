@@ -103,7 +103,7 @@ public class HashVectorClock implements VectorClock, Serializable,Cloneable {
 
 	@Override
 	public String toString() {
-		return "VC(" +this.key.toString() + ")"+ clocks.toString(); 
+		return "VC(" +this.key.toString().substring(2) + ")"+ clocks.toString();
 	}
 
 	@Override

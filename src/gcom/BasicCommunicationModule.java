@@ -1,6 +1,7 @@
 package gcom;
 
 
+import gcom.interfaces.DebugInterface;
 import java.util.Vector;
 
 import gcom.interfaces.GroupManagementModule;
@@ -81,4 +82,10 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	public void addGComViewChangeListener(GComViewChangeListener listener) {
 		listeners.add(listener);
 	}
+
+	public void attachDebugger(DebugInterface debug) {
+		debug.attachDebugger(mom);
+		mom = debug;
+	}
+
 }

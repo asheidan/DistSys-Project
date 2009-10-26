@@ -9,4 +9,7 @@ public interface CommunicationModule {
 	public void send(Member member, Message msg);
 
 	public void addGComViewChangeListener(GComViewChangeListener listener);
+
+	public void attachDebugger(DebugInterface debug);
+
 }

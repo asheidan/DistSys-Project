@@ -99,7 +99,6 @@ public class BasicCommunicationModuleTest {
 		
 		@Override
 		public void addMessageListener(GComMessageListener l) {}
-		
 	}
 
 }
