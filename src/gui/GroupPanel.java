@@ -5,6 +5,7 @@
 package gui;
 import gcom.Debug;
 import gcom.interfaces.*;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         nodeList = new javax.swing.JList();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        textAreaScrollPane = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
         textField = new javax.swing.JTextField();
 
@@ -79,16 +80,18 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 
         jSplitPane1.setRightComponent(jScrollPane2);
 
-        jScrollPane3.setName("jScrollPane3"); // NOI18N
+        textAreaScrollPane.setName("textAreaScrollPane"); // NOI18N
 
         textArea.setColumns(20);
         textArea.setEditable(false);
         textArea.setFont(nodeList.getFont());
+        textArea.setLineWrap(true);
         textArea.setRows(5);
+        textArea.setWrapStyleWord(true);
         textArea.setName("textArea"); // NOI18N
-        jScrollPane3.setViewportView(textArea);
+        textAreaScrollPane.setViewportView(textArea);
 
-        jSplitPane1.setLeftComponent(jScrollPane3);
+        jSplitPane1.setLeftComponent(textAreaScrollPane);
 
         jSplitPane2.setLeftComponent(jSplitPane1);
 
@@ -115,11 +118,11 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JList nodeList;
     private javax.swing.JTextArea textArea;
+    private javax.swing.JScrollPane textAreaScrollPane;
     private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables
 
@@ -152,6 +155,7 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		textArea.setText(
 			textArea.getText() + mainPanel.getTimeStampFormatter().format(new Date()) +
 			line + "\n");
+		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 
 	@Override

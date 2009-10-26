@@ -29,6 +29,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 	private String groupName;
 	private MockListModel<Message> holdBack = new MockListModel<Message>(new Vector<Message>());
 	private MockListModel<Message> queue;
+	private HashVectorClock clock;
 	private boolean run = true;
 	private Thread t;
 
@@ -45,6 +46,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 	@Override
 	public void tick() {
 		mom.tick();
+		clocksTextArea.setText(clock.prettyPrint());
 	}
 
 	@Override
@@ -58,6 +60,8 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 		Debug.log(this, Debug.DEBUG, groupName + ": Message queue attached");
 		queue = new MockListModel<Message>(messages);
 		queueList.setModel(queue);
+		this.clock = clock;
+		clocksTextArea.setText(clock.prettyPrint());
 	}
 
 	@Override
@@ -77,14 +81,13 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 				queue.update();
 			}
 		}
-		else Debug.log(this, Debug.ERROR, groupName + ": using recieve without attached com");
+		else Debug.log(this, Debug.FATAL, groupName + ": using recieve without attached com");
 	}
 
 	@Override
 	public void run() {
 		while(run) {
-			Debug.log(this,Debug.DEBUG,"Updating model");
-			if(queue != null) queue.update();
+			if(clock != null) clocksTextArea.setText(clock.prettyPrint());
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException ex) {
@@ -103,8 +106,8 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 		this.groupName = groupName;
 		setTitle("Debug: "+groupName);
 		setVisible(true);
-		//t = new Thread(this);
-		//t.start();
+		t = new Thread(this);
+		t.start();
     }
 	
     /** This method is called from within the constructor to
@@ -127,6 +130,9 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
         jScrollPane2 = new javax.swing.JScrollPane();
         queueList = new javax.swing.JList();
         queueLabel = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        clocksTextArea = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -184,8 +190,20 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
         queueList.setName("queueList"); // NOI18N
         jScrollPane2.setViewportView(queueList);
 
-        queueLabel.setText("Queue");
+        queueLabel.setText("Message queue:");
         queueLabel.setName("queueLabel"); // NOI18N
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        clocksTextArea.setColumns(13);
+        clocksTextArea.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        clocksTextArea.setRows(5);
+        clocksTextArea.setText("no clock");
+        clocksTextArea.setName("clocksTextArea"); // NOI18N
+        jScrollPane3.setViewportView(clocksTextArea);
+
+        jLabel1.setText("Clocks:");
+        jLabel1.setName("jLabel1"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,8 +212,8 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(holdbackLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
+                    .addComponent(holdbackLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(holdCheckBox)
@@ -206,8 +224,12 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
                         .addComponent(moveDownButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(queueLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+                    .addComponent(queueLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -228,9 +250,11 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(holdbackLabel)
-                    .addComponent(queueLabel))
+                    .addComponent(queueLabel)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE))
                 .addContainerGap())
@@ -267,12 +291,15 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 	}//GEN-LAST:event_releaseButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea clocksTextArea;
     private javax.swing.JButton dropButton;
     private javax.swing.JList holdBackList;
     private javax.swing.JCheckBox holdCheckBox;
     private javax.swing.JLabel holdbackLabel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton moveDownButton;
     private javax.swing.JButton moveUpButton;
     private javax.swing.JLabel queueLabel;

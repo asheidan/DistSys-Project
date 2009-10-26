@@ -46,7 +46,6 @@ public class MockListModel<T> extends AbstractListModel {
 	}
 
 	public void update() {
-		Debug.log(this, Debug.DEBUG, "Size: " + model.size());
 		fireContentsChanged(this, 0, model.size());
 	}
 }
