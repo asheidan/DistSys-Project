@@ -25,20 +25,23 @@ public class GroupSequencer implements GComMessageListener {
 	}
 
 	public void sequence(Message m) {
-		mom.queueMessage(m);
+		Integer hash = m.hashCode();
+		Integer number = messages.get(hash);
+		if(number == null) {
+			mom.queueMessage(m);
+		} else {
+			stamp(m, number);
+		}
 	}
 
 	@Override
-		public void messageReceived(gcom.interfaces.Message m) {
-			Integer hash = m.hashCode();
-			Integer number = messages.get(hash);
-			if(number == null) {
-				latest++;
-				number = latest;
-				messages.put(hash, number);
-			}
-			stamp(m, number);
-		}
+	public void messageReceived(gcom.interfaces.Message m) {
+		latest++;
+		Integer hash = m.hashCode();
+		Integer number = latest;
+		messages.put(hash, number);
+		stamp(m, number);
+	}
 
 	private void stamp(Message m, Integer number) {
 		HashVectorClock clock = m.getClock();
