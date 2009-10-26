@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.7.13)  26 OCT 2009 01:21
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.7.13)  26 OCT 2009 10:34
 entering extended mode
  %&-line parsing enabled.
 **report.tex
@@ -448,70 +448,70 @@ File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./report.toc
-LaTeX Font Info:    Try loading font information for U+msa on input line 6.
+LaTeX Font Info:    Try loading font information for U+msa on input line 7.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2002/01/19 v2.2g AMS font definitions
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 6.
+LaTeX Font Info:    Try loading font information for U+msb on input line 7.
 
 (/usr/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2002/01/19 v2.2g AMS font definitions
-))
+) [1])
 \tf@toc=\write3
 \openout3 = `report.toc'.
 
- [1]
-Overfull \hbox (128.78915pt too wide) in paragraph at lines 72--89
-[] 
- []
-
-[1] <momNonOrderd.png, id=16, 547.04375pt x 299.1175pt>
+ [2] [1] [2]
+<superuml.png, id=23, 826.08624pt x 765.86125pt>
+File: superuml.png Graphic file (type png)
+ <use superuml.png> [3]
+[4] [5 <./superuml.png (PNG copy)>]
+<momNonOrderd.png, id=34, 547.04375pt x 299.1175pt>
 File: momNonOrderd.png Graphic file (type png)
  <use momNonOrderd.png>
-[2 <./momNonOrderd.png (PNG copy)>]
-<momFIFO.png, id=21, 547.04375pt x 283.0575pt>
+[6 <./momNonOrderd.png (PNG copy)>]
+<momFIFO.png, id=38, 547.04375pt x 283.0575pt>
 File: momFIFO.png Graphic file (type png)
- <use momFIFO.png> [3 <./momFIFO.png (PNG copy)>] <momCausal.png, id=25, 640.39
+ <use momFIFO.png> [7 <./momFIFO.png (PNG copy)>] <momCausal.png, id=42, 640.39
 25pt x 475.7775pt>
 File: momCausal.png Graphic file (type png)
 
-<use momCausal.png> [4 <./momCausal.png (PNG copy)>]
-<momTotal.png, id=29, 674.52pt x 545.03625pt>
+<use momCausal.png> [8 <./momCausal.png (PNG copy)>]
+<momTotal.png, id=46, 674.52pt x 545.03625pt>
 File: momTotal.png Graphic file (type png)
  <use momTotal.png>
-<momTotalC.png, id=30, 507.8975pt x 223.83624pt>
+<momTotalC.png, id=47, 507.8975pt x 223.83624pt>
 File: momTotalC.png Graphic file (type png)
- <use momTotalC.png> [5 <./momTotal.png (PNG copy)>] [6 <./momTotalC.png (PNG c
-opy)>] [7]
-<klasser.png, id=41, 1322.11588pt x 959.34882pt>
+ <use momTotalC.png> [9 <./momTotal.png (PNG copy)>] [10 <./momTotalC.png (PNG 
+copy)>] [11] [12]
+<klasser.png, id=61, 1322.11588pt x 959.34882pt>
 File: klasser.png Graphic file (type png)
  <use klasser.png>
-Overfull \hbox (65.44135pt too wide) in paragraph at lines 287--288
+Overfull \hbox (65.44135pt too wide) in paragraph at lines 395--396
 [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[8] [9 <./klasser.png (PNG copy)>] [10] [11]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 399.
+[13] [14 <./klasser.png (PNG copy)>] [15] [16]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 507.
 
 
 (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 399.
- [12] [13] (./report.aux) ) 
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 507.
+ [17] [18] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 3858 strings out of 95080
- 47605 string characters out of 1183097
- 107000 words of memory out of 1500000
- 6968 multiletter control sequences out of 10000+50000
+ 3880 strings out of 95080
+ 47843 string characters out of 1183097
+ 108000 words of memory out of 1500000
+ 6989 multiletter control sequences out of 10000+50000
  11046 words of font info for 30 fonts, out of 1200000 for 2000
  28 hyphenation exceptions out of 8191
- 26i,6n,32p,464b,265s stack positions out of 5000i,500n,6000p,200000b,5000s
+ 26i,8n,32p,464b,265s stack positions out of 5000i,500n,6000p,200000b,5000s
  </home/ludw/.texmf-var/fonts/pk/ljfour/jknappen/ec/
 ecbx1200.600pk> </home/ludw/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1000.600
 pk> </home/ludw/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </home/l
@@ -519,9 +519,9 @@ udw/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2488.600pk> </home/ludw/.texmf-v
 ar/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </home/ludw/.texmf-var/fonts/pk/
 ljfour/jknappen/ec/ecrm1000.600pk></usr/share/texmf-texlive/fonts/type1/bluesky
 /cm/cmsy10.pfb>
-Output written on report.pdf (15 pages, 243624 bytes).
+Output written on report.pdf (21 pages, 304116 bytes).
 PDF statistics:
- 330 PDF objects out of 1000 (max. 8388607)
+ 375 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
- 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
