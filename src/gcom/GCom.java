@@ -553,5 +553,6 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public void attachDebug(String groupName, DebugInterface debug) {
 		debugs.put(groupName, debug);
 		comModules.get(groupName).attachDebugger(debug);
+		moModules.get(groupName).attachDebugger(debug);
 	}
 }

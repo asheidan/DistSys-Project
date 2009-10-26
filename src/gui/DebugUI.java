@@ -18,7 +18,6 @@ import gcom.interfaces.GComMessageListener;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
 import java.util.Vector;
-import javax.swing.AbstractListModel;
 
 /**
  *
@@ -55,6 +54,18 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 	}
 
 	@Override
+	public void attachDebugger(HashVectorClock clock, Vector<Message> messages) {
+		Debug.log(this, Debug.DEBUG, groupName + ": Message queue attached");
+		queue = new MockListModel<Message>(messages);
+		queueList.setModel(queue);
+	}
+
+	@Override
+	public void attachDebugger(DebugInterface debug) {
+		// Another debugger?!
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+	@Override
 	public void queueMessage(Message m) {
 		if(mom != null) {
 			Debug.log(this, Debug.TRACE, groupName + ": Message!!");
@@ -63,6 +74,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 			}
 			else {
 				mom.queueMessage(m);
+				queue.update();
 			}
 		}
 		else Debug.log(this, Debug.ERROR, groupName + ": using recieve without attached com");
@@ -91,8 +103,8 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 		this.groupName = groupName;
 		setTitle("Debug: "+groupName);
 		setVisible(true);
-		t = new Thread(this);
-		t.start();
+		//t = new Thread(this);
+		//t.start();
     }
 	
     /** This method is called from within the constructor to
@@ -250,6 +262,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 	private void releaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_releaseButtonActionPerformed
 		if(mom != null == holdBack.getSize() > 0) {
 			mom.queueMessage(holdBack.drop(0));
+			queue.update();
 		}
 	}//GEN-LAST:event_releaseButtonActionPerformed
 

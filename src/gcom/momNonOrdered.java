@@ -46,4 +46,9 @@ public class momNonOrdered implements MessageOrderingModule {
 		sendToListeners(m);
 	}
 
+	@Override
+	public void attachDebugger(DebugInterface debug) {
+		debug.attachDebugger(clock,messages);
+	}
+
 }
