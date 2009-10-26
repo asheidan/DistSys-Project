@@ -66,7 +66,7 @@ public class Message implements gcom.interfaces.Message,Comparable<Message> {
 	}
 	@Override
 	public String toString() {
-		return String.format("Msg %3s:%s:%s",this.type,this.clock,this.data);
+		return String.format("Msg %s:%s:%s",this.type.toString().substring(0,3),this.clock,this.data);
 	}
 
 	@Override

@@ -1,4 +1,5 @@
 package rmi;
+import gcom.interfaces.DebugInterface;
 import java.rmi.AccessException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -78,4 +79,9 @@ public class SequencerCommunicationModule implements gcom.interfaces.Communicati
 		}
 	}
 	public void addGComViewChangeListener(GComViewChangeListener listener) {}
+
+	@Override
+	public void attachDebugger(DebugInterface debug) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

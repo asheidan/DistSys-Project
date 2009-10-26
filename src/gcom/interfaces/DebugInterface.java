@@ -11,8 +11,7 @@ import java.util.Vector;
  *
  * @author emil
  */
-public interface DebugInterface extends CommunicationModule {
-	public void setQueue(Vector queue);
-
-	public void attachCom(CommunicationModule com);
+public interface DebugInterface extends MessageOrderingModule {
+	// COM
+	public void attachDebugger(MessageOrderingModule mom);
 }
