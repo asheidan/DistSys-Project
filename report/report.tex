@@ -59,7 +59,7 @@ Start client: $ ant gui
 
 %-----------------------------------------------------------
 \section{Introduction}
-In this project we have created a middle ware for group communication. A demo application to demonstrate that the middle ware works has also been created. 
+In this project we have created a middleware for group communication. A demo application to demonstrate that the middleware works has also been created. 
 
 The middleware handles communication between members of groups. Groups can have different message orderings, they can be static or dynamic and they can use either reliable or basic multicast for sending messages. Each member of the group uses the same of these properties.
 
@@ -68,7 +68,7 @@ The middleware can be used independently of the demo application but this will n
 
 Communication in groups is done by passing messages. A message is usually sent to the entire group, only when joining a group messages is sent to only one client in the group. Messages have a type so that application messages can be separated from system messages. 
 
-The middle ware can be used independently from the demo application but this will not be described further in this report.
+The middleware can be used independently from the demo application but this will not be described further in this report.
 %- Vad det är och vad det gör
 %- Grupper, medlemmar, statiska, dynamiska, andra begrepp
 
@@ -139,7 +139,7 @@ When you have joined a group you will see the group in the tab bar in the main w
 %-----------------------------------------------------------
 \section{System Overview}
 
-This project consists of a middle ware for group communication and a demo application to show that it works. The middle ware is located in the gcom and rmi packages, the demo application is in the gui package. An overview over all the packages and their classes can be seen in figure \vref{fig:overview}.
+This project consists of a middleware for group communication and a demo application to show that it works. The middleware is located in the gcom and rmi packages, the demo application is in the gui package. An overview over all the packages and their classes can be seen in figure \vref{fig:overview}.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{superuml.png}
@@ -206,7 +206,8 @@ A GroupDefinition stores information about a group like message ordering, commun
 
 \subsubsection{RemoteObject}
 The RemoteObject is used for communication between processes via java RMI. 
-%TODO: write more about remote object
+
+The object has a queue in which all incomming messages are queued. A thread is responsible for transferring messages from the queue to the corresponding Communication Module.
 
 \subsubsection{Group}
 Group stores members and GroupDefinition for a specific group. This class is only used by the GroupManagementModule for storing state.
@@ -249,11 +250,11 @@ GroupSequencer (GS) is used by SCM for setting serial numbers on messages. The G
 \subsection{The gui package}                                                                                    
 The gui package implements our demo application: a chat application with tabs for groups. 
 
-\subsubsection{GroupPanel}
-%TODO: write about group panel
-
 \subsubsection{GUIViewOther}
-%TODO: write about gui view other 
+A simple chat client implemented with GCom.
+
+\subsubsection{GroupPanel}
+A class implementing a panel containing a textarea, nicklist and textfield. One is created for each group.
 
 
 %-----------------------------------------------------------
@@ -389,10 +390,25 @@ If the crashed client is the group leader a new leader is elected.
 The leader of each group occasionally checks that the group is registered in the RMI-registry. If the registry has restarted for some reason the leader will re-register the group.
 
 \subsection{If the group leader crashes}
-If the group leader crashes the group will detect that no messages arrive from the leader and then elect a new leader. 
+If the group leader crashes the group will detect that no messages arrive to the leader and then elect a new leader. 
 
 \subsection{Election of a new leader}
 %% TODO: Write about election algorithm
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Election.png}
+\caption{Two members engaged in election.}
+\label{fig:election}
+\end{figure}
+
+When a member (A in figure \ref{fig:election}) detects that the leader is missing, an election of a new leader will take place. The member sets itself as leader of the group and sends an election message containing the members unique id to all known members of the group.
+
+Member (B) receives an election message. If the member hasn't already begun an election it sends it's id to all members of the group and sets either itself or the sender as leader depending on which has the higher id.
+If the member has already begun the election process the received id is compared to the saved largest id. The larger of the two is stored and the sending member is set as leader.
+
+When a member has received election messages from all other members the election is done and if a member has set itself as leader of the group it creates a ReferenceKeeper and binds a reference in the registry.
+
+This algorith isn't foolproof since crashing members can cause other members to wait for responses indefinitely.
 
 \subsection{If the last member of a group crashes}
 If the last member of a group crashes no one will unregister the group.
@@ -431,7 +447,7 @@ Below our requirement specification from out project plan is included in appendi
 
 \item If a group contains too many users java will run out of memory and the client will crash. If reliable multicast is used the network will most likely also be very congested.
 
-\item The demo application does not use the remove group feature of GCom since it is more user friendly to let the group live as long as there is users conencted to it and remove it when the last user quits. However, the feature is implemented and can be used by some other application that uses the middle ware.
+\item The demo application does not use the remove group feature of GCom since it is more user friendly to let the group live as long as there is users conencted to it and remove it when the last user quits. However, the feature is implemented and can be used by some other application that uses the middleware.
 
 \item The program does not build under Windows. Usage of windows is discourage and behaviour is undefined.
 
