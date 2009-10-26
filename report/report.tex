@@ -147,21 +147,50 @@ Total ordering means that all clients deliver the messages in the exact same ord
 The ReferenceKeeper is used by GCom only for the group leader. It checks that the rmi registry has the reference to the leaders RemoteObject and trys to rebind it if not. The ReferenceKeeper is run in it's own thread and rechecks the reference in the registry every minute.
 
 \subsubsection{HashVectorClock}
-
+The HashVectorClock implements VectorClock. It stores a clock state with integer values for different process IDs. The clock can be compared to another clock, merged with another clock and ticked, which increases the clock value for the owner by one.
 
 \subsubsection{GroupDefinition}
+A GroupDefinition stores information about a group like message ordering, communication type and if the group is static or dynamic. 
+
 \subsubsection{RemoteObject}
+The RemoteObject is used for communication between processes via java RMI. 
+
 \subsubsection{Group}
+Group stores members and GroupDefinition for a specific group. This class is only used by the GroupManagementModule for storeing state.
+
 \subsubsection{Member}
+Member stores id, name and RemoteObject for a member in a group.
+
 \subsubsection{Message}
+Message is a serializable class used for sending information between processes and modules. A message contains a vector clock, groupname, source, message type and message data. Messages used for requesting serial numbers from the sequencer also has a return address.
+
 \subsubsection{Debug}
+Debug holds a log4j logger and is used for printing debug and error messages.
 
 \subsection{The rmi package}
-\subsubsection{Sequencer}
-\subsubsection{GroupSequencer}
-\subsubsection{SequencerCommunicationModule}
+The rmi package contains classes related to the rmi registry. 
+
 \subsubsection{RMIServer}
+The RMI server creates a registry and opens a backdoor for binding objects remotely.
+
 \subsubsection{BackdoorOpener}
+BackdoorOpener is used by RMIServer to create a backdoor. The backdoor is needed since the used implementation of the registry does not allow remote processes to bind objects.
+
+\subsubsection{Sequencer}
+The Sequencer is used for getting a serial number on messages that all clients can agree to. There is therefor only one sequencer per group, and in our implementation only one in total.
+
+It extends the RMI-server and therefor first starts a registry. It then binds in a SequencerCommunicationModule SCM as "sequencer" in the registry which the clients that uses any of the total orderings will know that they can connect to. 
+
+Clients can request serial numbers by sending a message to the sequencer and supplying a return address in the message. The Sequencer will order the messages it recieves in either a momNonOrdered or a momCausal depending on if total or causal total ordering is requested. Messages that has allready been sequenced are cached and the same serial number will be returned if a new request for the same message arrives.
+
+\subsubsection{SequencerCommunicationModule}
+The SequencerCommunicationModule (SCM) implements CommunicationModule since it makes communication with it convenient, but the module itself is only used by the sequencer. 
+
+It recieves messages and returns them to the return address with a serial number. The serial numbers is supplyed by a GroupSequencer. Each group has it's own GroupSequencer.
+
+\subsubsection{GroupSequencer}
+GroupSequencer (GS) is used by SCM for setting serial numbers on messages. The GS uses a MOM to order the messages befor a serial number is given to them. Messages are cached with their serial numbers so requests for the same message get's the same number. 
+
 
 \subsection{The gui package}
 \subsubsection{GroupPanel}

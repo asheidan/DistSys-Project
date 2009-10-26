@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.7.13)  26 OCT 2009 10:34
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.7.13)  26 OCT 2009 11:31
 entering extended mode
  %&-line parsing enabled.
 **report.tex
@@ -461,49 +461,49 @@ File: umsb.fd 2002/01/19 v2.2g AMS font definitions
 \tf@toc=\write3
 \openout3 = `report.toc'.
 
- [2] [1] [2]
-<superuml.png, id=23, 826.08624pt x 765.86125pt>
+ [2] [1] [2] [3]
+[4] [5] <superuml.png, id=33, 826.08624pt x 765.86125pt>
 File: superuml.png Graphic file (type png)
- <use superuml.png> [3]
-[4] [5 <./superuml.png (PNG copy)>]
-<momNonOrderd.png, id=34, 547.04375pt x 299.1175pt>
+ <use superuml.png>
+[6 <./superuml.png (PNG copy)>]
+<momNonOrderd.png, id=37, 547.04375pt x 299.1175pt>
 File: momNonOrderd.png Graphic file (type png)
  <use momNonOrderd.png>
-[6 <./momNonOrderd.png (PNG copy)>]
-<momFIFO.png, id=38, 547.04375pt x 283.0575pt>
+[7 <./momNonOrderd.png (PNG copy)>]
+<momFIFO.png, id=41, 547.04375pt x 283.0575pt>
 File: momFIFO.png Graphic file (type png)
- <use momFIFO.png> [7 <./momFIFO.png (PNG copy)>] <momCausal.png, id=42, 640.39
+ <use momFIFO.png> [8 <./momFIFO.png (PNG copy)>] <momCausal.png, id=45, 640.39
 25pt x 475.7775pt>
 File: momCausal.png Graphic file (type png)
 
-<use momCausal.png> [8 <./momCausal.png (PNG copy)>]
-<momTotal.png, id=46, 674.52pt x 545.03625pt>
+<use momCausal.png> [9 <./momCausal.png (PNG copy)>]
+<momTotal.png, id=49, 674.52pt x 545.03625pt>
 File: momTotal.png Graphic file (type png)
  <use momTotal.png>
-<momTotalC.png, id=47, 507.8975pt x 223.83624pt>
+<momTotalC.png, id=50, 507.8975pt x 223.83624pt>
 File: momTotalC.png Graphic file (type png)
- <use momTotalC.png> [9 <./momTotal.png (PNG copy)>] [10 <./momTotalC.png (PNG 
-copy)>] [11] [12]
-<klasser.png, id=61, 1322.11588pt x 959.34882pt>
+ <use momTotalC.png> [10 <./momTotal.png (PNG copy)>] [11 <./momTotalC.png (PNG
+ copy)>] [12] [13]
+<klasser.png, id=64, 1322.11588pt x 959.34882pt>
 File: klasser.png Graphic file (type png)
  <use klasser.png>
-Overfull \hbox (65.44135pt too wide) in paragraph at lines 395--396
+Overfull \hbox (65.44135pt too wide) in paragraph at lines 428--429
 [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[13] [14 <./klasser.png (PNG copy)>] [15] [16]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 507.
+[14] [15 <./klasser.png (PNG copy)>] [16] [17]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 540.
 
 
 (/usr/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 507.
- [17] [18] (./report.aux) ) 
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 540.
+ [18] [19] (./report.aux) ) 
 Here is how much of TeX's memory you used:
  3880 strings out of 95080
  47843 string characters out of 1183097
@@ -511,7 +511,7 @@ Here is how much of TeX's memory you used:
  6989 multiletter control sequences out of 10000+50000
  11046 words of font info for 30 fonts, out of 1200000 for 2000
  28 hyphenation exceptions out of 8191
- 26i,8n,32p,464b,265s stack positions out of 5000i,500n,6000p,200000b,5000s
+ 26i,8n,32p,464b,250s stack positions out of 5000i,500n,6000p,200000b,5000s
  </home/ludw/.texmf-var/fonts/pk/ljfour/jknappen/ec/
 ecbx1200.600pk> </home/ludw/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1000.600
 pk> </home/ludw/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </home/l
@@ -519,9 +519,9 @@ udw/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2488.600pk> </home/ludw/.texmf-v
 ar/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </home/ludw/.texmf-var/fonts/pk/
 ljfour/jknappen/ec/ecrm1000.600pk></usr/share/texmf-texlive/fonts/type1/bluesky
 /cm/cmsy10.pfb>
-Output written on report.pdf (21 pages, 304116 bytes).
+Output written on report.pdf (22 pages, 307023 bytes).
 PDF statistics:
- 375 PDF objects out of 1000 (max. 8388607)
+ 378 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 131072)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
