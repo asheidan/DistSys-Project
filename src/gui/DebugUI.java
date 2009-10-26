@@ -19,7 +19,6 @@ import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 import java.util.Vector;
 import javax.swing.AbstractListModel;
-import org.apache.log4j.Level;
 
 /**
  *
@@ -40,7 +39,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface {
 	@Override
 	public void receive(Message m) {
 		if(com != null) {
-			Debug.log(this, Debug.DEBUG, groupName + ": Message!!");
+			Debug.log(this, Debug.TRACE, groupName + ": Message!!");
 			if(holdCheckBox.isSelected()) {
 				holdBack.add(m);
 			}
@@ -84,7 +83,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface {
 		}
 
 		public void add(T obj) {
-			Debug.log(this, Debug.DEBUG, "Added message to queue");
+			Debug.log(this, Debug.TRACE, "Added message to queue");
 			model.add(obj);
 			fireContentsChanged(this, 0, model.size()-1);
 		}
