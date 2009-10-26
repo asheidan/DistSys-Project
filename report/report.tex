@@ -69,7 +69,7 @@ JUnit will be used for unit testing and logging will be done through the log4j-p
 
 %-----------------------------------------------------------
 \section{Project plan}
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|l|l|p{7.5cm}|}
 \hline
 Date	&	Milestone	&	Content \\
 \hline
@@ -88,11 +88,98 @@ Date	&	Milestone	&	Content \\
 \end{tabular}
 
 
+%-----------------------------------------------------------
+\section{Using the demo application}
 
 
 %-----------------------------------------------------------
+\section{System Overview}
+
+\subsection{The gcom package}
+The gcom package is the main part of this project. This is where communication, message ordering and group management is handled. 
+\subsubsection{GCom}
+GCom is the main component in this package and is where the demo application is connected. The application gives commands to GCom, for example create a group or send a message, these commands are translated to messages that GCom sends through the appropriate communication module and to commands to the GroupManagementModule so that the current group state can be maintained.
+
+Information also flows from the communication modules via the message ordering modules back to gcom when messages from other clients is recieved. These messages either effects the group state or is application data that GCom forwards to the application. 
+
+GCom has one GroupManagementModule, one RMIModule and the same amount of communication and message ordering modules as the number of groups it handles.
+
+\subsubsection{BasicCommunicationModule}
+The BasicCommunicationModule (BCM) is the simplest implementation of the interface CommunicationModule. It implements basic multicast and has the ability to send and recieve messages. Each communication module corresponds to a specific group. 
+
+When a message is sent the BCM sends it to every member of the group, including the sender. It also detects if the connection is refused to any of the senders and removes these members from the group via a message to GCom.
+
+When the BasicCommunicationModule recieves a message the message is sent directly to the message ordering module for the group.
+
+\subsubsection{ReliableCommunicationModule}
+The ReliableCommunicationModule (RCM) extends the BCM and implements reliable multicast.
+
+When the RCM recieves a message it checks if it has recieved it before, if not the message is added to a cache of recieved messages, sent to all group members via BCM and then delivered to message ordering.
+
+Sending messages in the RCM also stores the message in the cache. The message is then sent to all members of the group and the message is delivered to the sender.
+
+When a message is added to the chache, the size of the cache is also trimmed by removing the oldest message if the cache is larger than a specified max size.
+
+\subsubsection{GroupManagementModule}
+The GroupManagementModule (GMM) stores information about groups and can notify listeners when something changes.
+
+The main responsabilitys for the GMM includes storing group state, resolving group names to members and updating group state when changes are recieved.
+
+\subsubsection{RMIModule}
+The RMIModule connects to a rmi registry at a given host and port. It then supplys an interface for binding, finding, unbinding and rebinding objects.
+
+\subsubsection{momNonOrdered}
+The momNonOrdered is the simplest implementation of the MessageOrderingModule (MOM) interface. Every group has a corresponding message ordering module. The type depends on what the creator of the group chose. 
+
+Message ordering is described in detail in section \vref{messageordering}.
+
+\subsubsection{momFIFO}
+This message ordering sorts messages in a First In First Out order, in this case this means that messages is delivered in the same order the sender sent them. See section \vref{mo-fifo} for details.
+
+
+\subsubsection{momCausal}
+Causal ordering orders messages according to a happend before relationship. See section \vref{mo-causal} for details.
+
+\subsubsection{momTotal}
+Total ordering means that all clients deliver the messages in the exact same order. See section \vref{mo-total} for details.
+
+\subsubsection{ReferenceKeeper}
+The ReferenceKeeper is used by GCom only for the group leader. It checks that the rmi registry has the reference to the leaders RemoteObject and trys to rebind it if not. The ReferenceKeeper is run in it's own thread and rechecks the reference in the registry every minute.
+
+\subsubsection{HashVectorClock}
+
+
+\subsubsection{GroupDefinition}
+\subsubsection{RemoteObject}
+\subsubsection{Group}
+\subsubsection{Member}
+\subsubsection{Message}
+\subsubsection{Debug}
+
+\subsection{The rmi package}
+\subsubsection{Sequencer}
+\subsubsection{GroupSequencer}
+\subsubsection{SequencerCommunicationModule}
+\subsubsection{RMIServer}
+\subsubsection{BackdoorOpener}
+
+\subsection{The gui package}
+\subsubsection{GroupPanel}
+\subsubsection{GUIViewOther}
+
+
+\begin{figure}
+\includegraphics[width=\textwidth]{superuml.png}
+\caption{All the classes in the program and an overview of their relations.}
+\label{fig:overview}
+\end{figure}
+
+%-----------------------------------------------------------
 \section{Message ordering and message ordering modules}
+\label{messageordering}
 GCom features five kinds of message orderings: NonOrdered, FIFO, Causal, Total and CausalTotal. The first four of these has their own message ordering module. Each type of ordering and it's corresponding class is described in detail below.
+
+The message ordering modules have each been thoroghly tested with unit tests to make sure that the algorithms works like intended.
 
 Additional information about algorithms and definitions of the ordering types above can also be found in \cite{distsys-ordering}.
 
@@ -108,6 +195,7 @@ The module also has two functions related to the vector clock. It increases the 
 \end{figure}
 
 \subsection{FIFO ordering / momFIFO}
+\label{mo-fifo}
 The FIFO ordered MOM delivers messages in the order they where sent. This works by numbering every sent message with a vector clock and storeing recieved messages in a holdback queue until they can be delivered in order. Messages in the queue is compared to the previous last delivered message from the same sender. Messages from new senders is delivered directly as no clockvalue is known. This is also described in figure \vref{fig:fifo}.
 
 In detail the sorting algorithm works as follows:
@@ -133,6 +221,7 @@ In detail the sorting algorithm works as follows:
 \end{figure}
 
 \subsection{Causal ordering / momCausal}
+\label{mo-causal}
 Causal ordering is an ordering where a message can not be delivered before a message that happend before it. Just like in the FIFO ordering the message is first placed in a holdback queue. If a new sender is detected their clockvalue is added to the local clock.
 
 Messages in the queue is checked when a message is recieved. If all previous messages from the same sender has been delivered, and all messages delivered by the sender when the message was timestamped has been delivered, then the message can be delivered. See figure \vref{fig:causal}.
@@ -164,6 +253,7 @@ In step 1 the clockvalue minus one is added to the local clock, this is since th
 \end{figure}
 
 \subsection{Total ordering / momTotal}
+\label{mo-total}
 Total ordering is an ordering where every client delivers the messages in the same order. In our implementation this is solved by the use of a sequencer, which is an appliation that is global for the group. 
 
 When a message is recieved it is sent to the sequencer. The sequencer gives the message a serial number and sends it back. When the MOM get's a message with a serial number it puts it in holdback queue until it can be delivered in sequence (that is until all messages with a lower number is delivered). This is also described in figure \vref{fig:total}.
@@ -186,6 +276,28 @@ With causal total ordering the sequencer uses a momCausal to order the messages 
 \caption{Causal total ordering also uses a sequencer, but here the sequencer has a MOM of it's own to give the messages serial numbers in causal order.}
 \label{fig:totalc}
 \end{figure}
+
+%-----------------------------------------------------------
+\section{Design decisions}
+
+\subsection{Selection of bonus level}
+We chose to solve bonus level two with dynamic groups since if seemed like an reasonable tradeoff between extra credits and extra workload. 
+
+\subsection{Why an chat Application?}
+As our demo application on top of gcom we built a chat application with tabs for different groups. This type of application maps well to the underlying structure of members that belongs to groups. It also gave an easy way to see that messages arrive unharmed and in the correct amount. 
+
+\subsection{Why using a sequencer for total ordering?}
+When implementing total ordering one can either use a sequencer or a distributed algorithm. The sequencer method has the downside of the sequencer beeing the single point of failure. However we still choose that method since it seemd mor estraightforward to implement and we already had a single point of failure.
+
+\subsection{Why the sequencer lives in the rmi-server}
+The RMI-server has to be setarted before the sequencer and we only wanted a single instance of both so it made sense to put them in the same module (or rather, make the sequencer extend the RMI-server). The RMI-server is also a hopefully quite stable host which makes it a good location for the sequencer.
+
+It would have scaled to more users to put the sequencer in the group leader, but this would make the sequencer less stable (since the group leader might choose to leave the group).
+
+An obvious drawback of having a single sequencer for all groups is that it becomes a bottleneck. This could be solved by moving the sequencer to several dedicated hosts and assigning groups to one of many sequencers.
+
+
+
 %-----------------------------------------------------------
 \section{Design}
 \subsection{GCom}

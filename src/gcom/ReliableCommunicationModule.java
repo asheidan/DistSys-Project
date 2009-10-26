@@ -24,7 +24,7 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 	
 	@Override
 	public void receive(Message m) {
-		Debug.log(this, Debug.DEBUG, "################### Got Message: " + m.hashCode());
+		Debug.log(this, Debug.DEBUG, "Got Message: " + m.hashCode());
 		if(!receivedMessages.containsKey(m.hashCode())) {
 			// New message!!!
 			rememberMessage(m);
@@ -40,7 +40,7 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 	
 	@Override
 	public void send(Message m) {
-		Debug.log(this, Debug.DEBUG, "@@@@@@ @@@@@@@@ @@@@@@@ Sent Message: " + m.hashCode());
+		Debug.log(this, Debug.DEBUG, "Sent Message: " + m.hashCode());
 		rememberMessage(m);
 		super.send(m);
 		super.receive(m);
