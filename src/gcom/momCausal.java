@@ -8,11 +8,9 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momCausal extends momNonOrdered {
-	private Vector<Message> messages;
 
 	public momCausal (String id) {
 		super(id);
-		messages = new Vector<Message>();
 	}
 
 	private void sendMessage(Message message) {

@@ -274,6 +274,8 @@ public class GUIViewOther extends javax.swing.JFrame {
         showRMIDialogButton = new javax.swing.JButton();
         showCreateGroupDialogToolbarButton = new javax.swing.JButton();
         showJoinDialogToolbarButton = new javax.swing.JButton();
+        viewMenu = new javax.swing.JMenu();
+        viewToolBarMenuItem = new javax.swing.JCheckBoxMenuItem();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         connectRMIMenuItem = new javax.swing.JMenuItem();
@@ -286,8 +288,8 @@ public class GUIViewOther extends javax.swing.JFrame {
         freezeGroupMenuItem = new javax.swing.JCheckBoxMenuItem();
         jSeparator3 = new javax.swing.JSeparator();
         leaveGroupMenuItem = new javax.swing.JMenuItem();
-        viewMenu = new javax.swing.JMenu();
-        viewToolBarMenuItem = new javax.swing.JCheckBoxMenuItem();
+        debugMenu = new javax.swing.JMenu();
+        attachDebugMenuItem = new javax.swing.JMenuItem();
         connectRMIDialog = new javax.swing.JDialog();
         connectToRMIButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -357,6 +359,14 @@ public class GUIViewOther extends javax.swing.JFrame {
         showJoinDialogToolbarButton.setName("showJoinDialogToolbarButton"); // NOI18N
         showJoinDialogToolbarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         toolBar.add(showJoinDialogToolbarButton);
+
+        viewMenu.setText("View");
+        viewMenu.setEnabled(false);
+        viewMenu.setName("viewMenu"); // NOI18N
+
+        viewToolBarMenuItem.setText("View Toolbar");
+        viewToolBarMenuItem.setName("viewToolBarMenuItem"); // NOI18N
+        viewMenu.add(viewToolBarMenuItem);
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -454,14 +464,26 @@ public class GUIViewOther extends javax.swing.JFrame {
 
         menuBar.add(groupMenu);
 
-        viewMenu.setText("View");
-        viewMenu.setName("viewMenu"); // NOI18N
+        debugMenu.setText("Debug");
+        debugMenu.setName("debugMenu"); // NOI18N
 
-        viewToolBarMenuItem.setText("View Toolbar");
-        viewToolBarMenuItem.setName("viewToolBarMenuItem"); // NOI18N
-        viewMenu.add(viewToolBarMenuItem);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupFocused, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), debugMenu, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
 
-        menuBar.add(viewMenu);
+        attachDebugMenuItem.setText("Attach debugger");
+        attachDebugMenuItem.setName("attachDebugMenuItem"); // NOI18N
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, groupFocused, org.jdesktop.beansbinding.ELProperty.create("${enabled}"), attachDebugMenuItem, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        attachDebugMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                attachDebugMenuItemActionPerformed(evt);
+            }
+        });
+        debugMenu.add(attachDebugMenuItem);
+
+        menuBar.add(debugMenu);
 
         connectRMIDialog.setTitle("Connect to Registry");
         connectRMIDialog.setAlwaysOnTop(true);
@@ -1018,10 +1040,16 @@ public class GUIViewOther extends javax.swing.JFrame {
 	}//GEN-LAST:event_tabbedPaneStateChanged
 
 	private void freezeGroupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_freezeGroupMenuItemActionPerformed
-		String groupName = tabbedPane.getTitleAt(tabbedPane.getSelectedIndex());
+		String groupName = tabbedPane.getTitleAt(selectedPane);
 		gcom.freezeGroup(groupName);
 		freezeGroupMenuItem.setSelected(!gcom.isGroupOpen(groupName));
 	}//GEN-LAST:event_freezeGroupMenuItemActionPerformed
+
+	private void attachDebugMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attachDebugMenuItemActionPerformed
+		String groupName = tabbedPane.getTitleAt(selectedPane);
+		DebugInterface debug = new DebugUI(groupName);
+		gcom.attachDebug(groupName, debug);
+	}//GEN-LAST:event_attachDebugMenuItemActionPerformed
 
    /**
     * @param args the command line arguments
@@ -1048,6 +1076,7 @@ public class GUIViewOther extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem attachDebugMenuItem;
     private javax.swing.JButton cancelConnectRMIDialogButton;
     private javax.swing.JButton cancelCreateGroupDialogButton;
     private javax.swing.JButton cancelJoinGroupDialogButton;
@@ -1059,6 +1088,7 @@ public class GUIViewOther extends javax.swing.JFrame {
     private javax.swing.JDialog createGroupDialog;
     private javax.swing.JMenuItem createGroupMenuItem;
     private javax.swing.JTextField createNickField;
+    private javax.swing.JMenu debugMenu;
     private javax.swing.JCheckBoxMenuItem freezeGroupMenuItem;
     private javax.swing.JLabel groupFocused;
     private javax.swing.JList groupList;
