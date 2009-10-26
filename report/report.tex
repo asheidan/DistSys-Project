@@ -63,30 +63,17 @@ We have solved bonus level two with dynamic groups.
 
 %-----------------------------------------------------------
 \section{Tools and language for implementation}
-Since the clear recommendation is to use Java and Java RMI we have decided to follow the recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
+Since the clear recommendation was to use Java and Java RMI we have decided to follow the recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
 
-JUnit will be used for unit testing and logging will be done through the log4j-package. 
+JUnit has be used for unit testing and logging has be done through the log4j-package. 
 
 %-----------------------------------------------------------
-\section{Project plan}
-\begin{tabular}{|l|l|p{7.5cm}|}
-\hline
-Date	&	Milestone	&	Content \\
-\hline
-11 Sept	&	Part 1 due	&	Written project plan \\
-18 Sept &	Milestone 1 &	Create all interfaces \\ 
-						&&	Build dataobjects \\
-						&&	Design GUI mockups for test app \\
-25 Sept &	Milestone 2 & 	Implement basic methods like non-ordered ordering and non-reliable multicast. \\
-2 Oct	&	Milestone 3 & 	Implement advanced methods like total ordering and reliable multicast. \\
-9 Oct	&	Milestone 4 & 	Implement GUI-application and debug mode. \\
-16 Oct	&	Milestone 5 & 	Resolve distributed problems. \\ && Write on the report.\\ && Make test protocol. \\
-23 Oct	&	Finalization 	& Everything should be finished. Minor adjustments. \\
-27 Oct	&	Hand in report 	& \\
-28-30 Oct & Demonstration	& \\
-\hline
-\end{tabular}
+\section{Realisation of the project plan}
+The project plan from deliverable 1 is included in appendix \vref{app:projectplan}. We have been slightly behind the plan during most of the project part due to the new influenza that struck Emil during one of the first weeks.
 
+We also moved forward the design of the GUI to milestone 4 since it was easier to do while implementing the actual application. We also moved total and causal total ordering forward one week since the other message orderings took most of the assigned week. 
+
+Generally things took slightly longer then anticipated, part due to tricky bugs and part due to tricky algorithms. 
 
 %-----------------------------------------------------------
 \section{Using the demo application}
@@ -331,9 +318,10 @@ An obvious drawback of having a single sequencer for all groups is that it becom
 
 %-----------------------------------------------------------
 \section{Fault tolerance}
-
 \subsection{Detecting crashed members}
-The GroupManagementModule gets notified when a message is received and can therefore keep track of the time since the last message from a process, measured in vector time. If a process does not send anything for a long time it will be marked as crashed and removed from the group list.
+The communication module detects if a client refuses connections or if connections timeout. If this happens the member is removed from the group management module and a lost member message is sent.
+
+If the crashed client is the group leader a new leader is elected.
 
 \subsection{If the registry restarts or is unresponsive}
 The leader of each group occasionally checks that the group is registered in the RMI-registry. If the registry has restarted for some reason the leader will re-register the group.
@@ -341,17 +329,72 @@ The leader of each group occasionally checks that the group is registered in the
 \subsection{If the group leader crashes}
 If the group leader crashes the group will detect that no messages arrive from the leader and then elect a new leader. 
 
+\subsection{Election of a new leader}
+%% TODO: Write about election algorithm
+
 \subsection{If the last member of a group crashes}
 If the last member of a group crashes no one will unregister the group.
-This will potentially lead to a lot of "dead" references in the registry if there is a bug causing nodes to crash when they are the last to leave a group. In order to counter this some extra testing will be done to make sure that nodes behave when leaving and unregistering with the registry.
-If the time allows we will try to implement a way to clear out old references in the registry (other than restarting it periodically).
+This will potentially lead to a lot of "dead" references in the registry if there is a bug causing nodes to crash when they are the last to leave a group. In order to counter this extra testing has be done to make sure that nodes behave when leaving and unregistering with the registry.
+
+There is currently no way to clear out old references in the registry (other than restarting it periodically).
 
 \subsection{Netsplit}
 If the group is split in two partitions, due to a cable failure or similar, the partition with the leader will continue to work as before. The other partition will elect a new leader when they discover that they no longer receive messages from the leader.
+
 The new leader will try to reregister the group in the registry. The leader for the other part will do the same and therefore compete over the reference in the registry. Because of this newcomers will join the group having the reference in the registry at the time the node connects.
 
 %-----------------------------------------------------------
-\section{Requirement Specification}
+\section{Implementation of requirement specification}
+Below our requirement specification from out project plan is included in appendix \vref{app:reqspec}. We have succeded with implementing all required specifications. 
+
+%-----------------------------------------------------------
+\section{Limitations}
+\begin{itemize}
+\item The RMI-registry is a single point of failure. If the registry crashes no processes can find or join groups until the registry has been restarted.
+
+\item If a group is split in two parts due to network failure and both parts still have contact with the registry bad things will happen. This is assumed to never happen.
+
+\item All processes are assumed to be good. If a process starts to lie or send malicious messages bad things will happen.
+
+\item If the sequencer crashes all groups using the sequencer must be restarted since the message cache is lost and messages will get new serial numers starting at 1. The sequencer is placed at the same host as the registry wich is assumed to be relativle stable for this to not be a big problem.
+
+\item If a group contains too many users java will run out of memory and the client will crash. If reliable multicast is used the network will most likely also be very congested.
+
+
+\end{itemize}
+
+
+\begin{thebibliography}{5}
+
+\bibitem{distsys-ordering} Distributed systems : concepts and design / GeorgeCoulouris, Jean Dollimore, Tim Kondberg.--4th ed. p. 490-498
+
+\end{thebibliography}
+
+
+\appendix
+\section{Project plan}
+\begin{tabular}{|l|l|p{7.5cm}|}
+\hline
+Date	&	Milestone	&	Content \\
+\hline
+11 Sept	&	Part 1 due	&	Written project plan \\
+18 Sept &	Milestone 1 &	Create all interfaces \\ 
+						&&	Build dataobjects \\
+						&&	Design GUI mockups for test app \\
+25 Sept &	Milestone 2 & 	Implement basic methods like non-ordered ordering and non-reliable multicast. \\
+2 Oct	&	Milestone 3 & 	Implement advanced methods like total ordering and reliable multicast. \\
+9 Oct	&	Milestone 4 & 	Implement GUI-application and debug mode. \\
+16 Oct	&	Milestone 5 & 	Resolve distributed problems. \\ && Write on the report.\\ && Make test protocol. \\
+23 Oct	&	Finalization 	& Everything should be finished. Minor adjustments. \\
+27 Oct	&	Hand in report 	& \\
+28-30 Oct & Demonstration	& \\
+\hline
+\end{tabular}
+
+
+\appendix
+\section{Requirement specification from project plan}
+\label{app:reqspec}
 
 \subsection{Group management}
 \begin{description}
@@ -392,23 +435,6 @@ The new leader will try to reregister the group in the registry. The leader for 
 \item[REQUIRED] A message must not be delivered until all previous messages are delivered if the message ordering demands so.
 \end{description}
 
-
-
-%-----------------------------------------------------------
-\section{Limitations}
-\begin{itemize}
-\item The RMI-registry is a single point of failure. If the registry crashes no processes can find or join groups. 
-
-\item If a group is split in two parts due to network failure and both parts still have contact  with the registry bad things will happen. This is assumed to never happen.
-
-\item All processes are assumed to be good. If a process starts to lie or send malicious messages bad things will happen.
-\end{itemize}
-
-\begin{thebibliography}{5}
-
-\bibitem{distsys-ordering} Distributed systems : concepts and design / GeorgeCoulouris, Jean Dollimore, Tim Kondberg.--4th ed. p. 490-498
-
-\end{thebibliography}
 
 
 
