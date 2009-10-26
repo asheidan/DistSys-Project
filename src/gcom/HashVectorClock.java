@@ -12,7 +12,7 @@ import java.util.Map;
  * {@link Hashtable} instead of a vector. This is to allow for
  * disappearing nodes.
  */
-public class HashVectorClock implements VectorClock, Serializable {
+public class HashVectorClock implements VectorClock, Serializable,Cloneable {
     private static final long serialVersionUID = -5166402897945275632L;
 
 	private Hashtable<Object, Integer> clocks;
@@ -103,7 +103,7 @@ public class HashVectorClock implements VectorClock, Serializable {
 
 	@Override
 	public String toString() {
-		return "VectorClock(" +this.key.toString() + ")"+ clocks.toString(); 
+		return "VC(" +this.key.toString() + ")"+ clocks.toString(); 
 	}
 
 	@Override
@@ -115,4 +115,8 @@ public class HashVectorClock implements VectorClock, Serializable {
 		return clocks.get(key);
 	}
 
+	@Override
+	public HashVectorClock clone() {
+		return new HashVectorClock(key,clocks);
+	}
 }
