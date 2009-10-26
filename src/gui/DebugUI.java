@@ -13,16 +13,11 @@ package gui;
 
 import gcom.Debug;
 import gcom.HashVectorClock;
-import gcom.interfaces.CommunicationModule;
 import gcom.interfaces.DebugInterface;
 import gcom.interfaces.GComMessageListener;
-import gcom.interfaces.GComViewChangeListener;
-import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractListModel;
 
 /**
@@ -40,7 +35,7 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 
 	@Override
 	public void addMessageListener(GComMessageListener listener) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		mom.addMessageListener(listener);
 	}
 
 	@Override
@@ -51,53 +46,6 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 	@Override
 	public void tick() {
 		mom.tick();
-	}
-
-    private class MockListModel<T> extends AbstractListModel {
-		private Vector<T> model;
-
-		public MockListModel(Vector<T> model) {
-			this.model = model;
-		}
-
-		@Override
-		public int getSize() {
-			return model.size();
-		}
-
-		@Override
-		public T getElementAt(int arg0) {
-			return model.elementAt(arg0);
-		}
-
-		public void add(T obj) {
-			Debug.log(this, Debug.TRACE, "Added message to queue");
-			model.add(obj);
-			fireContentsChanged(this, 0, model.size()-1);
-		}
-
-		public void moveUp(int index) {
-			T tmp = model.remove(index);
-			model.insertElementAt(tmp, index-1);
-			fireContentsChanged(this, index, index-1);
-		}
-
-		public void moveDown(int index) {
-			T tmp = model.remove(index);
-			model.insertElementAt(tmp, index+1);
-			fireContentsChanged(this, index, index+1);
-		}
-
-		public T drop(int index) {
-			T tmp = model.remove(index);
-			fireContentsChanged(this, index, index);
-			return tmp;
-		}
-
-		public void update() {
-			Debug.log(this, Debug.DEBUG, "Size: " + model.size());
-			fireContentsChanged(this, 0, model.size());
-		}
 	}
 
 	@Override
@@ -304,18 +252,6 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 			mom.queueMessage(holdBack.drop(0));
 		}
 	}//GEN-LAST:event_releaseButtonActionPerformed
-
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-			@Override
-            public void run() {
-                new DebugUI("Console");
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton dropButton;
