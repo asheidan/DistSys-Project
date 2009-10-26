@@ -94,9 +94,11 @@ Date	&	Milestone	&	Content \\
 
 %-----------------------------------------------------------
 \section{System Overview}
+This project consists of a middleware for goup communication and a demo application to show that it works. The middleware is located in the gcom and rmi packages, the demo application is in the gui package. An overview over all the packages and their classes can be seen in figure \vref{fig:overview}.
 
 \subsection{The gcom package}
 The gcom package is the main part of this project. This is where communication, message ordering and group management is handled. 
+
 \subsubsection{GCom}
 GCom is the main component in this package and is where the demo application is connected. The application gives commands to GCom, for example create a group or send a message, these commands are translated to messages that GCom sends through the appropriate communication module and to commands to the GroupManagementModule so that the current group state can be maintained.
 
@@ -135,7 +137,6 @@ Message ordering is described in detail in section \vref{messageordering}.
 
 \subsubsection{momFIFO}
 This message ordering sorts messages in a First In First Out order, in this case this means that messages is delivered in the same order the sender sent them. See section \vref{mo-fifo} for details.
-
 
 \subsubsection{momCausal}
 Causal ordering orders messages according to a happend before relationship. See section \vref{mo-causal} for details.
@@ -193,7 +194,10 @@ GroupSequencer (GS) is used by SCM for setting serial numbers on messages. The G
 
 
 \subsection{The gui package}
+The gui package implements our demo application: a chat application with tabs for groups. 
+
 \subsubsection{GroupPanel}
+
 \subsubsection{GUIViewOther}
 
 
@@ -324,150 +328,6 @@ The RMI-server has to be setarted before the sequencer and we only wanted a sing
 It would have scaled to more users to put the sequencer in the group leader, but this would make the sequencer less stable (since the group leader might choose to leave the group).
 
 An obvious drawback of having a single sequencer for all groups is that it becomes a bottleneck. This could be solved by moving the sequencer to several dedicated hosts and assigning groups to one of many sequencers.
-
-
-
-%-----------------------------------------------------------
-\section{Design}
-\subsection{GCom}
-A framework (middleware) for communicating between distributed nodes within groups.
-This module exposes the functionality of the other modules that are part of GCom so that referencing them directly should not be needed in order to use them.
-%	(Interface from previous year http://www.cs.umu.se/kurser/5DV020/HT08/GCom.java)
-
-\subsubsection{Interface}
-\begin{itemize}
-\item[+]  joinGroup(String groupName) \\
-	Contact RMI registry and get group-leader \\
-	Contact group-leader
-
-\item[+]  createGroup(String groupName)
-	Register at RMI registry
-
-\item[+]  removeGroup(String groupName) \\
-	Removes the group from the RMI registry
-
-\item[+] leave(String groupName) \\
-	Send GroupView excluding sending Member
-
-\item[+]  listGroups \\
-	Ask registry
-
-\item[+]  listMembers(String groupName)
-
-\item[+]  sendMessage(String groupName, Message) \\
-	Sends a message to the specified group via CommunicationModule
-
-\item[+]  connectToRegistry(String host, int port) \\
-	Connects to a RMI registry
-\end{itemize}
-
-\subsection{CommunicationModule}
-Sends and receives messages to and from other processes. This module must support both reliable and basic multicast. Received data is sent to the MessageOrderingModule. The GroupManagementModule is also notified with the senders process ID. 
-
-\subsubsection{Interface}
-\begin{itemize}
-\item[+] receive(Message)
-	This method is called remotely by other nodes when sending messages to this node.
-
-\item[+] send(Group, Message) \\
-	Look up communication type in group \\
-	Look up group members
-
-\item[-] multicastB
-	Private method used internally to perform a basic multicast.
-
-\item[-] multicastR
-	Private method which uses multicastB to perform a reliable multicast.
-
-\end{itemize}
-
-\subsection{MessageOrderingModule}
-Sorts incoming messages and makes sure that they're delivered according to the specified order (Non-ordered, FIFO, Causal, Total, Causal-Total). Non-ordered is the main class and the other ordering methods is implemented as subclasses. 
-
-\subsubsection{Interface}
-\begin{itemize}
-\item[+] queueMessage(Message)
-\end{itemize}
-
-\subsection{GroupManagementModule}
-The GroupManagementModule contains collection of Group objects. It monitors if a process stops responding. Notifies changes in the states to all members of the group (via the CommunicationModule). The GroupManagementModule also resolves group names to a list of members.
-
-\subsubsection{Interface}
-\begin{itemize}
-\item[+] addGroup(String groupName)
-\item[+] removeGroup(String groupName)
-\item[+] listGroups
-\end{itemize}
-
-\subsection{Group}
-Stores a group's state and group members.
-
-\subsubsection{Interface}
-\begin{itemize}
-\item[+] addMember \\
-	Adds the member to the member list
-\item[+]  removeMember \\
-	Removes the member from the member list
-\item[+]  listMembers
-\item[+]  update(ProcessID) \\
-	Updates the last seen vector time for the process
-\end{itemize}
-
-
-\subsection{GUI}
-The GUI class contains the application that uses GCom and is mostly used for testing and demonstration. We intend to write some kind of simple chat application. The GUI registers listeners in the GCom class to get information. 
-
-
-\subsection{Message}
-The Message is a basic data object which can be serialized. It contains a Vector clock, a destination group, message type and the actual message. 
-
-\subsection{RMI Registry}
-A central RMI-registry. Single point of failure. Leader registers and unregisters group. 
-
-\begin{figure}[h]
-	\includegraphics[width=150mm]{klasser.png}
-	\caption{How the modules are related.}
-\end{figure}
-
-%-----------------------------------------------------------
-\section{Use cases}
-
-A few of the scenarios that might arise during using and testing GCom.
-
-\subsection{A node creates a new group}
-When a node wants to create a new group, it connects to the RMI-Registry and leaves a reference to itself under the name of the channel.
-
-If this succeeds it sets itself as the group leader and adds itself to it's view of the group in the GroupManagementModule.
-
-If the registration fails an exception indicating if the name was already taken or the RMI-Registry was unresponsive is thrown.
-
-\subsection{A group leader removes a group}
-The leader removes all members from it's view of the group in GroupManagementModule and then sends this updated view to all members of the group via the CommunicationModule. It then unregisters the group name in the registry.
-
-\subsection{A member joins a group}
-When joining a group the prospective member connects to the RMI-Registry and gets a reference to the group leader and sends it a join request. The leader adds the new member to it's view of the group and then sends this updated view to all members of the group, including the new member. When the new member receives the updated view it knows it is part of the group.
-
-\subsection{A member leaves group}
-When a member wants to leave a group it sends a group view excluding itself to all the members (including the group-leader) of the group.
-
-\subsection{Send message to a group}
-First a list of all members in the group is obtained from the GroupManagementModule and then the message is sent to all of the members.
-
-%\subsection{Member receives message with much later time-stamp than previous message}
-%TODO: Design a way for a node to request an older message
-
-\subsection{Group-leader leaves group}
-When the group-leader leaves the group the remaining members starts electing a new group leader by creating a semi-random (and unique) value and sending this to all other nodes in an election-message.
-
-%TODO: A crashed node could make a group-leader election fail.
-When a node receives election-messages it compares the value in the incoming message with the value it created and sends the larger of these to all other nodes. When a node has received messages with it's own value from all members of the group it sets itself as group-leader and registers with the RMI-Registry.
-
-For now we do not take into account that a node might crash during the election.
-
-If the group-leader leaves a single member behind this node realizes it is alone in the group and sets itself as group-leader and registers with the registry.
-
-\subsection{The last member in a group leaves}
-When the last member of a group leaves it is the group-leader and it unregisters itself from the registry.
 
 %-----------------------------------------------------------
 \section{Fault tolerance}

@@ -6,8 +6,10 @@
 \@writefile{toc}{\contentsline {section}{\numberline {1}Bonus Level}{1}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Tools and language for implementation}{1}}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Project plan}{1}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Using the demo application}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}System Overview}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Using the demo application}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}System Overview}{1}}
+\newlabel{1@xvr}{{}{2}}
+\newlabel{1@vr}{{}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1}The gcom package}{2}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}GCom}{2}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.2}BasicCommunicationModule}{2}}
@@ -15,17 +17,17 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.4}GroupManagementModule}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.5}RMIModule}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.6}momNonOrdered}{3}}
-\newlabel{1@xvr}{{}{3}}
-\newlabel{1@vr}{{}{3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.7}momFIFO}{3}}
 \newlabel{2@xvr}{{}{3}}
 \newlabel{2@vr}{{}{3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.8}momCausal}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.7}momFIFO}{3}}
 \newlabel{3@xvr}{{}{3}}
 \newlabel{3@vr}{{}{3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.9}momTotal}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.8}momCausal}{3}}
 \newlabel{4@xvr}{{}{3}}
 \newlabel{4@vr}{{}{3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.9}momTotal}{3}}
+\newlabel{5@xvr}{{}{3}}
+\newlabel{5@vr}{{}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.10}ReferenceKeeper}{4}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.11}HashVectorClock}{4}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.12}GroupDefinition}{4}}
@@ -43,76 +45,76 @@
 \newlabel{fig:overview}{{1}{6}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.5}GroupSequencer}{6}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}The gui package}{6}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}GroupPanel}{6}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}GUIViewOther}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Message ordering and message ordering modules}{6}}
-\newlabel{messageordering}{{6}{6}}
 \citation{distsys-ordering}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The non ordered message ordering module just forwards messages to it's listeners. The state of a vector clock is also kept in the module.}}{7}}
 \newlabel{fig:nonorderd}{{2}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}GroupPanel}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}GUIViewOther}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Message ordering and message ordering modules}{7}}
+\newlabel{messageordering}{{6}{7}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Non ordered / momNonOrdered}{7}}
-\newlabel{5@xvr}{{}{7}}
-\newlabel{5@vr}{{}{7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}FIFO ordering / momFIFO}{7}}
-\newlabel{mo-fifo}{{6.2}{7}}
 \newlabel{6@xvr}{{}{7}}
 \newlabel{6@vr}{{}{7}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The FIFO ordered MOM places messages in a holdback queue until they can be delivered in the order they where sent. Messages from new senders are delivered directly as no previous clockvalue is known.}}{8}}
 \newlabel{fig:fifo}{{3}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Causal ordering / momCausal}{8}}
-\newlabel{mo-causal}{{6.3}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}FIFO ordering / momFIFO}{8}}
+\newlabel{mo-fifo}{{6.2}{8}}
 \newlabel{7@xvr}{{}{8}}
 \newlabel{7@vr}{{}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The Causal ordered MOM places a message in a holdback queue until all messages that happened before it has been deliverd.}}{9}}
-\newlabel{fig:causal}{{4}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Total ordering uses a sequencer to deliver messages in the same order in every client.}}{10}}
-\newlabel{fig:total}{{5}{10}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Total ordering / momTotal}{10}}
-\newlabel{mo-total}{{6.4}{10}}
-\newlabel{8@xvr}{{}{10}}
-\newlabel{8@vr}{{}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Causal ordering / momCausal}{9}}
+\newlabel{mo-causal}{{6.3}{9}}
+\newlabel{8@xvr}{{}{9}}
+\newlabel{8@vr}{{}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Total ordering / momTotal}{9}}
+\newlabel{mo-total}{{6.4}{9}}
+\newlabel{9@xvr}{{}{9}}
+\newlabel{9@vr}{{}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The Causal ordered MOM places a message in a holdback queue until all messages that happened before it has been deliverd.}}{10}}
+\newlabel{fig:causal}{{4}{10}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Causal total ordering}{10}}
+\newlabel{10@xvr}{{}{10}}
+\newlabel{10@vr}{{}{10}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Design decisions}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Selection of bonus level}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Total ordering uses a sequencer to deliver messages in the same order in every client.}}{11}}
+\newlabel{fig:total}{{5}{11}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Causal total ordering also uses a sequencer, but here the sequencer has a MOM of it's own to give the messages serial numbers in causal order.}}{11}}
 \newlabel{fig:totalc}{{6}{11}}
-\newlabel{9@xvr}{{}{11}}
-\newlabel{9@vr}{{}{11}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Design decisions}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Selection of bonus level}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Why an chat Application?}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Why using a sequencer for total ordering?}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Why the sequencer lives in the rmi-server}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Why an chat Application?}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}Why using a sequencer for total ordering?}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Why the sequencer lives in the rmi-server}{12}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Design}{12}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.1}GCom}{12}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {8.1.1}Interface}{12}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.2}CommunicationModule}{13}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.1}Interface}{13}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.3}MessageOrderingModule}{13}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.3.1}Interface}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}GroupManagementModule}{13}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.4.1}Interface}{13}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.3.1}Interface}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}GroupManagementModule}{14}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.4.1}Interface}{14}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.5}Group}{14}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {8.5.1}Interface}{14}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.6}GUI}{14}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.7}Message}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.8}RMI Registry}{14}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Use cases}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}A node creates a new group}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.8}RMI Registry}{15}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces How the modules are related.}}{15}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}A group leader removes a group}{15}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}A member joins a group}{15}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Use cases}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}A node creates a new group}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}A group leader removes a group}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}A member joins a group}{16}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.4}A member leaves group}{16}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.5}Send message to a group}{16}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.6}Group-leader leaves group}{16}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.7}The last member in a group leaves}{16}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Fault tolerance}{16}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Detecting crashed members}{16}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Fault tolerance}{17}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Detecting crashed members}{17}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {10.2}If the registry restarts or is unresponsive}{17}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {10.3}If the group leader crashes}{17}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {10.4}If the last member of a group crashes}{17}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {10.5}Netsplit}{17}}
-\@writefile{toc}{\contentsline {section}{\numberline {11}Requirement Specification}{17}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {11.1}Group management}{17}}
-\bibcite{distsys-ordering}{1}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Requirement Specification}{18}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1}Group management}{18}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {11.2}Communication}{18}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {11.3}Message Ordering}{18}}
-\@writefile{toc}{\contentsline {section}{\numberline {12}Limitations}{18}}
+\bibcite{distsys-ordering}{1}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Limitations}{19}}

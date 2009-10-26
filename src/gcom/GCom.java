@@ -291,6 +291,7 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		CommunicationModule com = comModules.get(groupName);
 		if(com != null) {
 			tick(groupName);
+			Debug.log(this, Debug.DEBUG, "--------------- Clock ticked to: " + getClock(groupName));
 			com.send(
 					new gcom.Message(getClock(groupName), groupName,
 					identities.get(groupName), message, Message.TYPE_MESSAGE.APPLICATION));
