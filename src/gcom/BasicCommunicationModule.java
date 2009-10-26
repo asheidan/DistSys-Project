@@ -15,7 +15,6 @@ import gcom.interfaces.MessageOrderingModule;
 
 public class BasicCommunicationModule implements gcom.interfaces.CommunicationModule {
 	private Logger logger = Logger.getLogger("gcom.CommunicationModule.Basic");
-	
 	private MessageOrderingModule mom;
 	private GroupManagementModule gmm;
 	private String group;

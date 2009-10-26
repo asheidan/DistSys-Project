@@ -27,8 +27,7 @@ public class momTotal implements MessageOrderingModule {
 	
 	@Override
 	public void tick() {
-		// Are we the sequencer?
-		//this.clock.tick();
+		// Does nothing in total ordering
 	}
 	
 	@Override
