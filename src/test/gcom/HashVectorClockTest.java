@@ -84,8 +84,7 @@ public class HashVectorClockTest {
 	
 	@Test
 	public void testToString() {
-		assertEquals("VectorClock(0){0=0}",clock_0.toString());
-		assertEquals("VectorClock(1){9=9, 8=8, 7=7, 6=6, 5=5, 4=4, 3=3, 2=2, 1=1}", clock_1.toString());
+		assertEquals("VC(0){0=0}",clock_0.toString());
 	}
 
 	 @Test
