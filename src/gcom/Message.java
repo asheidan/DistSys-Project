@@ -14,7 +14,7 @@ public class Message implements gcom.interfaces.Message,Comparable<Message> {
 	private Member returnMember;
 	
 	public Message(HashVectorClock clock, String group_name, Member source, Serializable message, TYPE_MESSAGE type) {
-		this.clock = clock;
+		this.clock = clock.clone();
 		this.groupName = group_name;
 		this.source = source;
 		this.data = message;
@@ -66,7 +66,7 @@ public class Message implements gcom.interfaces.Message,Comparable<Message> {
 	}
 	@Override
 	public String toString() {
-		return String.format("Message %s:%s:%s",this.type,this.clock,this.data);
+		return String.format("Msg %3s:%s:%s",this.type,this.clock,this.data);
 	}
 
 	@Override
