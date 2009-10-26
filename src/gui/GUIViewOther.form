@@ -54,6 +54,25 @@
         </Component>
       </SubComponents>
     </Container>
+    <Container class="javax.swing.JMenu" name="viewMenu">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="View"/>
+        <Property name="enabled" type="boolean" value="false"/>
+        <Property name="name" type="java.lang.String" value="viewMenu" noResource="true"/>
+      </Properties>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JCheckBoxMenuItem" name="viewToolBarMenuItem">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="View Toolbar"/>
+            <Property name="name" type="java.lang.String" value="viewToolBarMenuItem" noResource="true"/>
+          </Properties>
+        </MenuItem>
+      </SubComponents>
+    </Container>
     <Container class="javax.swing.JMenuBar" name="menuBar">
       <Properties>
         <Property name="name" type="java.lang.String" value="menuBar" noResource="true"/>
@@ -183,17 +202,26 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="viewMenu">
+        <Menu class="javax.swing.JMenu" name="debugMenu">
           <Properties>
-            <Property name="text" type="java.lang.String" value="View"/>
-            <Property name="name" type="java.lang.String" value="viewMenu" noResource="true"/>
+            <Property name="text" type="java.lang.String" value="Debug"/>
+            <Property name="name" type="java.lang.String" value="debugMenu" noResource="true"/>
           </Properties>
+          <BindingProperties>
+            <BindingProperty name="enabled" source="groupFocused" sourcePath="${enabled}" target="debugMenu" targetPath="enabled" updateStrategy="0" immediately="false"/>
+          </BindingProperties>
           <SubComponents>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="viewToolBarMenuItem">
+            <MenuItem class="javax.swing.JMenuItem" name="attachDebugMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" value="View Toolbar"/>
-                <Property name="name" type="java.lang.String" value="viewToolBarMenuItem" noResource="true"/>
+                <Property name="text" type="java.lang.String" value="Attach debugger"/>
+                <Property name="name" type="java.lang.String" value="attachDebugMenuItem" noResource="true"/>
               </Properties>
+              <BindingProperties>
+                <BindingProperty name="enabled" source="groupFocused" sourcePath="${enabled}" target="attachDebugMenuItem" targetPath="enabled" updateStrategy="0" immediately="false"/>
+              </BindingProperties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="attachDebugMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

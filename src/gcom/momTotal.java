@@ -13,14 +13,12 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 public class momTotal extends momNonOrdered {
-	private Vector<Message> messages;
 	private Integer lastDelivered;
 	private RemoteObject sequencer;
 	private Member identity;
 
 	public momTotal(String id) {
 		super(id);
-		messages = new Vector<Message>();
 	}
 	
 	public void setIdentity(Member me) {

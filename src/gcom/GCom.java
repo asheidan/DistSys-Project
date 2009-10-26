@@ -2,6 +2,7 @@ package gcom;
 
 // Imports
 import gcom.interfaces.CommunicationModule;
+import gcom.interfaces.DebugInterface;
 import gcom.interfaces.GComMessageListener;
 import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.GroupManagementModule;
@@ -40,6 +41,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	private Hashtable<String, ReferenceKeeper> keepers = new Hashtable<String, ReferenceKeeper>();
 
 	private Hashtable<String, Vector<GComMessageListener>> messageListeners = new Hashtable<String, Vector<GComMessageListener>>();
+	private Hashtable<String, DebugInterface> debugs = new Hashtable<String, DebugInterface>();
+
 
 	private Hashtable<String,Vector<Member>> electionResults = new Hashtable<String,Vector<Member>>();
 	private Hashtable<String,String> highestElectionValues = new Hashtable<String,String>();
@@ -545,5 +548,11 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	@Override
 	public boolean isGroupOpen(String groupName) {
 		return gmm.isGroupOpen(groupName);
+	}
+
+	@Override
+	public void attachDebug(String groupName, DebugInterface debug) {
+		debugs.put(groupName, debug);
+		((gcom.RemoteObject)identities.get(groupName).getRemoteObject()).attachDebugger(debug);
 	}
 }

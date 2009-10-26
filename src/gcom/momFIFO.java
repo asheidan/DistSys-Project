@@ -9,11 +9,9 @@ import java.io.Serializable;
 import java.util.Vector;
 
 public class momFIFO extends momNonOrdered {
-	private Vector<Message> messages;
 
 	public momFIFO(String id) {
 		super(id);
-		messages = new Vector<Message>();
 	}
 
 	private void sendMessage(Message message) {

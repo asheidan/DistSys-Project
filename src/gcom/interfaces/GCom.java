@@ -191,4 +191,6 @@ public interface GCom {
 
 	public void freezeGroup(String groupName);
 	public boolean isGroupOpen(String groupName);
+
+	public void attachDebug(String groupName, DebugInterface debug);
 }

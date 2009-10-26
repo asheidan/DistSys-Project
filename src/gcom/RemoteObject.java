@@ -5,6 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import gcom.interfaces.CommunicationModule;
+import gcom.interfaces.DebugInterface;
 import gcom.interfaces.GroupDefinition;
 import gcom.interfaces.Message;
 
@@ -97,6 +98,11 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	@Override
 	public double getUnique() {
 		return unique;
+	}
+
+	public void attachDebugger(DebugInterface debug) {
+		debug.attachCom(com);
+		com = debug;
 	}
 }
 
