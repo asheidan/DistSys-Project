@@ -24,6 +24,7 @@
 \noindent
 Tutors: \tutor \\
 Date: \today \\
+Bonus level: 2\\
 \\
 \\
 Running the program: 
@@ -57,13 +58,14 @@ Start client: $ ant gui
 
 
 %-----------------------------------------------------------
-\section{Bonus Level}
-We have solved bonus level two with dynamic groups. 
+\section{Introduction}
+- Vad det är och vad det gör
+- Grupper, medlemmar, statiska, dynamiska, andra begrepp
 
 
 %-----------------------------------------------------------
 \section{Tools and language for implementation}
-Since the clear recommendation was to use Java and Java RMI we have decided to follow the recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
+Since the clear recommendation was to use Java and Jav                                                                                    a RMI we have decided to follow the recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
 
 JUnit has be used for unit testing and logging has be done through the log4j-package. 
 
@@ -82,6 +84,12 @@ Generally things took slightly longer then anticipated, part due to tricky bugs 
 %-----------------------------------------------------------
 \section{System Overview}
 This project consists of a middle-ware for group communication and a demo application to show that it works. The middle-ware is located in the gcom and rmi packages, the demo application is in the gui package. An overview over all the packages and their classes can be seen in figure \vref{fig:overview}.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{superuml.png}
+\caption{All the classes in the program and an overview of their relations.}
+\label{fig:overview}
+\end{figure}
 
 \subsection{The gcom package}
 The gcom package is the main part of this project. This is where communication, message ordering and group management is handled. 
@@ -132,7 +140,13 @@ Causal ordering orders messages according to a happened before relationship. See
 Total ordering means that all clients deliver the messages in the exact same order. See section \vref{mo-total} for details.
 
 \subsubsection{ReferenceKeeper}
-The ReferenceKeeper is used by GCom only for the group leader. It checks that the rmi registry has the reference to the leaders RemoteObject and tries to rebind it if not. The ReferenceKeeper is run in it's own thread and rechecks the reference in the registry every minute.
+The ReferenceKeeper is used by GCom 
+
+\begin{figure}
+\includegraphics[width=\textwidth]{superuml.png}
+\caption{All the classes in the program and an overview of their relations.}
+\label{fig:overview}
+\end{figure}only for the group leader. It checks that the rmi registry has the reference to the leaders RemoteObject and tries to rebind it if not. The ReferenceKeeper is run in it's own thread and rechecks the reference in the registry every minute.
 
 \subsubsection{HashVectorClock}
 The HashVectorClock implements VectorClock. It stores a clock state with integer values for different process IDs. The clock can be compared to another clock, merged with another clock and ticked, which increases the clock value for the owner by one.
@@ -180,19 +194,13 @@ It receives messages and returns them to the return address with a serial number
 GroupSequencer (GS) is used by SCM for setting serial numbers on messages. The GS uses a MOM to order the messages before a serial number is given to them. Messages are cached with their serial numbers so requests for the same message gets the same number. 
 
 
-\subsection{The gui package}
+\subsection{The gui package}                                                                                    
 The gui package implements our demo application: a chat application with tabs for groups. 
 
 \subsubsection{GroupPanel}
 
 \subsubsection{GUIViewOther}
 
-
-\begin{figure}
-\includegraphics[width=\textwidth]{superuml.png}
-\caption{All the classes in the program and an overview of their relations.}
-\label{fig:overview}
-\end{figure}
 
 %-----------------------------------------------------------
 \section{Message ordering and message ordering modules}
@@ -293,7 +301,13 @@ With causal total ordering the sequencer uses a momCausal to order the messages 
 
 \begin{figure}
 \includegraphics[width=\textwidth]{momTotalC.png}
-\caption{Causal total ordering also uses a sequencer, but here the sequencer has a MOM of it's own to give the messages serial numbers in causal order.}
+\caption{Causal total ordering also uses a sequencer, but here the sequencer has a MOM of it's own to give the messages serial numbers in c
+
+\begin{figure}
+\includegraphics[width=\textwidth]{superuml.png}
+\caption{All the classes in the program and an overview of their relations.}
+\label{fig:overview}
+\end{figure}ausal order.}
 \label{fig:totalc}
 \end{figure}
 
@@ -360,19 +374,20 @@ Below our requirement specification from out project plan is included in appendi
 
 \item If a group contains too many users java will run out of memory and the client will crash. If reliable multicast is used the network will most likely also be very congested.
 
+\item The demo application does not use the remove group feature of GCom since it is more user friendly to let the group live as long as there is users conencted to it and remove it when the last user quits. However, the feature is implemented and can be used by some other application that uses the middle ware.
+
+\item The program does not build under Windows. Usage of windows is discourage and behaviour is undefined.
 
 \end{itemize}
 
-
 \begin{thebibliography}{5}
-
 \bibitem{distsys-ordering} Distributed systems : concepts and design / GeorgeCoulouris, Jean Dollimore, Tim Kondberg.--4th ed. p. 490-498
 
 \end{thebibliography}
 
-
 \appendix
 \section{Project plan}
+\label{app:projectplan}
 \begin{tabular}{|l|l|p{7.5cm}|}
 \hline
 Date	&	Milestone	&	Content \\
@@ -390,7 +405,6 @@ Date	&	Milestone	&	Content \\
 28-30 Oct & Demonstration	& \\
 \hline
 \end{tabular}
-
 
 \appendix
 \section{Requirement specification from project plan}
@@ -418,7 +432,12 @@ Date	&	Milestone	&	Content \\
 
 \subsection{Communication}
 \begin{description}
-\item[REQUIRED] It must be possible to send messages to the members of joined group.
+\item[REQUIRED] It must be possible to send messages t
+%-----------------------------------------------------------
+\section{Bonus Level}
+We have solved bonus level two with dynamic groups. 
+
+o the members of joined group.
 
 \item[REQUIRED] Both non-reliable and reliable multicast must be supported for sending messages.
 

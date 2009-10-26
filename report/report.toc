@@ -1,58 +1,59 @@
 \select@language {english}
-\contentsline {section}{\numberline {1}Bonus Level}{1}
+\contentsline {section}{\numberline {1}Introduction}{1}
 \contentsline {section}{\numberline {2}Tools and language for implementation}{1}
-\contentsline {section}{\numberline {3}Realisation of the project plan}{1}
+\contentsline {section}{\numberline {3}Realization of the project plan}{1}
 \contentsline {section}{\numberline {4}Using the demo application}{1}
 \contentsline {section}{\numberline {5}System Overview}{1}
 \contentsline {subsection}{\numberline {5.1}The gcom package}{1}
-\contentsline {subsubsection}{\numberline {5.1.1}GCom}{2}
-\contentsline {subsubsection}{\numberline {5.1.2}BasicCommunicationModule}{2}
-\contentsline {subsubsection}{\numberline {5.1.3}ReliableCommunicationModule}{2}
-\contentsline {subsubsection}{\numberline {5.1.4}GroupManagementModule}{3}
-\contentsline {subsubsection}{\numberline {5.1.5}RMIModule}{3}
-\contentsline {subsubsection}{\numberline {5.1.6}momNonOrdered}{3}
-\contentsline {subsubsection}{\numberline {5.1.7}momFIFO}{3}
-\contentsline {subsubsection}{\numberline {5.1.8}momCausal}{3}
-\contentsline {subsubsection}{\numberline {5.1.9}momTotal}{3}
-\contentsline {subsubsection}{\numberline {5.1.10}ReferenceKeeper}{3}
-\contentsline {subsubsection}{\numberline {5.1.11}HashVectorClock}{4}
-\contentsline {subsubsection}{\numberline {5.1.12}GroupDefinition}{4}
-\contentsline {subsubsection}{\numberline {5.1.13}RemoteObject}{4}
-\contentsline {subsubsection}{\numberline {5.1.14}Group}{4}
-\contentsline {subsubsection}{\numberline {5.1.15}Member}{4}
-\contentsline {subsubsection}{\numberline {5.1.16}Message}{4}
-\contentsline {subsubsection}{\numberline {5.1.17}Debug}{4}
-\contentsline {subsection}{\numberline {5.2}The rmi package}{4}
-\contentsline {subsubsection}{\numberline {5.2.1}RMIServer}{4}
-\contentsline {subsubsection}{\numberline {5.2.2}BackdoorOpener}{5}
-\contentsline {subsubsection}{\numberline {5.2.3}Sequencer}{5}
-\contentsline {subsubsection}{\numberline {5.2.4}SequencerCommunicationModule}{5}
-\contentsline {subsubsection}{\numberline {5.2.5}GroupSequencer}{5}
-\contentsline {subsection}{\numberline {5.3}The gui package}{5}
-\contentsline {subsubsection}{\numberline {5.3.1}GroupPanel}{6}
-\contentsline {subsubsection}{\numberline {5.3.2}GUIViewOther}{6}
-\contentsline {section}{\numberline {6}Message ordering and message ordering modules}{6}
+\contentsline {subsubsection}{\numberline {5.1.1}GCom}{3}
+\contentsline {subsubsection}{\numberline {5.1.2}BasicCommunicationModule}{3}
+\contentsline {subsubsection}{\numberline {5.1.3}ReliableCommunicationModule}{3}
+\contentsline {subsubsection}{\numberline {5.1.4}GroupManagementModule}{4}
+\contentsline {subsubsection}{\numberline {5.1.5}RMIModule}{4}
+\contentsline {subsubsection}{\numberline {5.1.6}momNonOrdered}{4}
+\contentsline {subsubsection}{\numberline {5.1.7}momFIFO}{4}
+\contentsline {subsubsection}{\numberline {5.1.8}momCausal}{4}
+\contentsline {subsubsection}{\numberline {5.1.9}momTotal}{4}
+\contentsline {subsubsection}{\numberline {5.1.10}ReferenceKeeper}{4}
+\contentsline {subsubsection}{\numberline {5.1.11}HashVectorClock}{5}
+\contentsline {subsubsection}{\numberline {5.1.12}GroupDefinition}{5}
+\contentsline {subsubsection}{\numberline {5.1.13}RemoteObject}{5}
+\contentsline {subsubsection}{\numberline {5.1.14}Group}{5}
+\contentsline {subsubsection}{\numberline {5.1.15}Member}{5}
+\contentsline {subsubsection}{\numberline {5.1.16}Message}{5}
+\contentsline {subsubsection}{\numberline {5.1.17}Debug}{5}
+\contentsline {subsection}{\numberline {5.2}The rmi package}{5}
+\contentsline {subsubsection}{\numberline {5.2.1}RMIServer}{5}
+\contentsline {subsubsection}{\numberline {5.2.2}BackdoorOpener}{6}
+\contentsline {subsubsection}{\numberline {5.2.3}Sequencer}{6}
+\contentsline {subsubsection}{\numberline {5.2.4}SequencerCommunicationModule}{6}
+\contentsline {subsubsection}{\numberline {5.2.5}GroupSequencer}{6}
+\contentsline {subsection}{\numberline {5.3}The gui package}{6}
+\contentsline {subsubsection}{\numberline {5.3.1}GroupPanel}{7}
+\contentsline {subsubsection}{\numberline {5.3.2}GUIViewOther}{7}
+\contentsline {section}{\numberline {6}Message ordering and message ordering modules}{7}
 \contentsline {subsection}{\numberline {6.1}Non ordered / momNonOrdered}{7}
-\contentsline {subsection}{\numberline {6.2}FIFO ordering / momFIFO}{7}
-\contentsline {subsection}{\numberline {6.3}Causal ordering / momCausal}{8}
+\contentsline {subsection}{\numberline {6.2}FIFO ordering / momFIFO}{8}
+\contentsline {subsection}{\numberline {6.3}Causal ordering / momCausal}{9}
 \contentsline {subsection}{\numberline {6.4}Total ordering / momTotal}{9}
 \contentsline {subsection}{\numberline {6.5}Causal total ordering}{10}
-\contentsline {section}{\numberline {7}Design decisions}{11}
-\contentsline {subsection}{\numberline {7.1}Selection of bonus level}{11}
-\contentsline {subsection}{\numberline {7.2}Why an chat Application?}{11}
-\contentsline {subsection}{\numberline {7.3}Why using a sequencer for total ordering?}{11}
-\contentsline {subsection}{\numberline {7.4}Why the sequencer lives in the rmi-server}{11}
+\contentsline {section}{\numberline {7}Design decisions}{10}
+\contentsline {subsection}{\numberline {7.1}Selection of bonus level}{10}
+\contentsline {subsection}{\numberline {7.2}Why an chat Application?}{12}
+\contentsline {subsection}{\numberline {7.3}Why using a sequencer for total ordering?}{12}
+\contentsline {subsection}{\numberline {7.4}Why the sequencer lives in the rmi-server}{12}
 \contentsline {section}{\numberline {8}Fault tolerance}{12}
 \contentsline {subsection}{\numberline {8.1}Detecting crashed members}{12}
 \contentsline {subsection}{\numberline {8.2}If the registry restarts or is unresponsive}{12}
-\contentsline {subsection}{\numberline {8.3}If the group leader crashes}{12}
-\contentsline {subsection}{\numberline {8.4}Election of a new leader}{12}
-\contentsline {subsection}{\numberline {8.5}If the last member of a group crashes}{12}
+\contentsline {subsection}{\numberline {8.3}If the group leader crashes}{13}
+\contentsline {subsection}{\numberline {8.4}Election of a new leader}{13}
+\contentsline {subsection}{\numberline {8.5}If the last member of a group crashes}{13}
 \contentsline {subsection}{\numberline {8.6}Netsplit}{13}
 \contentsline {section}{\numberline {9}Implementation of requirement specification}{13}
 \contentsline {section}{\numberline {10}Limitations}{13}
 \contentsline {section}{\numberline {A}Project plan}{14}
-\contentsline {section}{\numberline {A}Requirement specification from project plan}{14}
-\contentsline {subsection}{\numberline {A.1}Group management}{14}
+\contentsline {section}{\numberline {A}Requirement specification from project plan}{15}
+\contentsline {subsection}{\numberline {A.1}Group management}{15}
 \contentsline {subsection}{\numberline {A.2}Communication}{15}
-\contentsline {subsection}{\numberline {A.3}Message Ordering}{15}
+\contentsline {section}{\numberline {B}Bonus Level}{15}
+\contentsline {subsection}{\numberline {B.1}Message Ordering}{16}
