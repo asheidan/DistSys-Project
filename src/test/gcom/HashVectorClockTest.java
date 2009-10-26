@@ -21,39 +21,39 @@ public class HashVectorClockTest {
 	public void setUp() throws Exception {
 		BasicConfigurator.configure();
 
-		clock_0 = new HashVectorClock(0);
+		clock_0 = new HashVectorClock("0");
 		
-		Hashtable<Object, Integer> table_1 = new Hashtable<Object, Integer>();
+		Hashtable<String, Integer> table_1 = new Hashtable<String, Integer>();
 		Integer k = 0;
 		for(Integer v : Arrays.asList(1,2,3,4,5,6,7,8,9)) {
 			k++;
-			table_1.put(k,v);
+			table_1.put(String.valueOf(k),v);
 		}
-		clock_1 = new HashVectorClock(1,table_1);
+		clock_1 = new HashVectorClock("1",table_1);
 
-		Hashtable<Object, Integer> table_2 = new Hashtable<Object, Integer>();
+		Hashtable<String, Integer> table_2 = new Hashtable<String, Integer>();
 		k = 0;
 		for(Integer v : Arrays.asList(1,2,3,4,5,7,7,8,9)) {
 			k++;
-			table_2.put(k,v);
+			table_2.put(String.valueOf(k),v);
 		}
-		clock_2 = new HashVectorClock(2,table_2);
+		clock_2 = new HashVectorClock("2",table_2);
 		
-		Hashtable<Object, Integer> table_3 = new Hashtable<Object, Integer>();
+		Hashtable<String, Integer> table_3 = new Hashtable<String, Integer>();
 		k = 0;
 		for(Integer v : Arrays.asList(0,2,3,4,5,7,7,9,9)) {
 			k++;
-			table_3.put(k,v);
+			table_3.put(String.valueOf(k),v);
 		}
-		clock_3 = new HashVectorClock(3,table_3);
+		clock_3 = new HashVectorClock("3",table_3);
 		
-		Hashtable<Object, Integer> table_4 = new Hashtable<Object, Integer>();
+		Hashtable<String, Integer> table_4 = new Hashtable<String, Integer>();
 		k = 4;
 		for(Integer v : Arrays.asList(5,6,7,8,9,0,1,2,3,4,5,6,7,8)) {
 			k++;
-			table_4.put(k,v);
+			table_4.put(String.valueOf(k),v);
 		}
-		clock_4 = new HashVectorClock(4,table_4);
+		clock_4 = new HashVectorClock("4",table_4);
 	}
 
 	@Test

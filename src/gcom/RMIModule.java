@@ -12,6 +12,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 import gcom.interfaces.RemoteObject;
 import gcom.interfaces.Backdoor;
+import java.rmi.NoSuchObjectException;
+import org.apache.log4j.Level;
 
 public class RMIModule implements gcom.interfaces.RMIModule {
 	private Registry registry;
@@ -45,12 +47,19 @@ public class RMIModule implements gcom.interfaces.RMIModule {
 				backdoor = null;
 				connect();
 			}
+			catch(NoSuchObjectException e) {
+				Debug.log(this, Debug.DEBUG, "Registry is restarted");
+				backdoor = null;
+				connect();
+			}
 		}
 	}
 	
 	@Override
 	public void bind(String name, RemoteObject ro) throws AccessException, RemoteException, AlreadyBoundException {
 		connect();
+		Debug.log(this, Debug.DEBUG, "backdoor is: " + backdoor);
+		Debug.log(this, Debug.DEBUG, "remote is: " + ro);
 		try {
 			backdoor.bind(name, UnicastRemoteObject.exportObject(ro,0));
 		}

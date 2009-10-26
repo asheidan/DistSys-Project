@@ -99,6 +99,11 @@ public class BasicCommunicationModuleTest {
 		
 		@Override
 		public void addMessageListener(GComMessageListener l) {}
+
+		@Override
+		public void attachDebugger(DebugInterface debug) {
+			throw new UnsupportedOperationException("Not supported yet.");
+		}
 	}
 
 }

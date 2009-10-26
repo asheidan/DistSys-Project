@@ -1,5 +1,6 @@
 package rmi.test;
 
+import gcom.interfaces.DebugInterface;
 import static org.junit.Assert.*;
 
 import rmi.*;
@@ -136,6 +137,11 @@ public class sequencerTest {
 		@Override
 		public void send(gcom.interfaces.Member member, gcom.interfaces.Message msg) {
 			throw new java.lang.RuntimeException("You're using a mockup!");
+		}
+
+		@Override
+		public void attachDebugger(DebugInterface debug) {
+			throw new UnsupportedOperationException("Not supported yet.");
 		}
 	}
 }

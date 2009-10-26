@@ -21,7 +21,7 @@ public class MessageTest {
 	
 	@Before
 	public void setUp() {
-		clock = new HashVectorClock(0);
+		clock = new HashVectorClock("");
 		source = new gcom.Member("123", "test");
 		m = new gcom.Message(clock, "testGroup", source, "test", TYPE_MESSAGE.APPLICATION);
 	}
