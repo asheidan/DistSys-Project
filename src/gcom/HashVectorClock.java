@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 /**
  * Implements the interface {@link VectorClock} with the use of a
  * {@link Hashtable} instead of a vector. This is to allow for
@@ -16,7 +14,6 @@ import org.apache.log4j.Logger;
  */
 public class HashVectorClock implements VectorClock, Serializable {
     private static final long serialVersionUID = -5166402897945275632L;
-	private static Logger logger = Logger.getLogger("gcom.HashVectorClock");
 
 	private Hashtable<Object, Integer> clocks;
 	private Object key;
@@ -49,59 +46,70 @@ public class HashVectorClock implements VectorClock, Serializable {
 	}
 
 	public void merge(HashVectorClock o) {
-		logger.debug(String.format("Merging %s with %s", toString(), o.toString()));
-		for(Object key : o.clocks.keySet()) {
-			Integer my_value = clocks.get(key);
-			Integer other_value = o.clocks.get(key);
+		Debug.log(this, Debug.DEBUG, String.format("Merging %s with %s", toString(), o.toString()));
+		for(Object k : o.clocks.keySet()) {
+			Integer my_value = clocks.get(k);
+			Integer other_value = o.clocks.get(k);
 			if(my_value == null) {
-				clocks.put(key, other_value);
+				clocks.put(k, other_value);
 				continue;
 			}
 			if(my_value < other_value) {
-				clocks.put(key, other_value);
+				clocks.put(k, other_value);
 			}
 		}
 	}
 
 	public int compareTo(HashVectorClock o) {
-		logger.debug(String.format("Comparing %s with %s", toString(), o.toString()));
+		Debug.log(this, Debug.DEBUG, String.format("Comparing %s with %s", toString(), o.toString()));
 		int later = 0;
 		int earlier = 0;
-		for(Object key : clocks.keySet()){
-			Integer otherClockValue = o.clocks.get(key);
+		for(Object k : clocks.keySet()){
+			Integer otherClockValue = o.clocks.get(k);
 			if(otherClockValue != null) { 
-				switch(clocks.get(key).compareTo(otherClockValue)) {
+				switch(clocks.get(k).compareTo(otherClockValue)) {
 					case -1: earlier = -1; break;
 					case 1: later = 1; break;
 				}
 			}
 		}
+		Debug.log(this, Debug.DEBUG, "Result: " + earlier + " " + later);
 		return earlier + later;
 	}
 
 	public int excludedCompareTo(HashVectorClock o, Object excluded) {
+		Debug.log(this, Debug.DEBUG, String.format("Comparing e %s with %s", toString(), o.toString()));
 		int later = 0;
 		int earlier = 0;
-		for(Object key : clocks.keySet()){
-			Integer otherClockValue = o.clocks.get(key);
-			if(otherClockValue != null && key != excluded) { 
-				switch(clocks.get(key).compareTo(otherClockValue)) {
+		for(Object k : clocks.keySet()){
+			Integer otherClockValue = o.clocks.get(k);
+			Debug.log(this, Debug.TRACE, "otherclockval: " + otherClockValue + " key: " + k);
+			if(otherClockValue != null && !String.valueOf(k).equals(String.valueOf(excluded))) {
+				Debug.log(this, Debug.TRACE, "clockval: " + clocks.get(k) + " cmp: " + clocks.get(k).compareTo(otherClockValue));
+				switch(clocks.get(k).compareTo(otherClockValue)) {
 					case -1: earlier = -1; break;
 					case 1: later = 1; break;
 				}
 			}
 		}
+		Debug.log(this, Debug.DEBUG, "Result: " + earlier + " " + later);
 		return earlier + later;
 	}
 
+	@Override
 	public int compareTo(VectorClock o) {
 		throw(new RuntimeException("Method not implemented: compareTo(VectorClock)"));
 	}
 
+	@Override
 	public String toString() {
 		return "VectorClock(" +this.key.toString() + ")"+ clocks.toString(); 
 	}
 
+	@Override
+	public int hashCode() {
+		return clocks.hashCode();
+	}
 
 	public Integer getValue(Object key) {
 		return clocks.get(key);

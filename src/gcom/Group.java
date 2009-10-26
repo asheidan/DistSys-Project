@@ -4,32 +4,38 @@ import gcom.interfaces.Member;
 import gcom.interfaces.GroupDefinition;
 
 import gcom.interfaces.ViewChangeListener;
+import gcom.interfaces.GCom.TYPE_GROUP;
 import java.util.List;
 import java.util.Vector;
-import org.apache.log4j.Level;
 
 public class Group implements gcom.interfaces.Group {
 
 	private Vector<ViewChangeListener> viewChangeListeners = new Vector<ViewChangeListener>();
 	private Vector<Member> members = new Vector<Member>();
 	private GroupDefinition groupDefinition;
-	private boolean leader;
+	private Member leader;
+	private boolean isOpen = true;
+	private boolean isLost = false;
 
 	public Group(GroupDefinition group_definition) {
 		this.groupDefinition = group_definition;
 	}
 
 	@Override
-	public synchronized void addMember(Member member) {
-		Debug.log("gcom.Group", Level.DEBUG, groupDefinition.getGroupName() + ": adding member: " + member);
-		members.add(member);
-		for(ViewChangeListener l : viewChangeListeners) {
-			l.gotMember(member);
+	public void addMember(Member member) {
+		if(!isMember(member)) {
+			Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding member: " + member);
+			members.add(member);
+			for(ViewChangeListener l : viewChangeListeners) {
+				l.gotMember(member);
+			}
+		} else {
+			Debug.log("gcom.Group", Debug.DEBUG, "Addmember: Member " + member + " is already part of group.");
 		}
 	}
 
 	@Override
-	public synchronized List<Member> listMembers() {
+	public List<Member> listMembers() {
 		return members;
 	}
 
@@ -39,38 +45,65 @@ public class Group implements gcom.interfaces.Group {
 	}
 
 	@Override
-	public synchronized void removeMember(Member member) {
-		int index = members.indexOf(member);
-		members.remove(index);
-		for(ViewChangeListener l : viewChangeListeners) {
-			l.lostMember(member);
-		}
+	public void removeMember(Member member) {
+		if(!members.remove(member))
+			Debug.log(this,Debug.DEBUG, "Trying to remove member not part of group: " + member);
+		else
+			for(ViewChangeListener l : viewChangeListeners) {
+				l.lostMember(member);
+			}
 	}
-
 
 	@Override
 	public GroupDefinition getDefinition() {
 		return groupDefinition;
 	}
 
+	@Override
+	public void close() {
+		if(groupDefinition.getGroupType() == TYPE_GROUP.STATIC) {
+			isOpen = false;
+		}
+	}
+	
+	@Override
+	public boolean isOpen() {
+		return isOpen;
+	}
 
 	@Override
-	public void setLeader(boolean leader) {
+	public void setLeader(Member leader) {
 		this.leader = leader;
 	}
 	
 	@Override
-	public boolean isLeader() {
+	public Member getLeader() {
 		return leader;
 	}
 
 	@Override
-	public void addViewChangeListener(ViewChangeListener listener) {
-		Debug.log("gcom.Group", Level.DEBUG, groupDefinition.getGroupName() + ": adding listener: " + listener);
-		for(Member m : members) {
-			listener.gotMember(m);
+	public void lost() {
+		isLost = true;
+		Debug.log(this,Debug.TRACE, "Group is lost" + viewChangeListeners.toString());
+		for(ViewChangeListener l : viewChangeListeners) {
+			Debug.log(this,Debug.TRACE, "GAAHADHADWÖLHK");
+			l.lostGroup(groupDefinition.getGroupName());
 		}
-		viewChangeListeners.add(listener);
+	}
+
+	@Override
+	public void addViewChangeListener(ViewChangeListener listener) {
+		Debug.log("gcom.Group", Debug.DEBUG, groupDefinition.getGroupName() + ": adding listener: " + listener);
+		if(!isLost) {
+			for(Member m : members) {
+				listener.gotMember(m);
+			}
+			viewChangeListeners.add(listener);
+		}
+		else {
+			Debug.log(this,Debug.TRACE,"Adding listener to lost group");
+			listener.lostGroup(groupDefinition.getGroupName());
+		}
 	}
 
 }

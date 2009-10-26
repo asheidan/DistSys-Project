@@ -8,23 +8,26 @@ import gcom.interfaces.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
+import javax.swing.JTabbedPane;
+import org.apache.log4j.Level;
 
 /**
  *
  * @author emil
  */
 public class GroupPanel extends javax.swing.JPanel implements ActionListener,gcom.interfaces.ViewChangeListener,gcom.interfaces.GComMessageListener {
-	private NetBeansGUIView mainPanel;
+	private GUIViewOther mainPanel;
 	private Vector<MessageSender> senders = new Vector<MessageSender>();
 	private String groupName;
+	private JTabbedPane parent;
     /** Creates new form GroupPanel */
-    public GroupPanel(NetBeansGUIView mainPanel, String groupName) {
+    public GroupPanel(GUIViewOther mainPanel, String groupName, JTabbedPane parent) {
 		this.groupName = groupName;
 		this.mainPanel = mainPanel;
+		this.parent = parent;
         initComponents();
 		textField.addActionListener(this);
     }
@@ -67,6 +70,8 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
         jScrollPane2.setMinimumSize(new java.awt.Dimension(0, 23));
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(GroupPanel.class);
+        nodeList.setFont(resourceMap.getFont("nodeList.font")); // NOI18N
         nodeList.setModel(new javax.swing.DefaultListModel());
         nodeList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         nodeList.setName("nodeList"); // NOI18N
@@ -78,8 +83,7 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 
         textArea.setColumns(20);
         textArea.setEditable(false);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(gui.NetBeansGUIApp.class).getContext().getResourceMap(GroupPanel.class);
-        textArea.setFont(resourceMap.getFont("textArea.font")); // NOI18N
+        textArea.setFont(nodeList.getFont());
         textArea.setRows(5);
         textArea.setName("textArea"); // NOI18N
         jScrollPane3.setViewportView(textArea);
@@ -124,12 +128,14 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		Debug.log("netbeansgui.GroupPanel",Debug.DEBUG,"Tab for " + groupName + " got member " + member);
 		((DefaultListModel)nodeList.getModel()).addElement(member);
 		//nodeList.repaint();
+		append(String.format(">>> %s joined group (%s)",member.getName(),member.getID()));
 	}
 
 	@Override
 	public void lostMember(Member member) {
 		Debug.log("netbeansgui.GroupPanel",Debug.DEBUG,"Tab for " + groupName + " lost member " + member);
 		((DefaultListModel)nodeList.getModel()).removeElement(member);
+		append(String.format("<<< %s left group (%s)",member.getName(),member.getID()));
 	}
 
 	@Override
@@ -153,15 +159,20 @@ public class GroupPanel extends javax.swing.JPanel implements ActionListener,gco
 		String line = event.getActionCommand();
 		textField.setText("");
 		Debug.log(this, Debug.TRACE, "Got event in panel "+line);
-		append(line);
 		for(MessageSender sender : senders) {
-			// TODO: handling of unresponsive nodes should be done in gcom.*
 			try {sender.sendMessage(groupName, line);} catch(IOException e) {}
 		}
+		//append(String.format("> %s",line));
 	}
 
 	public void addMessageSender(MessageSender sender) {
 		senders.add(sender);
+	}
+
+	@Override
+	public void lostGroup(String groupName) {
+		Debug.log(this, Debug.TRACE, "Lost group: " + groupName);
+		if(parent != null) parent.remove(this);
 	}
 
 }

@@ -7,4 +7,6 @@ package gcom.interfaces;
 public interface ViewChangeListener {
 	public void gotMember(Member member);
 	public void lostMember(Member member);
+
+	public void lostGroup(String groupName);
 }

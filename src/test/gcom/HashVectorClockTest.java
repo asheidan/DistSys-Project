@@ -1,4 +1,4 @@
-package gcom.test;
+package test.gcom;
 import static org.junit.Assert.*;
 
 import gcom.HashVectorClock;
@@ -87,4 +87,17 @@ public class HashVectorClockTest {
 		assertEquals("VectorClock(0){0=0}",clock_0.toString());
 		assertEquals("VectorClock(1){9=9, 8=8, 7=7, 6=6, 5=5, 4=4, 3=3, 2=2, 1=1}", clock_1.toString());
 	}
+
+	 @Test
+	 public void testDifferentOrderOfKeys() {
+		HashVectorClock clock1 = new HashVectorClock("0");
+		HashVectorClock clock2 = new HashVectorClock("0");
+		clock1.put("1", 5);
+		clock1.put("2", 7);
+		clock2.put("2", 7);
+		clock2.put("1", 5);
+		assertEquals(0, clock1.compareTo(clock2));
+		assertEquals(0, clock2.compareTo(clock1));
+	}
+
 }

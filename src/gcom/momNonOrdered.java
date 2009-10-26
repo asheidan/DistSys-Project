@@ -3,16 +3,18 @@ package gcom;
 import gcom.interfaces.Message;
 import gcom.interfaces.*;
 import gcom.HashVectorClock;
+import gcom.interfaces.Message.*; 
 
 import java.io.Serializable;
 import java.util.Vector;
-import org.apache.log4j.Level;
 
 public class momNonOrdered implements MessageOrderingModule {
-	private Vector<GComMessageListener> listeners;
-	private HashVectorClock clock;
+	protected Vector<GComMessageListener> listeners;
+	protected HashVectorClock clock;
+	protected String myID;
 
 	public momNonOrdered(String id) {
+		myID = id;
 		listeners = new Vector<GComMessageListener>();
 		this.clock = new HashVectorClock(id);
 	}
@@ -24,9 +26,7 @@ public class momNonOrdered implements MessageOrderingModule {
 	
 	@Override
 	public void tick() {
-		// WE DO NOT CARE ABOUT TICKS AND CLOCKS
-		// WE ARE UNORDERED
-		// ORDER IS FOR THE WEAK
+		this.clock.tick();
 	}
 
 	@Override
@@ -34,16 +34,16 @@ public class momNonOrdered implements MessageOrderingModule {
 		listeners.add(listener);
 	}
 
-	private void sendToListeners(Message message) {
+	protected void sendToListeners(Message message) {
 		for(GComMessageListener l : listeners) {
-			Debug.log("gcom.momNonOrdered", Level.DEBUG, "Sent message to: " + l.toString());
+			Debug.log(this, Debug.TRACE, "Sent message to: " + l.toString());
 			l.messageReceived(message);
 		}
 	}
 	
 	@Override
 	public void queueMessage(Message m) {
-		Debug.log("gcom.momNonOrdered", Level.DEBUG, "Queued message: " + m.toString());
+		Debug.log(this, Debug.TRACE, "Queued message: " + m.toString());
 		sendToListeners(m);
 	}
 

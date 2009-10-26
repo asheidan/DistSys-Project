@@ -6,7 +6,6 @@ import gcom.interfaces.GComMessageListener;
 import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.Message;
-import gcom.interfaces.MessageListener;
 import gcom.interfaces.MessageOrderingModule;
 import gcom.interfaces.ViewChangeListener;
 import gcom.interfaces.GroupDefinition;
@@ -27,29 +26,56 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewChangeListener,MessageSender {
-	private Logger log = Logger.getLogger("gcom");
+
+	private String processID;
 
 	private GroupManagementModule gmm = new gcom.GroupManagementModule();
 	private RMIModule rmi;
+
 	private Hashtable<String, CommunicationModule> comModules = new Hashtable<String, CommunicationModule>();
 	private Hashtable<String, MessageOrderingModule> moModules = new Hashtable<String, MessageOrderingModule>();
-	private Hashtable<String, HashVectorClock> clocks = new Hashtable<String, HashVectorClock>();
 	private Hashtable<String, Member> identities = new Hashtable<String, Member>();
+	private Hashtable<String, ReferenceKeeper> keepers = new Hashtable<String, ReferenceKeeper>();
+
 	private Hashtable<String, Vector<GComMessageListener>> messageListeners = new Hashtable<String, Vector<GComMessageListener>>();
-	private Hashtable<String, Vector<ViewChangeListener>> viewChangeListeners = new Hashtable<String, Vector<ViewChangeListener>>();
-	private String processID;
+
+	private Hashtable<String,Vector<Member>> electionResults = new Hashtable<String,Vector<Member>>();
+	private Hashtable<String,String> highestElectionValues = new Hashtable<String,String>();
+
+	private void clearGroupData(String groupName) {
+		ReferenceKeeper k = keepers.get(groupName);
+		if(k != null) {
+			k.stop();
+			keepers.remove(groupName);
+		}
+		electionResults.remove(groupName);
+		highestElectionValues.remove(groupName);
+		comModules.remove(groupName);
+		moModules.remove(groupName);
+		messageListeners.remove(groupName);
+		if(identities.get(groupName).equals(gmm.getLeader(groupName))) {
+			Debug.log(this, Debug.DEBUG, "I'm leader, removing my reference");
+			try {
+				rmi.unbind(groupName);
+			}
+			catch(AccessException e) {
+				Debug.log(this, Debug.DEBUG, "Couldn't remove reference, no access");
+			}
+			catch(RemoteException e) {
+				Debug.log(this, Debug.DEBUG, "Couldn't remove reference, remote exception");
+			}
+		}
+		gmm.removeGroup(groupName);
+		identities.remove(groupName);
+	}
 	
 	public GCom() {
+		Debug.setLevel(Debug.DEBUG);
 		//processID = String.valueOf(String.valueOf(Math.random()).hashCode());
 		processID = "0x" + String.format("%06x",(int)Math.floor(Math.random() * Math.pow(2, 24))).toUpperCase();
-		BasicConfigurator.configure();
-		log.setLevel(Level.DEBUG);
-		log.debug("gcom-object created");
+		Debug.log(this, Debug.DEBUG, "gcom-object created");
 	}
 	
 	@Override
@@ -73,16 +99,47 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		rmi = new gcom.RMIModule(host,port);
 	}
 
+	private void setIdentityInMOM(MessageOrderingModule mom, GroupDefinition def) {
+		if(def.getMessageOrderingType() == GCom.TYPE_MESSAGEORDERING.TOTAL || 
+			def.getMessageOrderingType() == GCom.TYPE_MESSAGEORDERING.CAUSALTOTAL) {
+			((momTotal)mom).setIdentity(identities.get(def.getGroupName()));
+		}
+	}
+	
+	
+	private void setupKeeper(String groupName, RemoteObject ro) {
+		ReferenceKeeper k = new ReferenceKeeper(rmi, groupName, ro);
+		keepers.put(groupName,k);
+	}
+	
 	private MessageOrderingModule setupMOM(GroupDefinition definition) {
 		MessageOrderingModule mom;
 		switch (definition.getMessageOrderingType()) {
-		case NONORDERED:
-			mom = new gcom.momNonOrdered(processID);
-			break;
-
-		default:
-			log.error("Unknown message-ordering type: " + definition.getMessageOrderingType());
-			return null;
+			case NONORDERED:
+				mom = new gcom.momNonOrdered(processID);
+				break;
+			case FIFO:
+				mom = new gcom.momFIFO(processID);
+				break;
+			case CAUSAL:
+				mom = new gcom.momCausal(processID);
+				break;
+			case CAUSALTOTAL:
+				// We just use total and let the sequencer deal with ordering.
+			case TOTAL:
+				mom = new momTotal(processID);
+				try {
+					RemoteObject seq = rmi.getReference("sequencer");
+					((momTotal)mom).setSequencer(seq);
+				}
+				catch(Exception e) {
+					Debug.log(this, Debug.ERROR, "Could not get sequencer");
+					return null;
+				}
+				break;
+			default:
+				Debug.log(this, Debug.ERROR, "Unknown message-ordering type: " + definition.getMessageOrderingType());
+				return null;
 		}
 		mom.addMessageListener(this);
 		return mom;
@@ -94,38 +151,56 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		case BASIC_UNRELIABLE_MULTICAST :
 			com = new BasicCommunicationModule(mom, gmm, definition.getGroupName(), processID);
 			break;
-			
+		case BASIC_RELIABLE_MULTICAST:
+			com = new ReliableCommunicationModule(mom, gmm, definition.getGroupName(), processID);
+			break;
 		default:
-			log.error("Unknown communication type: " + definition.getCommunicationType());
+			Debug.log(this, Debug.ERROR, "Unknown communication type: " + definition.getCommunicationType());
 			return null;
 		}
 		com.addGComViewChangeListener(this);
 		return com;
 	}
 
+	private void tick(String groupName) {
+		moModules.get(groupName).tick();
+	}
+
+	private HashVectorClock getClock(String groupName) {
+		return moModules.get(groupName).getClock();
+	}
+	
 	@Override
 	public void createGroup(GroupDefinition description,
-			String localMemberName) throws IOException {
+			String localMemberName) throws AlreadyBoundException,IOException {
 		String groupName = description.getGroupName();
 		
 		MessageOrderingModule mom = setupMOM(description);
 		CommunicationModule com = setupCom(description,mom);
 
+		RemoteObject remote = new gcom.RemoteObject(com,description);
 		try {
 			// TODO: Should this throw an exception if we aren't connected to RMI?
-			RemoteObject remote = new gcom.RemoteObject(com,description);
 			rmi.bind(groupName, remote);
 			Member me = new gcom.Member(processID,localMemberName, remote);
 			gmm.addGroup(description);
 			gmm.addMember(groupName, me);
 			identities.put(groupName,me);
 
-			clocks.put(groupName, new HashVectorClock(processID));
+			gmm.setLeader(groupName, me);
+
+			setIdentityInMOM(mom,description);
+
 			moModules.put(groupName, mom);
 			comModules.put(groupName, com);
+			// ReferenceKeeper isn't broken
+			setupKeeper(groupName, remote);
+		
 		}
 		catch (AlreadyBoundException e) {
-			log.debug("Trying to bind object for new group while name already exists: " + groupName);
+			Debug.log(this, Debug.DEBUG, "Trying to bind object for new group while name already exists: " + groupName);
+			((gcom.RemoteObject)remote).stop();
+			throw(e);
 		}
 	}
 
@@ -133,18 +208,16 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public void disconnect(String groupName) throws IOException {
 		CommunicationModule com = comModules.get(groupName);
 		if( com != null ) {
+			Member me = identities.get(groupName);
+			gmm.removeMember(groupName, me);
 			com.send(
 					new gcom.Message(
-							clocks.get(groupName),
+							getClock(groupName),
 							groupName,
-							identities.get(groupName),
+							me,
 							"",
 							Message.TYPE_MESSAGE.PARTREQUEST));
-			gmm.removeGroup(groupName);
-			comModules.remove(groupName);
-			moModules.remove(groupName);
-			clocks.remove(groupName);
-			identities.remove(groupName);
+			clearGroupData(groupName);
 		}
 	}
 
@@ -171,10 +244,12 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		Member me = new gcom.Member(processID, localMemberName, localRemote);
 		HashVectorClock clock = new HashVectorClock(processID);
 		remoteRemote.send(new gcom.Message(clock, groupName, me, null, Message.TYPE_MESSAGE.JOINREQUEST));
-		clocks.put(groupName, clock);
 		comModules.put(groupName, com);
 		moModules.put(groupName, mom);
 		identities.put(groupName, me);
+		
+		setIdentityInMOM(mom,definition);
+	
 		gmm.addGroup(definition);
 		return definition;
 	}
@@ -187,8 +262,24 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	@Override
 	public void removeGroup(String groupName) throws IOException,
 			IllegalStateException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException();
+		if(getLocalMember(groupName).equals(gmm.getLeader(groupName))) {
+			CommunicationModule com = comModules.get(groupName);
+			if(com != null) {
+				com.send(
+					new gcom.Message(
+						getClock(groupName),groupName,
+						getLocalMember(groupName),"Closing group", Message.TYPE_MESSAGE.REJECT)
+				);
+				rmi.unbind(groupName);
+				clearGroupData(groupName);
+			}
+			else {
+				Debug.log(this, Debug.ERROR, "Got null for com-mod");
+			}
+		}
+		else {
+			Debug.log(this, Debug.WARN, "Trying to remove group where we're not leader.");
+		}
 	}
 
 	@Override
@@ -196,8 +287,9 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 			throws IOException {
 		CommunicationModule com = comModules.get(groupName);
 		if(com != null) {
+			tick(groupName);
 			com.send(
-					new gcom.Message(clocks.get(groupName), groupName,
+					new gcom.Message(getClock(groupName), groupName,
 					identities.get(groupName), message, Message.TYPE_MESSAGE.APPLICATION));
 		}
 	}
@@ -206,11 +298,43 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	public String[] listReferences() throws AccessException, RemoteException {
 		return rmi.list();
 	}
+	
+	private boolean ignoreMessage(Message m) {
+		String groupName = m.getGroupName();
+		GroupDefinition def =  gmm.getGroupDefinition(groupName);
+		if(def != null && def.getGroupType() == TYPE_GROUP.DYNAMIC) return false;
+		boolean open = gmm.isGroupOpen(groupName);
+		switch(m.getMessageType()) {
+			case JOINREQUEST:
+			case GOTMEMBER:
+			case WELCOME:
+			case CLOSE:
+			if(open) {
+				return false;
+			}
+			else {
+				return true;
+			}
+			case APPLICATION:
+				if(open) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			case LOSTMEMBER:
+			case PARTREQUEST:
+			case ELECTION:
+			case REJECT:
+			default:
+				return false;
+		}
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void messageReceived(Message message) {
-		Debug.log("gcom.GCom.messageReceived", Debug.DEBUG, "Got a " + message.getMessageType());
+		Debug.log("gcom.GCom.messageReceived", Debug.DEBUG, "Got a " + message.getMessageType() + " (" + message.toString() + ")");
 		String groupName = message.getGroupName();
 		GroupDefinition definition = gmm.getGroupDefinition(groupName);
 		if(definition == null) {
@@ -218,40 +342,64 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 					"Got message from a group I'm not a member of." + message.toString());
 			return;
 		}
+		
+		// Handling of static groups
+		//if(definition.getGroupType() == TYPE_GROUP.STATIC && ignoreMessage(message)) { return; }
+		
 		switch(message.getMessageType()) {
-			// TODO: should information about parting/joining be sent to "gui"?
 			case JOINREQUEST:
-				gotMember(groupName, message.getSource());
-				List<Member> view = gmm.listGroupMembers(groupName);
-				Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
-				//comModules.get(groupName).send(msg);
-				try {
-					// TODO: COM should be expanded with private messages
-					Debug.log(this, Level.DEBUG, "Welcoming " + message.getSource().toString() + " to " + groupName + " via " + message.getSource().getRemoteObject());
-					message.getSource().getRemoteObject().send(msg);
-				} catch (RemoteException ex) {
-					Debug.log(this,Debug.WARN, "Got remote exception", ex);
+				Message msg;
+				if(!ignoreMessage(message)) {
+					gotMember(groupName, message.getSource());
+					List<Member> view = gmm.listGroupMembers(groupName);
+					msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), (Serializable)view, Message.TYPE_MESSAGE.WELCOME);
+					Debug.log(this, Debug.DEBUG,
+						"Welcoming " + message.getSource().toString() +
+						" to " + groupName + " via " + message.getSource().getRemoteObject());
 				}
+				else {
+					msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), message, Message.TYPE_MESSAGE.REJECT);
+				}
+				comModules.get(groupName).send(message.getSource(),msg);
 				break;
 			case WELCOME:
-				for(Member m : (List<Member>)message.getMessage()) {
-					gmm.addMember(groupName, m);
+				if(!ignoreMessage(message)) {
+					for(Member m : (List<Member>)message.getMessage()) {
+						gmm.addMember(groupName, m);
+					}
+					gmm.setLeader(groupName,message.getSource());
 				}
 				break;
 			case GOTMEMBER:
-				gmm.addMember(groupName, (Member)message.getMessage());
+				if(!ignoreMessage(message)) {
+					gmm.addMember(groupName, (Member)message.getMessage());
+				}
 				break;
 			case PARTREQUEST:
 				lostMember(groupName, message.getSource());
-				// TODO: Will we send a reject now? Right now a node will remove itself but still be able to send messages
 				break;
 			case LOSTMEMBER:
 				// TODO: Should we try to contact the lost member?
+				// TODO: What if we are the lost member?
 				gmm.removeMember(groupName, (Member)message.getMessage());
 				break;
 			case APPLICATION:
-				sendToMessageListeners(groupName,message);
+				if(!ignoreMessage(message)) {
+					sendToMessageListeners(groupName,message);
+				}
 				break;
+			case ELECTION:
+				election(message);
+				break;
+			case REJECT:
+				Debug.log(this,Debug.DEBUG, "Rejected from: " + groupName);
+				clearGroupData(groupName);
+				break;
+			case CLOSE:
+				if(!ignoreMessage(message)) {
+					// TODO: Should we trust anyone to close the group?
+					gmm.closeGroup(groupName);
+				}
 		}
 	}
 
@@ -266,14 +414,103 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		return processID;
 	}
 
+	private Vector<Member> setupElection(String groupName) {
+		Vector<Member> results;
+		results = electionResults.get(groupName);
+		if(results == null || results.size() == 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Setting up group: " + groupName);
+			results = new Vector<Member>(gmm.listGroupMembers(groupName));
+			results.removeElement(identities.get(groupName));
+			electionResults.put(groupName,results);
+			highestElectionValues.put(groupName,processID);
+			gmm.setLeader(groupName,identities.get(groupName));
+		}
+		return results;
+	}
+	private void election(Message message) {
+		String groupName = message.getGroupName();
+		Vector<Member> results = setupElection(groupName);
+		Debug.log(this, Debug.DEBUG, "Election: Got result from:" + message.getSource());
+		if(!results.contains(message.getSource())) {
+			return;
+		}
+		int compare = highestElectionValues.get(groupName).compareTo((String)message.getMessage());
+		if(compare == 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Same id chosen by: " + message.getSource());
+		}
+		else if(compare < 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Got message with lower value from: " + message.getSource());
+			// Send my value, not highest
+			comModules.get(groupName).send(
+				message.getSource(),
+				new gcom.Message(
+					getClock(groupName),
+					groupName,
+					identities.get(groupName),
+					processID,
+					Message.TYPE_MESSAGE.ELECTION));
+		}
+		else if(compare > 0) {
+			Debug.log(this, Debug.DEBUG, "Election: Got message with higher value from: " + message.getSource());
+			// Send his value
+			comModules.get(groupName).send(
+				message.getSource(),
+				new gcom.Message(
+					getClock(groupName),
+					groupName,
+					identities.get(groupName),
+					message.getMessage(),
+					Message.TYPE_MESSAGE.ELECTION));
+			highestElectionValues.put(groupName,(String)message.getMessage());
+			gmm.setLeader(groupName,message.getSource());
+		}
+		results.removeElement(message.getSource());
+		if(results.size() == 0) {
+			Debug.log(this, Debug.DEBUG, "Election: is over");
+			if(highestElectionValues.get(groupName).equals(processID)) {
+				Debug.log(this, Debug.DEBUG, "Election: I'm elected as leader");
+				setupKeeper(groupName, identities.get(groupName).getRemoteObject());
+			}
+			else {
+				Debug.log(this, Debug.DEBUG, "Election: Someone else is leader: " + gmm.getLeader(groupName));
+			}
+			highestElectionValues.remove(groupName);
+			electionResults.remove(groupName);
+		}
+		else {
+			Debug.log(this, Debug.DEBUG, "Election: Waiting for results from: " + results.toString());
+		}
+	}
+
 	@Override
 	public void lostMember(String groupName, Member member) {
-		// TODO: send out lostmember-message
 		if(gmm.memberIsInGroup(groupName, member)) {
 			gmm.removeMember(groupName, member);
 
-			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
+			tick(groupName);
+			Message msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.LOSTMEMBER);
 			comModules.get(groupName).send(msg);
+			if(member.equals(gmm.getLeader(groupName))) {
+				Debug.log(this, Debug.WARN, "We lost our leader: " + member.toString());
+				setupElection(groupName);
+				if(electionResults.get(groupName).size() == 0) {
+					Debug.log(this, Debug.DEBUG, "I'm leader in an empty group...");
+					setupKeeper(groupName, identities.get(groupName).getRemoteObject());
+					highestElectionValues.remove(groupName);
+					electionResults.remove(groupName);
+				}
+				else {
+					comModules.get(groupName).send(
+						new gcom.Message(
+							getClock(groupName),
+							groupName,
+							identities.get(groupName),
+							highestElectionValues.get(groupName),
+							Message.TYPE_MESSAGE.ELECTION
+						)
+					);
+				}
+			}
 		}
 		else {
 			Debug.log(this, Debug.DEBUG, "Trying to remove member which isn't present: " + member.toString());
@@ -283,7 +520,8 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 	@Override
 	public void gotMember(String groupName, Member member) {
 		if(!gmm.memberIsInGroup(groupName, member)) {
-			Message msg = new gcom.Message(clocks.get(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.GOTMEMBER);
+			tick(groupName);
+			Message msg = new gcom.Message(getClock(groupName), groupName, identities.get(groupName), member, Message.TYPE_MESSAGE.GOTMEMBER);
 			comModules.get(groupName).send(msg);
 			
 			gmm.addMember(groupName, member);
@@ -293,4 +531,19 @@ public class GCom implements gcom.interfaces.GCom,GComMessageListener,GComViewCh
 		}
 	}
 
+	@Override
+	public void freezeGroup(String groupName) {
+		Member me = identities.get(groupName);
+		if(me != null && me.equals(gmm.getLeader(groupName))) {
+			gmm.closeGroup(groupName);
+			comModules.get(groupName).send(
+					new gcom.Message(getClock(groupName), groupName, me, null, Message.TYPE_MESSAGE.CLOSE)
+				);
+		}
+	}
+
+	@Override
+	public boolean isGroupOpen(String groupName) {
+		return gmm.isGroupOpen(groupName);
+	}
 }

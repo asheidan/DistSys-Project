@@ -48,4 +48,42 @@ public class GroupDefinition implements gcom.interfaces.GroupDefinition {
 		return messageOrderingType;
 	}
 
+	public String toString() {
+		return String.format("Group{%s,%s,%s,%s}", groupName, messageOrderingType, groupType, communicationType);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final GroupDefinition other = (GroupDefinition) obj;
+		if ((this.groupName == null) ? (other.groupName != null) : !this.groupName.equals(other.groupName)) {
+			return false;
+		}
+		if (this.communicationType != other.communicationType) {
+			return false;
+		}
+		if (this.groupType != other.groupType) {
+			return false;
+		}
+		if (this.messageOrderingType != other.messageOrderingType) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 5;
+		hash = 37 * hash + (this.groupName != null ? this.groupName.hashCode() : 0);
+		hash = 37 * hash + this.communicationType.hashCode();
+		hash = 37 * hash + this.groupType.hashCode();
+		hash = 37 * hash + this.messageOrderingType.hashCode();
+		return hash;
+	}
+
 }

@@ -9,6 +9,8 @@ public interface RMIModule {
 	public void bind(String name, RemoteObject ro)
 		throws AccessException, RemoteException, AlreadyBoundException;
 	
+	public void rebind(String name, RemoteObject ro) throws AccessException, RemoteException;
+	
 	public void unbind(String name) throws AccessException, RemoteException;
 
 	public String[] list() throws AccessException, RemoteException;

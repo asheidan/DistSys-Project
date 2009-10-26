@@ -1,20 +1,18 @@
 package gcom;
 
-import java.rmi.RemoteException;
-import java.rmi.ConnectException;
 
 import java.util.Vector;
-
-import org.apache.log4j.Logger;
 
 import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.GComViewChangeListener;
 import gcom.interfaces.Member;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
+import java.rmi.ConnectException;
+import java.rmi.RemoteException;
 
 public class BasicCommunicationModule implements gcom.interfaces.CommunicationModule {
-	private Logger logger = Logger.getLogger("gcom.CommunicationModule.Basic");
+	
 	private MessageOrderingModule mom;
 	private GroupManagementModule gmm;
 	private String group;
@@ -38,21 +36,38 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 
 	@Override
 	public void send(Message message) {
+		Vector<Member> lostMembers = new Vector<Member>();
+		Debug.log(this, Debug.DEBUG, "Sending message to group: " + gmm.listGroupMembers(group));
+		Debug.log(this, Debug.DEBUG, "Sending: " + message.toString());
 		for(Member m : gmm.listGroupMembers(group)) {
-			if(!processID.equals(m.getID())) {
-				logger.debug("Sending message to: " + m.toString());
-				try {
-					m.getRemoteObject().send(message);
-				}
-				catch(ConnectException e) {
-					Debug.log(this, Debug.DEBUG, "Connection refused to " + m);
-					// CHANGED: Removes user from group and tell other members
-					looseMember(m);
-				}
-				catch(RemoteException e) {
-					e.printStackTrace();
-				}
+			Debug.log(this, Debug.DEBUG, "Sending message to: " + m.toString());
+			try {
+				m.getRemoteObject().send(message);
 			}
+			catch(ConnectException e) {
+				Debug.log(this, Debug.DEBUG, "Connection refused to " + m);
+				lostMembers.add(m);
+			}
+			catch(RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+		for(Member m : lostMembers) {
+			looseMember(m);
+		}
+	}
+	
+	@Override
+	public void send(Member member, Message msg) {
+		try {
+			member.getRemoteObject().send(msg);
+		}
+		catch(ConnectException e) {
+			Debug.log(this, Debug.DEBUG, "Connection refused to " + member);
+			looseMember(member);
+		}
+		catch(RemoteException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -62,6 +77,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 		}
 	}
 
+	@Override
 	public void addGComViewChangeListener(GComViewChangeListener listener) {
 		listeners.add(listener);
 	}

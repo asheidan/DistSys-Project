@@ -8,7 +8,6 @@ import gcom.interfaces.ViewChangeListener;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import org.apache.log4j.Level;
 
 public class GroupManagementModule implements gcom.interfaces.GroupManagementModule {
 	Hashtable<String, Group> groups;
@@ -19,9 +18,14 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 	}
 	
 	@Override
-	public boolean isLeader(String groupName) {
+	public Member getLeader(String groupName) {
 		// TODO: nullpointerexception
-		return groups.get(groupName).isLeader();
+		return groups.get(groupName).getLeader();
+	}
+	
+	@Override
+	public void setLeader(String groupName, Member leader) {
+		groups.get(groupName).setLeader(leader);
 	}
 
 	@Override
@@ -42,8 +46,8 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 
 	@Override
 	public void removeGroup(String groupName) {
-		// TODO This should only be done if we are the group leader? Or is that check performed somewhere else?
-		groups.remove(groupName);
+		Debug.log(this, Debug.DEBUG, "Removing: " + groupName);
+		groups.remove(groupName).lost();
 	}
 
 	@Override
@@ -55,18 +59,19 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 
 	@Override
 	public void addMember(String groupName, Member member) {
-		Debug.log("gcom.GroupManagementModule", Level.DEBUG, "Adding member: " + member.toString());
+		Debug.log("gcom.GroupManagementModule", Debug.DEBUG, "Adding member: " + member.toString());
 		Group g = groups.get(groupName);
 		g.addMember(member);
 	}
 
 	@Override
 	public void removeMember(String groupName, Member member) {
-		Debug.log(this, Level.DEBUG, "Removing member: " + member.toString());
+		Debug.log(this, Debug.DEBUG, "Removing member: " + member.toString());
 		Group g = groups.get(groupName);
 		g.removeMember(member);
 	}
 
+	@Override
 	public boolean memberIsInGroup(String groupName, Member member){
 		// TODO: nullpointer exception
 		Group g = groups.get(groupName);
@@ -80,10 +85,26 @@ public class GroupManagementModule implements gcom.interfaces.GroupManagementMod
 	}
 
 	@Override
+	public void closeGroup(String groupName) {
+		Group g = groups.get(groupName);
+		if(g != null) g.close();
+	}
+	
+	@Override
+	public boolean isGroupOpen(String groupName) {
+		Group g = groups.get(groupName);
+		if(g != null) return g.isOpen();
+		return false;
+	}
+
+	@Override
 	public void addViewChangeListener(String groupName, ViewChangeListener listener) {
 		Group g = groups.get(groupName);
 		if(g != null) {
 			g.addViewChangeListener(listener);
+		}
+		else {
+			listener.lostGroup(groupName);
 		}
 	}
 }

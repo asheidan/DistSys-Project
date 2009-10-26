@@ -11,6 +11,7 @@ import gcom.interfaces.Message;
 public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	//private Logger logger = Logger.getLogger("gcom.RemoteObject");
 	private static final long serialVersionUID = 1740402897021175632L;
+	private final double unique = Math.random();
 	private GroupDefinition definition;
 	private transient CommunicationModule com;
 	private BlockingQueue<Message> localQueue = new LinkedBlockingQueue<Message>();
@@ -18,8 +19,6 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	private transient Thread t;
 
 	public RemoteObject(CommunicationModule com, GroupDefinition definition) {
-		//logger.setLevel(Level.ERROR);
-		//BasicConfigurator.configure();
 		this.definition = definition;
 		this.com = com;
 		t = new Thread(this);
@@ -34,7 +33,7 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 	
 	@Override
 	public void send(Message m) {
-		Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queueing message in " + this);
+		//Debug.log("gcom.RemoteObject",Debug.DEBUG,"Queueing message in " + this);
 		localQueue.add(m);
 	}
 
@@ -48,7 +47,7 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 					Debug.log("gcom.RemoteObject",Debug.DEBUG,"Received a Message in " + this);
 				}
 				else {
-					Debug.log("gcom.RemoteObject",Debug.TRACE,"Queue poll timed out");
+					//Debug.log("gcom.RemoteObject",Debug.TRACE,"Queue poll timed out");
 				}
 			}
 			catch(InterruptedException e) {
@@ -67,5 +66,37 @@ public class RemoteObject implements gcom.interfaces.RemoteObject,Runnable {
 		return definition;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Debug.log(this, Debug.DEBUG, String.format("Compared to %s", obj));
+		if (obj == null) {
+			Debug.log(this, Debug.DEBUG, "Compared to null");
+			return false;
+		}
+		gcom.interfaces.RemoteObject other = (gcom.interfaces.RemoteObject) obj;
+		try {
+			if (this.unique != other.getUnique()) {
+				Debug.log(this, Debug.DEBUG, "Compared to other unique");
+				return false;
+			}
+		}
+		catch(Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 19 * hash + (int) (Double.doubleToLongBits(this.unique) ^ (Double.doubleToLongBits(this.unique) >>> 32));
+		hash = 19 * hash + (this.definition != null ? this.definition.hashCode() : 0);
+		return hash;
+	}
+
+	@Override
+	public double getUnique() {
+		return unique;
+	}
 }
 

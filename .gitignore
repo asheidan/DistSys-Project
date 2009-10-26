@@ -1,7 +1,11 @@
 *~
 .DS_Store
+.classpath
+.project
+.settings/*
 bin/*
 build/*
+nbproject/*
 dist/*
 reports/*
 *.swp
