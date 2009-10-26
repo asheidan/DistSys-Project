@@ -29,7 +29,7 @@ Bonus level: 2\\
 \\
 Running the program: 
 \begin{verbatim}
-$ cd ~dit06lwn/edu/DS/Distsys-Project/
+$ cd ~dit06lwn/edu/DS/git/DistSys-Project/
 Start registry and sequencer: $ ant seq
 Start client: $ ant gui
 \end{verbatim}
@@ -59,30 +59,86 @@ Start client: $ ant gui
 
 %-----------------------------------------------------------
 \section{Introduction}
-- Vad det är och vad det gör
-- Grupper, medlemmar, statiska, dynamiska, andra begrepp
+In this project we have created a middle ware for group communication. A demo application to demonstrate that the middle ware works has also been created. 
+
+The middleware handles communication between members of groups. Groups can have different message orderings, they can be static or dynamic and they can use either reliable or basic multicast for sending messages. Each member of the group uses the same of these properties.
+
+Each group has a leader which has a referens in a registry. Clients can find groups and join them by getting a group list from the registry and contacting the leader.
+The middleware can be used independently of the demo application but this will not be described further in this report.
+
+Communication in groups is done by passing messages. A message is usually sent to the entire group, only when joining a group messages is sent to only one client in the group. Messages have a type so that application messages can be separated from system messages. 
+
+The middle ware can be used independently from the demo application but this will not be described further in this report.
+%- Vad det är och vad det gör
+%- Grupper, medlemmar, statiska, dynamiska, andra begrepp
 
 
 %-----------------------------------------------------------
 \section{Tools and language for implementation}
-Since the clear recommendation was to use Java and Jav                                                                                    a RMI we have decided to follow the recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
+Since the clear recommendation was to use Java and Java RMI we have decided to follow the recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
 
 JUnit has be used for unit testing and logging has be done through the log4j-package. 
 
 %-----------------------------------------------------------
-\section{Realization of the project plan}
-The project plan from deliverable 1 is included in appendix \vref{app:projectplan}. We have been slightly behind the plan during most of the project part due to the new influenza that struck Emil during one of the first weeks.
+\section{Usage guide: the demo application}
+Before you can use the application you must obtain the source code. The code is available at CS servers at the following location:
+{\tt ~dit06lwn/edu/DS/git/DistSys-Project/}
 
-We also moved forward the design of the GUI to milestone 4 since it was easier to do while implementing the actual application. We also moved total and causal total ordering forward one week since the other message orderings took most of the assigned week. 
+\subsection{Starting the application}
+Before starting the client, start a rmi regisry and a sequencer on a known host with:\\
+{\tt \$ ant seq}
 
-Generally things took slightly longer then anticipated, part due to tricky bugs and part due to tricky algorithms. 
+The client can be started from the command line with:\\
+{\tt \$ ant gui}
 
-%-----------------------------------------------------------
-\section{Using the demo application}
+\subsection{Using the application}
+When the client is started you must begin with connecting to a registry. This can be done from the File menu and then Connect to registry. A dialog like the one in figure \vref{fig:contoreg} is displayed. Enter the hostname and port of the registry and click connect.
+
+\begin{figure}
+\centering \includegraphics[width=10cm]{gui5.png}
+\caption{The dialog for connecting to a rmi registry.}
+\label{fig:contoreg}
+\end{figure}
+
+If the client is connected to a registry you can create or join groups.
+
+\subsubsection{Creating a group}
+To create a group, select Create group from the Group menu. You are now presented with the dialog in figure \vref{fig:creat}. Enter the name of the group and your nickname.
+
+Select group type from the dropdown box, in dynamic groups users can join and leave at anytime, static groups has a fixed set of members.
+
+Choose which type of multicast you would like to use in the group. Basic multicast just sends the messages, reliable multicast guarantees that an attempt to send the message to all users has been made before the message is delivered to the sender.
+
+Finally, select type of ordering and click Create. Please refere to section \vref{messageordering} for descriptions of the available message ordering types.
+
+\begin{figure}
+\centering \includegraphics[width=10cm]{gui2.png}
+\caption{The dialog for creating a new group.}
+\label{fig:creat}
+\end{figure}
+
+\subsubsection{Joining a group}
+To join a group, select Join group from the Group menu. A dialog like the one in figure \vref{fig:join} is displayed. Enter a nickname and select a group from the Groups list. Do not attempt to join backdoor or sequencer. Click Join.
+
+\begin{figure}
+\centering \includegraphics[width=10cm]{gui4.png}
+\caption{The dialog for joining a group.}
+\label{fig:join}
+\end{figure}
+
+\subsubsection{Chatting in a group}
+When you have joined a group you will see the group in the tab bar in the main window. Click the groups name to select it (see figure \vref{fig:gui3}). When a group is selected messages from the group is displayd in the big window to the left. To the right a list of members in the group is shown. At the bottom there is a textfield for entering messages to the group. You send a message by pressing Enter in the textfield.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{gui3.png}
+\caption{A chat room the user has joined that contains no other users.}
+\label{fig:gui3}
+\end{figure}
 
 
 %-----------------------------------------------------------
 \section{System Overview}
+
 This project consists of a middle-ware for group communication and a demo application to show that it works. The middle-ware is located in the gcom and rmi packages, the demo application is in the gui package. An overview over all the packages and their classes can be seen in figure \vref{fig:overview}.
 
 \begin{figure}
@@ -150,6 +206,7 @@ A GroupDefinition stores information about a group like message ordering, commun
 
 \subsubsection{RemoteObject}
 The RemoteObject is used for communication between processes via java RMI. 
+%TODO: write more about remote object
 
 \subsubsection{Group}
 Group stores members and GroupDefinition for a specific group. This class is only used by the GroupManagementModule for storing state.
@@ -177,7 +234,8 @@ The Sequencer is used for getting a serial number on messages that all clients c
 
 It extends the RMI-server and therefor first starts a registry. It then binds in a SequencerCommunicationModule SCM as "sequencer" in the registry which the clients that uses any of the total orderings will know that they can connect to. 
 
-Clients can request serial numbers by sending a message to the sequencer and supplying a return address in the message. The Sequencer will order the messages it receives in either a momNonOrdered or a momCausal depending on if total or causal total ordering is requested. Messages that has already been sequenced are cached and the same serial number will be returned if a new request for the same message arrives.
+Clients can request serial numbers by sending a message to the sequencer and supplying a return address in the message. The Sequencer will order the messages it receives in either a momNonOrdered or a momCausal depending on if total or causal total ordering is requested. Messages that has already been sequenced are cached and the same seri
+al number will be returned if a new request for the same message arrives.
 
 \subsubsection{SequencerCommunicationModule}
 The SequencerCommunicationModule (SCM) implements CommunicationModule since it makes communication with it convenient, but the module itself is only used by the sequencer. 
@@ -192,8 +250,10 @@ GroupSequencer (GS) is used by SCM for setting serial numbers on messages. The G
 The gui package implements our demo application: a chat application with tabs for groups. 
 
 \subsubsection{GroupPanel}
+%TODO: write about group panel
 
 \subsubsection{GUIViewOther}
+%TODO: write about gui view other 
 
 
 %-----------------------------------------------------------
@@ -345,6 +405,13 @@ If the group is split in two partitions, due to a cable failure or similar, the 
 
 The new leader will try to reregister the group in the registry. The leader for the other part will do the same and therefore compete over the reference in the registry. Because of this newcomers will join the group having the reference in the registry at the time the node connects.
 
+\section{Realization of the project plan}
+The project plan from deliverable 1 is included in appendix \vref{app:projectplan}. We have been slightly behind the plan during most of the project part due to the new influenza that struck Emil during one of the first weeks.
+
+We also moved forward the design of the GUI to milestone 4 since it was easier to do while implementing the actual application. We also moved total and causal total ordering forward one week since the other message orderings took most of the assigned week. 
+
+Generally things took slightly longer then anticipated, part due to tricky bugs and part due to tricky algorithms. 
+
 %-----------------------------------------------------------
 \section{Implementation of requirement specification}
 Below our requirement specification from out project plan is included in appendix \vref{app:reqspec}. We have succeeded with implementing all required specifications. 
@@ -358,6 +425,8 @@ Below our requirement specification from out project plan is included in appendi
 
 \item All processes are assumed to be good. If a process starts to lie or send malicious messages bad things will happen.
 
+\item If a client crashes during election undefined things happen.
+
 \item If the sequencer crashes all groups using the sequencer must be restarted since the message cache is lost and messages will get new serial numbers starting at 1. The sequencer is placed at the same host as the registry which is assumed to be relatively stable for this to not be a big problem.
 
 \item If a group contains too many users java will run out of memory and the client will crash. If reliable multicast is used the network will most likely also be very congested.
@@ -365,6 +434,8 @@ Below our requirement specification from out project plan is included in appendi
 \item The demo application does not use the remove group feature of GCom since it is more user friendly to let the group live as long as there is users conencted to it and remove it when the last user quits. However, the feature is implemented and can be used by some other application that uses the middle ware.
 
 \item The program does not build under Windows. Usage of windows is discourage and behaviour is undefined.
+
+\item In the demo application backdoor and sequencer is visible in the groups list.
 
 \end{itemize}
 
@@ -394,7 +465,6 @@ Date	&	Milestone	&	Content \\
 \hline
 \end{tabular}
 
-\appendix
 \section{Requirement specification from project plan}
 \label{app:reqspec}
 
@@ -420,12 +490,7 @@ Date	&	Milestone	&	Content \\
 
 \subsection{Communication}
 \begin{description}
-\item[REQUIRED] It must be possible to send messages t
-%-----------------------------------------------------------
-\section{Bonus Level}
-We have solved bonus level two with dynamic groups. 
-
-o the members of joined group.
+\item[REQUIRED] It must be possible to send messages to the members of joined group.
 
 \item[REQUIRED] Both non-reliable and reliable multicast must be supported for sending messages.
 
