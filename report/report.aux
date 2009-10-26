@@ -1,0 +1,70 @@
+\relax 
+\select@language{english}
+\@writefile{toc}{\select@language{english}}
+\@writefile{lof}{\select@language{english}}
+\@writefile{lot}{\select@language{english}}
+\citation{distsys-ordering}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Bonus Level}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Tools and language for implementation}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Project plan}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Message ordering and message ordering modules}{1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The non ordered message ordering module just forwards messages to it's listeners. The state of a vector clock is also kept in the module.}}{2}}
+\newlabel{fig:nonorderd}{{1}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Non ordered / momNonOrdered}{2}}
+\newlabel{1@xvr}{{}{2}}
+\newlabel{1@vr}{{}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}FIFO ordering / momFIFO}{2}}
+\newlabel{2@xvr}{{}{2}}
+\newlabel{2@vr}{{}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The FIFO ordered MOM places messages in a holdback queue until they can be delivered in the order they where sent. Messages from new senders are delivered directly as no previous clockvalue is known.}}{3}}
+\newlabel{fig:fifo}{{2}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Causal ordering / momCausal}{3}}
+\newlabel{3@xvr}{{}{3}}
+\newlabel{3@vr}{{}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The Causal ordered MOM places a message in a holdback queue until all messages that happened before it has been deliverd.}}{4}}
+\newlabel{fig:causal}{{3}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Total ordering / momTotal}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Total ordering uses a sequencer to deliver messages in the same order in every client.}}{5}}
+\newlabel{fig:total}{{4}{5}}
+\newlabel{4@xvr}{{}{5}}
+\newlabel{4@vr}{{}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Causal total ordering}{5}}
+\newlabel{5@xvr}{{}{5}}
+\newlabel{5@vr}{{}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Causal total ordering also uses a sequencer, but here the sequencer has a MOM of it's own to give the messages serial numbers in causal order.}}{6}}
+\newlabel{fig:totalc}{{5}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Design}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}GCom}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}Interface}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}CommunicationModule}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.2.1}Interface}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}MessageOrderingModule}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Interface}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}GroupManagementModule}{7}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.1}Interface}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Group}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.1}Interface}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}GUI}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Message}{8}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8}RMI Registry}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Use cases}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces How the modules are related.}}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}A node creates a new group}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}A group leader removes a group}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}A member joins a group}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}A member leaves group}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Send message to a group}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6}Group-leader leaves group}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7}The last member in a group leaves}{10}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Fault tolerance}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Detecting crashed members}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}If the registry restarts or is unresponsive}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}If the group leader crashes}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}If the last member of a group crashes}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}Netsplit}{11}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Requirement Specification}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Group management}{11}}
+\bibcite{distsys-ordering}{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Communication}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Message Ordering}{12}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Limitations}{12}}

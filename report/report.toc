@@ -1,0 +1,43 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Bonus Level}{1}
+\contentsline {section}{\numberline {2}Tools and language for implementation}{1}
+\contentsline {section}{\numberline {3}Project plan}{1}
+\contentsline {section}{\numberline {4}Message ordering and message ordering modules}{1}
+\contentsline {subsection}{\numberline {4.1}Non ordered / momNonOrdered}{2}
+\contentsline {subsection}{\numberline {4.2}FIFO ordering / momFIFO}{2}
+\contentsline {subsection}{\numberline {4.3}Causal ordering / momCausal}{3}
+\contentsline {subsection}{\numberline {4.4}Total ordering / momTotal}{4}
+\contentsline {subsection}{\numberline {4.5}Causal total ordering}{5}
+\contentsline {section}{\numberline {5}Design}{6}
+\contentsline {subsection}{\numberline {5.1}GCom}{6}
+\contentsline {subsubsection}{\numberline {5.1.1}Interface}{6}
+\contentsline {subsection}{\numberline {5.2}CommunicationModule}{7}
+\contentsline {subsubsection}{\numberline {5.2.1}Interface}{7}
+\contentsline {subsection}{\numberline {5.3}MessageOrderingModule}{7}
+\contentsline {subsubsection}{\numberline {5.3.1}Interface}{7}
+\contentsline {subsection}{\numberline {5.4}GroupManagementModule}{7}
+\contentsline {subsubsection}{\numberline {5.4.1}Interface}{8}
+\contentsline {subsection}{\numberline {5.5}Group}{8}
+\contentsline {subsubsection}{\numberline {5.5.1}Interface}{8}
+\contentsline {subsection}{\numberline {5.6}GUI}{8}
+\contentsline {subsection}{\numberline {5.7}Message}{8}
+\contentsline {subsection}{\numberline {5.8}RMI Registry}{8}
+\contentsline {section}{\numberline {6}Use cases}{8}
+\contentsline {subsection}{\numberline {6.1}A node creates a new group}{9}
+\contentsline {subsection}{\numberline {6.2}A group leader removes a group}{9}
+\contentsline {subsection}{\numberline {6.3}A member joins a group}{9}
+\contentsline {subsection}{\numberline {6.4}A member leaves group}{10}
+\contentsline {subsection}{\numberline {6.5}Send message to a group}{10}
+\contentsline {subsection}{\numberline {6.6}Group-leader leaves group}{10}
+\contentsline {subsection}{\numberline {6.7}The last member in a group leaves}{10}
+\contentsline {section}{\numberline {7}Fault tolerance}{10}
+\contentsline {subsection}{\numberline {7.1}Detecting crashed members}{10}
+\contentsline {subsection}{\numberline {7.2}If the registry restarts or is unresponsive}{11}
+\contentsline {subsection}{\numberline {7.3}If the group leader crashes}{11}
+\contentsline {subsection}{\numberline {7.4}If the last member of a group crashes}{11}
+\contentsline {subsection}{\numberline {7.5}Netsplit}{11}
+\contentsline {section}{\numberline {8}Requirement Specification}{11}
+\contentsline {subsection}{\numberline {8.1}Group management}{11}
+\contentsline {subsection}{\numberline {8.2}Communication}{12}
+\contentsline {subsection}{\numberline {8.3}Message Ordering}{12}
+\contentsline {section}{\numberline {9}Limitations}{12}
