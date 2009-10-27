@@ -37,6 +37,11 @@ public class momTotal extends momNonOrdered {
 	}
 
 	@Override
+	public void gotClock(HashVectorClock c) {
+		this.clock.merge(c);
+	}
+
+	@Override
 	public void queueMessage(Message m) {
 		if(m.bypass()) { 
 			sendToListeners(m);

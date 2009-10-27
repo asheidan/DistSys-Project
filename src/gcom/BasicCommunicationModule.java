@@ -33,6 +33,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	public void receive(Message m) {
 		/* Everything needs to get ordered (don't want messages *
 		 * from parted members                                  */
+		mom.gotClock(m.getClock());
 		if(debugger != null) debugger.queueMessage(m);
 		else mom.queueMessage(m);
 	}

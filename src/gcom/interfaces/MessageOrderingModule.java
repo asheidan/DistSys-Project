@@ -8,6 +8,7 @@ public interface MessageOrderingModule {
 	public void queueMessage(Message m);
 	public HashVectorClock getClock();
 	public void tick();
+	public void gotClock(HashVectorClock c);
 
 	public void attachDebugger(DebugInterface debug);
 

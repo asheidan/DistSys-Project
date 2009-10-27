@@ -53,6 +53,7 @@ public class HashVectorClock implements VectorClock, Serializable,Cloneable {
 		for(String k : o.clocks.keySet()) {
 			Integer my_value = clocks.get(k);
 			Integer other_value = o.clocks.get(k);
+			if(k.equals("serialNo")) { continue; }
 			if(my_value == null) {
 				clocks.put(k, other_value);
 				continue;

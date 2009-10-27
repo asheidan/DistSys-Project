@@ -50,6 +50,43 @@ Causal ordering:
 	- A rearranges the messages
 	- A releases messages in holdback
 
+Causal ordering (Tests happened before on first message from a sender):
+	- A creates a Causal ordered group "causal2"
+	- B joins group "causal2"
+	- C joins group "causal2"
+	- A sends an initial message
+	- B sends an initial message
+	- A captures messages
+	- B sends a message
+	- C sends a message
+	- A rearranges the messages
+	- A releases the messages in holdback
+	Excpected: A gets messages in order A, B, B, C
+
 Total ordering:
+	- A creates a Totaly ordered group "total"
+	- B joins group "total"
+	- A sends an initial message
+	- A captures messages
+	- B captures messages
+	- A sends a message
+	- B sends a message
+	- A rearranges the messages
+	- A releases two messages
+	- B releases two messages
+	- A and B releases remaining messages
+	Expected: Both A and B recieves messages in order A, B, A
 
 Causaltotal ordering:
+	- A creates a Totaly ordered group "ctotal"
+	- B joins group "ctotal"
+	- A sends an initial message
+	- A captures messages
+	- B captures messages
+	- A sends a message
+	- B sends a message
+	- A rearranges the messages
+	- A releases two messages
+	- B releases two messages
+	- A and B releases remaining messages
+	Expected: Both A and B recieves messages in order A, A, B

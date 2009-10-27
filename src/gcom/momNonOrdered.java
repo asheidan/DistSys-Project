@@ -29,6 +29,9 @@ public class momNonOrdered implements MessageOrderingModule {
 	}
 
 	@Override
+	public void gotClock(HashVectorClock c) {}
+
+	@Override
 	public void addMessageListener(GComMessageListener listener) {
 		listeners.add(listener);
 	}

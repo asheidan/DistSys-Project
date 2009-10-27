@@ -50,6 +50,9 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 		mom.tick();
 		clocksTextArea.setText(clock.prettyPrint());
 	}
+	
+	@Override
+	public void gotClock(HashVectorClock c) {}
 
 	@Override
 	public void attachDebugger(MessageOrderingModule mom) {
