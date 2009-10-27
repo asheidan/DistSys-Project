@@ -1,0 +1,15 @@
+Dynamic group:
+
+Static group:
+
+Reliable multicast:
+
+Nonordered ordering:
+
+FIFO ordering:
+
+Causal ordering:
+
+Total ordering:
+
+Causaltotal ordering:
