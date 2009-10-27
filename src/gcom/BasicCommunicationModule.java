@@ -18,6 +18,7 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	private GroupManagementModule gmm;
 	private String group;
 	private String processID;
+	private DebugInterface debugger;
 
 	private Vector<GComViewChangeListener> listeners = new Vector<GComViewChangeListener>();
 	
@@ -32,7 +33,8 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 	public void receive(Message m) {
 		/* Everything needs to get ordered (don't want messages *
 		 * from parted members                                  */
-		mom.queueMessage(m);
+		if(debugger != null) debugger.queueMessage(m);
+		else mom.queueMessage(m);
 	}
 
 	@Override
@@ -85,7 +87,10 @@ public class BasicCommunicationModule implements gcom.interfaces.CommunicationMo
 
 	public void attachDebugger(DebugInterface debug) {
 		debug.attachDebugger(mom);
+		/*
 		mom = debug;
+		*/
+		debugger = debug;
 	}
 
 }

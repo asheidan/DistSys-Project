@@ -1,5 +1,6 @@
 package gcom;
 
+import gcom.interfaces.DebugInterface;
 import gcom.interfaces.GroupManagementModule;
 import gcom.interfaces.Message;
 import gcom.interfaces.MessageOrderingModule;
@@ -7,10 +8,12 @@ import gcom.interfaces.MessageOrderingModule;
 import java.util.Hashtable;
 import java.util.PriorityQueue;
 
-class ReliableCommunicationModule extends BasicCommunicationModule {
+public class ReliableCommunicationModule extends BasicCommunicationModule {
 	
 	// TODO: Broken since messagehashing is broken (or something else)
 	
+	private DebugInterface debugger;
+
 	private static final int QUEUE_LENGTH = 100;
 	
 	private Hashtable<Integer, Message> receivedMessages = new Hashtable<Integer, Message>(QUEUE_LENGTH);
@@ -25,6 +28,11 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 	@Override
 	public void receive(Message m) {
 		Debug.log(this, Debug.DEBUG, "Got Message: " + m.hashCode());
+		if(debugger != null) debugger.receive(m);
+		else actualReceive(m);
+	}
+
+	public void actualReceive(Message m) {
 		if(!receivedMessages.containsKey(m.hashCode())) {
 			// New message!!!
 			rememberMessage(m);
@@ -56,6 +64,15 @@ class ReliableCommunicationModule extends BasicCommunicationModule {
 		lastMessages.add(m);
 		receivedMessages.put(Integer.valueOf(m.hashCode()),m);
 		
+	}
+
+	@Override
+	public void attachDebugger(DebugInterface debug) {
+		debug.attachDebugger(this);
+		/*
+		mom = debug;
+		*/
+		debugger = debug;
 	}
 	
 }

@@ -13,6 +13,7 @@ package gui;
 
 import gcom.Debug;
 import gcom.HashVectorClock;
+import gcom.ReliableCommunicationModule;
 import gcom.interfaces.DebugInterface;
 import gcom.interfaces.GComMessageListener;
 import gcom.interfaces.Message;
@@ -26,6 +27,7 @@ import java.util.Vector;
 public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnable {
 
 	private MessageOrderingModule mom;
+	private ReliableCommunicationModule rcom;
 	private String groupName;
 	private MockListModel<Message> holdBack = new MockListModel<Message>(new Vector<Message>());
 	private MockListModel<Message> queue;
@@ -55,6 +57,26 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 		this.mom = mom;
 	}
 
+	@Override
+	public void attachDebugger(ReliableCommunicationModule rcom) {
+		Debug.log(this, Debug.DEBUG, groupName + ": Reliable commod attached");
+		this.rcom = rcom;
+	}
+
+	@Override
+	public void receive(Message m) {
+		if(rcom != null) {
+			if(holdCheckBox.isSelected()) {
+				holdBack.add(m);
+			}
+			else {
+				rcom.actualReceive(m);
+				queue.update();
+			}
+		}
+	}
+
+	
 	@Override
 	public void attachDebugger(HashVectorClock clock, Vector<Message> messages) {
 		Debug.log(this, Debug.DEBUG, groupName + ": Message queue attached");
@@ -284,8 +306,12 @@ public class DebugUI extends javax.swing.JFrame implements DebugInterface,Runnab
 	}//GEN-LAST:event_dropButtonActionPerformed
 
 	private void releaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_releaseButtonActionPerformed
-		if(mom != null == holdBack.getSize() > 0) {
+		if(mom != null && holdBack.getSize() > 0) {
 			mom.queueMessage(holdBack.drop(0));
+			queue.update();
+		}
+		else if(rcom != null && holdBack.getSize() > 0) {
+			rcom.actualReceive(holdBack.drop(0));
 			queue.update();
 		}
 	}//GEN-LAST:event_releaseButtonActionPerformed
