@@ -1,4 +1,4 @@
-package rmi.test;
+package test.rmi;
 
 import gcom.interfaces.DebugInterface;
 import static org.junit.Assert.*;

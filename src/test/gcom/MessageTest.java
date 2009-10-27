@@ -29,7 +29,7 @@ public class MessageTest {
 	@Test
 	public void testGetClock() {
 		HashVectorClock c = m.getClock();
-		assertEquals(clock, c);
+		assertEquals(clock.hashCode(), c.hashCode());
 	}
 	
 	@Test
