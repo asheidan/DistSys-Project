@@ -1,14 +1,54 @@
-Dynamic group:
-
 Static group:
+	- A creates a static group "static"
+	- B joins group "static"
+	- B tries to send a message
+	- A freezes group
+	- A sends a message
+	- C tries to join group "static"
 
+Dynamic group:
+	- A creates a dynamic group "dynamic"
+	- B joins group "dynamic"
+	- B sends a message
+	- B leaves group "dynamic"
+	- B rejoins group "dynamic"
+	- A sends message
+	
 Reliable multicast:
+	- A creates a group "reliable" with reliable multicast
+	- B joins group "reliable"
+	- C joins group "reliable"
+	- A starts capturing messages in DebugUI
+	- C sends a message to the group
+	- A drops the first message
+	- A releases messages
 
 Nonordered ordering:
+	- A creates a non ordered group "test"
+	- B joins group "test"
+	- B sends an initial message
+	- A captures messages
+	- B sends three consecutive messages
+	- A reorders the messages in holdback
+	- A releases messages in holdback
 
 FIFO ordering:
+	- A creates a FIFO ordered group "fifo"
+	- B joins group "fifo"
+	- B sends an initial message
+	- A captures messages
+	- A sends three consecutive messages
+	- A reorders the messages in holdback
+	- A releases messages in holdback
 
 Causal ordering:
+	- A creates a Causal ordered group "causal"
+	- B joins group "causal"
+	- B sends an initial message
+	- A captures messages
+	- B sends three consecutive messages
+	- A rearranges the messages
+	- A releases messages in holdback
 
 Total ordering:
 
