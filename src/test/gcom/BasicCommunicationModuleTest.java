@@ -95,6 +95,9 @@ public class BasicCommunicationModuleTest {
 		public void tick() {}
 		
 		@Override
+		public void gotClock(HashVectorClock clock) {}
+		
+		@Override
 		public HashVectorClock getClock() { return null; }
 		
 		@Override
