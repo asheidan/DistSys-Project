@@ -1,9 +1,9 @@
-\documentclass[english]{article}
+\documentclass[a4paper,english]{article}
 \usepackage{a4,babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{graphicx,amssymb,amstext,amsmath,listings,color}
-\usepackage{setspace,varioref,url,placeins}
+\usepackage{setspace,varioref,url,placeins,fancyhdr}
 
 \def\author			{Ludvig Widman(dit06lwn), Emil Eriksson(c07een)}
 \def\email			{}
@@ -12,6 +12,15 @@
 \def\trivialname	{GCom}
 \def\tutor			{Lars Larsson, Daniel Henriksson}
 \def\myabstract	{}
+
+\pagestyle{fancyplain}{
+\lhead[\today]{\trivialname}
+\rhead[\trivialname]{\today}
+\chead[]{}
+\rfoot[\author]{\thepage}
+\lfoot[\thepage]{\author}
+\cfoot[]{}
+}
 
 %-----------------------------------------------------------
 \begin{document}
@@ -29,9 +38,10 @@ Bonus level: 2\\
 \\
 Running the program: 
 \begin{verbatim}
-$ cd ~dit06lwn/edu/DS/git/DistSys-Project/
-Start registry and sequencer: $ ant seq
-Start client: $ ant gui
+1. $ cd ~dit06lwn/edu/DS/git/DistSys-Project/
+2. Start registry and sequencer: $ ant seq
+3. Start a client: $ ant gui
+4. Goto 3
 \end{verbatim}
 
 \begin{center}
@@ -48,13 +58,9 @@ Start client: $ ant gui
 \thispagestyle{empty}
 \pagenumbering{roman}
 \tableofcontents
+\thispagestyle{empty}
 \newpage
 \pagenumbering{arabic}
-
-\setstretch{1.3}	% Radavstånd
-% Mellanrum mellan stycken, inget indrag
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
 
 
 %-----------------------------------------------------------
@@ -63,19 +69,17 @@ In this project we have created a middleware for group communication. A demo app
 
 The middleware handles communication between members of groups. Groups can have different message orderings, they can be static or dynamic and they can use either reliable or basic multicast for sending messages. Every member of the group uses the same of these properties.
 
-Each group has a leader which has a referens in a registry. Clients can find groups and join them by getting a group list from the registry and contacting the leader.
-The middleware can be used independently of the demo application but this will not be described further in this report.
+Each group has a leader which has a reference in a registry. Clients can find groups and join them by getting a group list from the registry and contacting the leader.
+The middleware can be used independently of the demo application but this will not be described in this report.
 
-Communication in groups is done by passing messages. A message is usually sent to the entire group, only when joining a group messages is sent to only one client in the group. Messages have a type so that application messages can be separated from system messages. 
+Communication in groups is done by passing messages. A message is usually sent to the entire group, only when joining a group messages is sent to only one member in the group. Messages have a type so that application messages can be separated from system messages. 
 
 The middleware can be used independently from the demo application but this will not be described further in this report.
-%- Vad det är och vad det gör
-%- Grupper, medlemmar, statiska, dynamiska, andra begrepp
 
 
 %-----------------------------------------------------------
 \section{Tools and language for implementation}
-Since the clear recommendation was to use Java and Java RMI we have decided to follow the recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
+Since the clear recommendation was to use Java and Java RMI we have decided to follow that recommendation. While there are languages that would be more interesting and easier to design GUIs in (cocoa/objective c), Java is more easily ported and the available help from lecturers also helped tip the balance in Java's favor.
 
 JUnit has be used for unit testing and logging has be done through the log4j-package. 
 
@@ -109,7 +113,7 @@ Ordering & Explanation \\
 \hline
 NONORDERED 	& Messages are not ordered at all. \\
 FIFO		& Messages are ordered per sender in the order they where sent. \\
-CAUSAL		& Messages are ordered in a happen before realtion. \\
+CAUSAL		& Messages are ordered in a ``happen before'' relation. \\
 TOTAL		& Messages are ordered in the exact same order by all clients in the group \\
 CAUSALTOTAL & Messages are ordered in a causal order and in the exact same order by all clients \\
 \hline
@@ -185,7 +189,7 @@ When the BasicCommunicationModule receives a message the message is sent directl
 \subsubsection{ReliableCommunicationModule}
 The ReliableCommunicationModule (RCM) extends the BCM and implements reliable multicast.
 
-When the RCM receives a message it checks if it has received it before, if not the message is added to a cache of received messages, sent to all group members via BCM and then delivered to message ordering.
+When the RCM receives a message it checks if it has received it before. If not the message is added to a cache of received messages. The message is then sent to all group members via BCM and delivered to a message ordering module.
 
 Sending messages in the RCM also stores the message in the cache. The message is then sent to all members of the group and the message is delivered to the sender.
 
@@ -197,7 +201,7 @@ The GroupManagementModule (GMM) stores information about groups and can notify l
 The main responsibilities for the GMM includes storing group state, resolving group names to members and updating group state when changes are received.
 
 \subsubsection{RMIModule}
-The RMIModule connects to a rmi registry at a given host and port. It has an interface for binding, finding, unbinding and rebinding objects.
+The RMIModule connects to a rmi registry at a given host and port. It has an interface for binding, unbinding, listing and rebinding objects.
 
 \subsubsection{momNonOrdered}
 The momNonOrdered is the simplest implementation of the MessageOrderingModule (MOM) interface. Every group has a corresponding message ordering module. The type depends on what the creator of the group chose. 
@@ -208,13 +212,13 @@ Message ordering is described in detail in section \vref{messageordering}.
 The momFIFO orders messages in FIFO ordering, in which messages is delivered in the same order the sender sent them. See section \vref{mo-fifo} for details.
 
 \subsubsection{momCausal}
-Causal ordering orders messages according to a happened before relationship. See section \vref{mo-causal} for details.
+Causal ordering orders messages according to a ``happened before'' relationship. See section \vref{mo-causal} for details.
 
 \subsubsection{momTotal}
 Total ordering means that all clients deliver the messages in the exact same order. See section \vref{mo-total} for details.
 
 \subsubsection{ReferenceKeeper}
-The ReferenceKeeper is used by GCom only for the group leader. It checks that the rmi registry has the reference to the leaders RemoteObject and tries to rebind it if not. The ReferenceKeeper is run in it's own thread and rechecks the reference in the registry every minute.
+The ReferenceKeeper is used only by GCom for the group leader. It checks that the rmi registry has the reference to the leaders RemoteObject and tries to rebind it if not. The ReferenceKeeper is run in it's own thread and rechecks the reference in the registry every minute.
 
 \subsubsection{HashVectorClock}
 The HashVectorClock is a simple vector clock. It stores a clock state with integer values for different process IDs. The clock can be compared to another clock, merged with other clocks and ticked, which increases the clock value for the owner of the clock by one.
@@ -225,7 +229,7 @@ A GroupDefinition stores information about a group like message ordering, commun
 \subsubsection{RemoteObject}
 The RemoteObject is used for communication between processes via java RMI. 
 
-The object has a queue in which all incomming messages are queued. A thread is responsible for transferring messages from the queue to the corresponding Communication Module.
+The object has a queue in which all incomming messages are queued. A thread is responsible for transferring messages from the queue to the corresponding CommunicationModule.
 
 \subsubsection{Group}
 Group stores members and GroupDefinition for a specific group. This class is only used by the GroupManagementModule for storing state.
@@ -251,12 +255,12 @@ BackdoorOpener is used by RMIServer to create a backdoor. The backdoor is needed
 \subsubsection{Sequencer}
 The Sequencer is used for getting a serial number on messages that all clients can agree to. There is only one sequencer per group, and in our implementation only one in total.
 
-Sequencer extends the RMI-server and therefor first starts a registry. It then binds in a SequencerCommunicationModule SCM as ``sequencer'' in the registry which the clients that uses any of the total orderings will know that they can connect to. 
+Sequencer extends the RMI-server and therefore first starts a registry. It then binds in a SequencerCommunicationModule SCM as ``sequencer'' in the registry which the clients that uses any of the total orderings will connect to. 
 
 Clients can request serial numbers by sending a message to the sequencer and supplying a return address in the message. The Sequencer will order the messages it receives in either a momNonOrdered or a momCausal depending on which of total or causal total ordering is requested. Messages that has already been sequenced are cached and the same serial number will be returned if a new request for the same message arrives.
 
 \subsubsection{SequencerCommunicationModule}
-The SequencerCommunicationModule (SCM) implements CommunicationModule since this makes communication with it convenient, but the module itself is only used by the Sequencer. 
+The SequencerCommunicationModule (SCM) implements a CommunicationModule since this makes communication with it convenient, but the module itself is only used by the Sequencer. 
 
 It receives messages and returns them to the return address with a serial number. The serial numbers is supplied by a GroupSequencer. Each group has it's own GroupSequencer.
 
@@ -286,7 +290,7 @@ Additional information about algorithms and definitions of the ordering types ab
 \subsection{Non ordered / momNonOrdered}
 The non ordered ordering module (MOM) does not order messages at all. This is the base class for the ordering modules. Every message ordering module has a queuing method, a vector clock and message listeners. All the NonOrdered does is to receive messages in the queue method and send them through to it's messages listeners directly. This is also shown in figure \vref{fig:nonorderd}.
 
-The module also has two functions related to the vector clock. It increases the vector clock when told so and returns the clock values if asked. These functions is used in several of the child modules that inherits from momNonOrdered.
+This module also has two functions related to the vector clock. It increases the vector clock when told so and returns the clock values if asked. These functions is used in several of the child modules that inherits from momNonOrdered.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{momNonOrderd.png}
@@ -356,7 +360,7 @@ In step 1 the clock value minus one is added to the local clock, this is since t
 \label{mo-total}
 Total ordering is an ordering where every client delivers the messages in the same order. In our implementation this is solved by the use of a sequencer, which is an application that is global for the group. 
 
-When a message is received it is sent to the sequencer. The sequencer gives the message a serial number and sends it back. When the MOM gets a message with a serial number it puts it in hold back queue until it can be delivered in sequence (that is until all messages with a lower number is delivered). This is also described in figure \vref{fig:total}.
+When a message is received it is sent to the sequencer. The sequencer gives the message a serial number and sends it back. When the MOM gets a message with a serial number it puts it in hold back queue until it can be delivered in sequence (until all messages with a lower number is delivered). This is also described in figure \vref{fig:total}.
 
 The first message with a serial number the MOM receives is delivered directly and any message with a lower number than that is discarded.
 
@@ -381,25 +385,40 @@ With causal total ordering the sequencer uses a momCausal to order the messages 
 \section{Design decisions}
 
 \subsection{Selection of bonus level}
-We chose to solve bonus level two with dynamic groups since if seemed like an reasonable trade off between extra credits and extra workload. 
+We chose to solve bonus level two with dynamic groups since if seemed like an reasonable trade off between extra credits and extra workload.
+
+\subsection{Our implementation of static groups}
+We have implemented static groups as dynamic groups with some extra limitations. The list of members in a static groups is created dynamicaly (by letting users join freely), the group is then freezed and the group becomes static. This was the easiest way to implement static groups when we allready had the dynamic ones. If only static groups would have been implemented they probably could have been created in a simpler way.
 
 \subsection{Why an chat Application?}
-As our demo application on top of gcom we built a chat application with tabs for different groups. This type of application maps well to the underlying structure of members that belongs to groups. It also gave an easy way to see that messages arrive unharmed and in the correct amount. 
+As our demo application on top of GCom we built a chat application with tabs for different groups. This type of application maps well to the underlying structure of members that belongs to groups. It also gave an easy way to see that messages arrive unharmed and in the correct amounts and order. 
 
 \subsection{Why using a sequencer for total ordering?}
-When implementing total ordering one can either use a sequencer or a distributed algorithm. The sequencer method has the downside of the sequencer being the single point of failure. However we still choose that method since it seemed more straightforward to implement and we already had a single point of failure.
+When implementing total ordering one can either use a sequencer or a distributed algorithm. The sequencer method has the downside of the sequencer being the single point of failure. However we still choose that method since it seemed more straightforward to implement and we already had another single point of failure.
 
 \subsection{Why the sequencer lives in the rmi-server}
-The RMI-server has to be started before the sequencer and we only wanted a single instance of both so it made sense to put them in the same module (or rather, make the sequencer extend the RMI-server). The RMI-server is also a hopefully quite stable host which makes it a good location for the sequencer.
+The RMI-server has to be started before the sequencer and we only wanted a single instance of both so it made sense to put them in the same module (or rather, make the sequencer extend the RMI-server). The RMI-server is also run on a hopefully quite stable host which makes it a good location for the sequencer.
 
 It would have scaled to more users to put the sequencer in the group leader, but this would make the sequencer less stable (since the group leader might choose to leave the group).
 
 An obvious drawback of having a single sequencer for all groups is that it becomes a bottleneck. This could be solved by moving the sequencer to several dedicated hosts and assigning groups to one of many sequencers.
 
+\subsection{Why use a backdoor?}
+We could either have implemented our own registry, have one registry per host, or create a backdoor for binding objects from remote hosts. The latter seemed like a easier solution.
+
+\subsection{Is a rmi registry neccessary?}
+During the analysis phase we speulated in if the registry really would be neccessary. We acctually sketched a more distributed design where a client only needed to find any node in the network to get a list of groups. This would be solved by letting nodes ask other nodes for known groups and leaders. This soultion was quite early deemed unpractical and much too complicated.
+
+\subsection{All clients are assumed to be good}
+We are assuming that all clients are good and that no one is lying. This simplifies things significantly and it seemed a bit out of scope to ensure that everything works correctly against all possible kinds of attacks. The security in the system is generally very low. If arbitary messages can be sent (for example by writing a new application ontop of gcom) a user can do almost anything.
+
+\subsection{Reliable multicast sends some extra messages to itself}
+Due to laziness and because it does not really affect anything reliable multicast sends messages to itself twice and discards one of the messages. It also resends unseen received messages to itself and discards the resended message. This made the implementation simpler and it hardly takes any extra time.
+
 %-----------------------------------------------------------
 \section{Fault tolerance}
 \subsection{Detecting crashed members}
-The communication module detects if a client refuses connections or if connections timeout. If this happens the member is removed from the group management module and a lost member message is sent.
+The communication module detects if a client refuses connections or if connections timeout. If this happens the member is removed from the group management module and a ``lost member'' message is sent to the group.
 
 If the crashed client is the group leader a new leader is elected.
 
@@ -409,8 +428,7 @@ The leader of each group occasionally checks that the group is registered in the
 \subsection{If the group leader crashes}
 If the group leader crashes the group will detect that no messages arrive to the leader and then elect a new leader. 
 
-\subsection{Election of a new leader}
-%% TODO: Write about election algorithm
+\subsubsection{Election of a new leader}
 
 \begin{figure}
 \includegraphics[width=\textwidth]{Election.png}
@@ -421,9 +439,9 @@ If the group leader crashes the group will detect that no messages arrive to the
 When a member (A in figure \ref{fig:election}) detects that the leader is missing, an election of a new leader will take place. The member sets itself as leader of the group and sends an election message containing the members unique id to all known members of the group.
 
 Member (B) receives an election message. If the member hasn't already begun an election it sends it's id to all members of the group and sets either itself or the sender as leader depending on which has the higher id.
-If the member has already begun the election process the received id is compared to the saved largest id. The larger of the two is stored and the sending member is set as leader.
+If the member has already begun the election process the received id is compared to the saved largest id. The larger of the two is stored and the sending member is set as leader if the sent id is higher.
 
-When a member has received election messages from all other members the election is done and if a member has set itself as leader of the group it creates a ReferenceKeeper and binds a reference in the registry.
+When a member has received election messages from all other members, the election is done and if a member has set itself as leader of the group it creates a ReferenceKeeper and binds a reference in the registry.
 
 This algorith isn't foolproof since crashing members can cause other members to wait for responses indefinitely.
 
@@ -439,7 +457,7 @@ If the group is split in two partitions, due to a cable failure or similar, the 
 The new leader will try to reregister the group in the registry. The leader for the other part will do the same and therefore compete over the reference in the registry. Because of this newcomers will join the group having the reference in the registry at the time the node connects.
 
 \section{Realization of the project plan}
-The project plan from deliverable 1 is included in appendix \vref{app:projectplan}. We have been slightly behind the plan during most of the project part due to the new influenza that struck Emil during one of the first weeks.
+The project plan from deliverable 1 is included in appendix \vref{app:projectplan}. We have been slightly behind the plan during most of the project part due to the new influenza that struck Emil during the first weeks.
 
 We also moved forward the design of the GUI to milestone 4 since it was easier to do while implementing the actual application. We also moved total and causal total ordering forward one week since the other message orderings took most of the assigned week. 
 
@@ -447,28 +465,28 @@ Generally things took slightly longer then anticipated, part due to tricky bugs 
 
 %-----------------------------------------------------------
 \section{Implementation of requirement specification}
-Below our requirement specification from out project plan is included in appendix \vref{app:reqspec}. We have succeeded with implementing all required specifications. 
+The requirement specification from the project plan is included in appendix \vref{app:reqspec}. All the requirements of the specification are implemented. 
 
 %-----------------------------------------------------------
 \section{Limitations}
 \begin{itemize}
 \item The RMI-registry is a single point of failure. If the registry crashes no processes can find or join groups until the registry has been restarted.
 
-\item If a group is split in two parts due to network failure and both parts still have contact with the registry bad things will happen. This is assumed to never happen.
-
 \item All processes are assumed to be good. If a process starts to lie or send malicious messages bad things will happen.
 
 \item If a client crashes during election undefined things happen.
 
-\item If the sequencer crashes all groups using the sequencer must be restarted since the message cache is lost and messages will get new serial numbers starting at 1. The sequencer is placed at the same host as the registry which is assumed to be relatively stable for this to not be a big problem.
+\item If the sequencer crashes all groups using the sequencer must be restarted since the message cache is lost and messages will get new serial numbers starting at 1. The sequencer is placed at the same host as the registry which is assumed to be stable enough for this to not be a big problem.
 
-\item If a group contains too many users java will run out of memory and the client will crash. If reliable multicast is used the network will most likely also be very congested.
+\item If a group contains too many users the java VM will run out of memory and the client will crash. If reliable multicast is used the network will most likely also be very congested.
 
-\item The demo application does not use the remove group feature of GCom since it is more user friendly to let the group live as long as there is users conencted to it and remove it when the last user quits. However, the feature is implemented and can be used by some other application that uses the middleware.
+\item The demo application does not use the remove group feature of GCom since it is more user friendly to let the group live as long as there is users connected to it and remove it when the last user quits. However, the feature is implemented and can be used by some other application that uses the middleware.
 
 \item The program does not build under Windows. Usage of windows is discourage and behaviour is undefined.
 
 \item In the demo application backdoor and sequencer is visible in the groups list.
+
+\item If too many totaly ordered messages is sent (probably a bit over 500000 messages with the default VM memory size) the sequencer will crash since it does not empty it's cache. This is easy to fix, but we realised this a bit too late to have the time to implement the fix.
 
 \end{itemize}
 
@@ -478,7 +496,7 @@ Below our requirement specification from out project plan is included in appendi
 \end{thebibliography}
 
 \appendix
-\section{Project plan}
+\section{Project plan} 
 \label{app:projectplan}
 \begin{tabular}{|l|l|p{7.5cm}|}
 \hline
