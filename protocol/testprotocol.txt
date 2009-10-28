@@ -89,7 +89,6 @@ Causaltotal ordering:
 	- A sends an initial message
 	- A captures messages
 	- B captures messages
-	- A sends a message
 	- B sends a message
 	- A rearranges the messages
 	- A releases two messages
