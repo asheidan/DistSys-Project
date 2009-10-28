@@ -5,14 +5,21 @@ Static group:
 	- A freezes group
 	- A sends a message
 	- C tries to join group "static"
+	Expected:
+		The first message from B should not arrive
+		The message from A should arrive
+		C should not be able to join the group
 
-Dynamic group:
+Dynamic group/parting leader:
 	- A creates a dynamic group "dynamic"
 	- B joins group "dynamic"
 	- B sends a message
-	- B leaves group "dynamic"
-	- B rejoins group "dynamic"
-	- A sends message
+	- A leaves group "dynamic"
+	- A rejoins group "dynamic"
+	- B sends message
+	Expected:
+		A should find a reference and be able to join the group
+		A should receive message from B
 	
 Reliable multicast:
 	- A creates a group "reliable" with reliable multicast
@@ -22,15 +29,22 @@ Reliable multicast:
 	- C sends a message to the group
 	- A drops the first message
 	- A releases messages
+	Expected: A should receive message eventhough the first was dropped
 
-Nonordered ordering:
+Nonordered ordering/crashing leader:
 	- A creates a non ordered group "test"
 	- B joins group "test"
-	- B sends an initial message
 	- A captures messages
 	- B sends three consecutive messages
 	- A reorders the messages in holdback
 	- A releases messages in holdback
+	- A crashes
+	- B tries to send a message
+	- C tries to join group
+	Expected:
+		A should receive the messages reordered
+		B should detect A has crashed and assume leadership
+		C should be able to join group
 
 FIFO ordering:
 	- A creates a FIFO ordered group "fifo"
@@ -40,6 +54,7 @@ FIFO ordering:
 	- A sends three consecutive messages
 	- A reorders the messages in holdback
 	- A releases messages in holdback
+	Expected: A shows messages in the same order as they were sent
 
 Causal ordering:
 	- A creates a Causal ordered group "causal"
@@ -49,6 +64,7 @@ Causal ordering:
 	- B sends three consecutive messages
 	- A rearranges the messages
 	- A releases messages in holdback
+	Expected: A shows messages in the same order as they were sent
 
 Causal ordering (Tests happened before on first message from a sender):
 	- A creates a Causal ordered group "causal2"
