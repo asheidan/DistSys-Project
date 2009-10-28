@@ -952,8 +952,8 @@ public class GUIViewOther extends javax.swing.JFrame {
 	}//GEN-LAST:event_createGroupMenuItemActionPerformed
 
 	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
-		for(int i = 1; i < tabbedPane.getTabCount(); i++) {
-			String groupName = tabbedPane.getTitleAt(i);
+		while(tabbedPane.getTabCount() > 1) {
+			String groupName = tabbedPane.getTitleAt(1);
 			try { gcom.disconnect(groupName); }
 			catch(Exception e) {}
 		}
