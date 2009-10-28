@@ -32,8 +32,8 @@ Reliable multicast:
 	Expected: A should receive message eventhough the first was dropped
 
 Nonordered ordering/crashing leader:
-	- A creates a non ordered group "test"
-	- B joins group "test"
+	- A creates a non ordered group "crash"
+	- B joins group "crash"
 	- A captures messages
 	- B sends three consecutive messages
 	- A reorders the messages in holdback
@@ -53,16 +53,6 @@ FIFO ordering:
 	- A captures messages
 	- A sends three consecutive messages
 	- A reorders the messages in holdback
-	- A releases messages in holdback
-	Expected: A shows messages in the same order as they were sent
-
-Causal ordering:
-	- A creates a Causal ordered group "causal"
-	- B joins group "causal"
-	- B sends an initial message
-	- A captures messages
-	- B sends three consecutive messages
-	- A rearranges the messages
 	- A releases messages in holdback
 	Expected: A shows messages in the same order as they were sent
 
@@ -94,7 +84,7 @@ Total ordering:
 	Expected: Both A and B recieves messages in order A, B, A
 
 Causaltotal ordering:
-	- A creates a Totaly ordered group "ctotal"
+	- A creates a causal and totaly ordered group "ctotal"
 	- B joins group "ctotal"
 	- A sends an initial message
 	- A captures messages
